@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import { Box, Hidden, IconButton, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -10,6 +10,10 @@ import HeaderMenu from './Menu';
 import HeaderButtons from './Buttons';
 import HeaderUserbox from './Userbox';
 import Logo from 'src/components/Logo';
+
+interface HeaderProps {
+  isBasic?: boolean;
+}
 
 const HeaderWrapper = styled(Box)(
   ({ theme }) => `
@@ -26,28 +30,39 @@ const HeaderWrapper = styled(Box)(
 `
 );
 
-function Header() {
+
+const Header: FC<HeaderProps> = ({ isBasic }) => {
   const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
 
-  return (
-    <HeaderWrapper display="flex" alignItems="center">
-      <Box display="flex" alignItems="center">
-        <Tooltip arrow title="Toggle Menu">
-          <IconButton onClick={toggleSidebar} style={{ marginRight: '12px', color: 'white' }}>
-            {!sidebarToggle ? <MenuTwoToneIcon /> : <CloseTwoToneIcon />}
-          </IconButton>
-        </Tooltip>
-        <Logo />
-        <Hidden mdDown>
-          <HeaderMenu />
-        </Hidden>
-      </Box>
-      <Box display="flex" alignItems="center">
-        <HeaderButtons />
-        <HeaderUserbox />
-      </Box>
-    </HeaderWrapper>
-  );
+  if (isBasic) {
+    return (
+      <HeaderWrapper display="flex" alignItems="center">
+        <Box display="flex" alignItems="center">
+          <Logo />
+        </Box>
+      </HeaderWrapper>
+    );
+  } else {
+    return (
+      <HeaderWrapper display="flex" alignItems="center">
+        <Box display="flex" alignItems="center">
+          <Tooltip arrow title="Toggle Menu">
+            <IconButton onClick={toggleSidebar} style={{ marginRight: '12px', color: 'white' }}>
+              {!sidebarToggle ? <MenuTwoToneIcon /> : <CloseTwoToneIcon />}
+            </IconButton>
+          </Tooltip>
+          <Logo />
+          <Hidden mdDown>
+            <HeaderMenu />
+          </Hidden>
+        </Box>
+        <Box display="flex" alignItems="center">
+          <HeaderButtons />
+          <HeaderUserbox />
+        </Box>
+      </HeaderWrapper>
+    );
+  }
 }
 
 export default Header;

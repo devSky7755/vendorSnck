@@ -29,8 +29,10 @@ import FindInPageTwoToneIcon from '@mui/icons-material/FindInPageTwoTone';
 import ChevronRightTwoToneIcon from '@mui/icons-material/ChevronRightTwoTone';
 
 const Transition = forwardRef(function Transition(
-  props: TransitionProps & { children?: ReactElement<any, any> },
-  ref: Ref<unknown>
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>,
 ) {
   return <Slide direction="down" ref={ref} {...props} />;
 });
