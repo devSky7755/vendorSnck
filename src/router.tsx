@@ -10,6 +10,10 @@ import OnboardingPhone from './content/onboarding/phone';
 import OnboardingVerification from './content/onboarding/verification';
 import OnboardingPin from './content/onboarding/pin';
 import TermsAndPolicy from './content/pages/Docs/TermsAndPolicy';
+import OnboardingOrderType from './content/onboarding/ordertype';
+import OnboardingQueue from './content/onboarding/queue';
+import OnboardingAcceptOrder from './content/onboarding/acceptorder';
+import FAQ from './content/pages/Docs/FAQ';
 
 const Loader = (Component) => (props) => (
   <Suspense fallback={<SuspenseLoader />}>
@@ -129,39 +133,31 @@ const routes: RouteObject[] = [
         element: <OnboardingPin />
       },
       {
-        path: 'status',
-        children: [
-          {
-            path: '',
-            element: (
-              <Navigate
-                to="404"
-                replace
-              />
-            )
-          },
-          {
-            path: '404',
-            element: <Status404 />
-          },
-          {
-            path: '500',
-            element: <Status500 />
-          },
-          {
-            path: 'maintenance',
-            element: <StatusMaintenance />
-          },
-          {
-            path: 'coming-soon',
-            element: <StatusComingSoon />
-          },
-        ]
+        path: 'ordertype',
+        element: <OnboardingOrderType />
       },
       {
-        path: '*',
-        element: <Status404 />
+        path: 'queue',
+        element: <OnboardingQueue />
       },
+      {
+        path: 'acceptorder',
+        element: <OnboardingAcceptOrder />
+      },
+    ]
+  },
+  {
+    path: 'help',
+    element: (
+      <SidebarLayout />
+    ),
+    children: [
+      {
+        path: '',
+        element: (
+          <FAQ />
+        )
+      }
     ]
   },
   {

@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { styled } from '@mui/material/styles';
 import OnboardingStepper from '../OnboardingStepper';
 import PinInput from 'react-pin-input';
+import { useNavigate } from 'react-router';
 
 const OnboardingWrapper = styled(Box)(
     () => `
@@ -23,6 +24,7 @@ const PhoneWrapper = styled(Box)(
 const steps = ['Your Phone', '2-Step Verification', 'Pin'];
 
 function OnboardingPin() {
+    const navigate = useNavigate();
     return (
         <OnboardingWrapper>
             <Helmet>
@@ -57,7 +59,9 @@ function OnboardingPin() {
                         />
                     </PhoneWrapper>
                     <PhoneWrapper>
-                        <Button variant='contained' color='primary' fullWidth>Next</Button>
+                        <Button variant='contained' color='primary' fullWidth onClick={() => {
+                            navigate('/onboarding/ordertype');
+                        }}>Next</Button>
                     </PhoneWrapper>
                 </Card>
             </Container>

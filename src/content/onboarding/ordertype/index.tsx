@@ -1,10 +1,9 @@
-import { Box, Container, Card, Typography, TextField, Checkbox, Button } from '@mui/material';
+import { Box, Container, Card, Typography, TextField, Button, Switch, Divider } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
-import MuiPhoneNumber from 'material-ui-phone-number';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import OnboardingStepper from '../OnboardingStepper';
+import { useNavigate } from 'react-router';
 
 const OnboardingWrapper = styled(Box)(
     () => `
@@ -18,21 +17,25 @@ const OnboardingWrapper = styled(Box)(
 
 const PhoneWrapper = styled(Box)(
     () => `
+    text-align: left;
     padding: 16px 32px 16px 32px;
 `
 );
 
-const steps = ['Your Phone', '2-Step Verification', 'Pin'];
+const StyledDivider = styled(Divider)(
+    () => `
+    margin: 0px 32px;
+    `
+);
 
-function OnboardingPhone() {
-    const [phone, setPhone] = useState('');
+const steps = ['Order Type', 'Queue Setting', 'Accept Orders'];
 
+function OnboardingOrderType() {
     const navigate = useNavigate();
-
     return (
         <OnboardingWrapper>
             <Helmet>
-                <title>Snackr - Vendor</title>
+                <title>Order Types</title>
             </Helmet>
             <Container maxWidth='sm'>
                 <Box sx={{ mt: 10 }}>
@@ -40,30 +43,22 @@ function OnboardingPhone() {
                 </Box>
                 <Card sx={{ p: 8, mt: 4, mb: 10, borderRadius: 0 }}>
                     <Typography sx={{ mb: 2 }} variant="h1">
-                        Welcome to Snackr
+                        Login Successful!
                     </Typography>
                     <Typography component="span" variant="subtitle1">
-                        Let’s make sure it’s really you.<br />
-                        Your phone number will be used for 2-Step Verification.
+                        Setup your location <b>Hot Dog Stand</b><br />
+                        to start accepting order
                     </Typography>
                     <PhoneWrapper>
-                        <MuiPhoneNumber
-                            variant='outlined'
-                            fullWidth
-                            value={phone}
-                            style={{ fontSize: 18 }}
-                            defaultCountry={'us'}
-                            onChange={(value) => {
-                                setPhone(value);
-                            }}
-                        />
+                        <Switch></Switch> Accept Pickup Orders
                     </PhoneWrapper>
-                    <div style={{ textAlign: 'left', paddingLeft: 32 }}>
-                        <Checkbox></Checkbox> I agree to Snackr <Link target='_blank' to={'/terms_policy'}>Terms &amp; Privacy Policy</Link>
-                    </div>
+                    <StyledDivider />
+                    <PhoneWrapper>
+                        <Switch></Switch> Accept Delivery Orders
+                    </PhoneWrapper>
                     <PhoneWrapper>
                         <Button variant='contained' color='primary' fullWidth onClick={() => {
-                            navigate('/onboarding/verification');
+                            navigate('/onboarding/queue');
                         }}>Next</Button>
                     </PhoneWrapper>
                 </Card>
@@ -72,4 +67,4 @@ function OnboardingPhone() {
     );
 }
 
-export default OnboardingPhone;
+export default OnboardingOrderType;
