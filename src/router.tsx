@@ -14,7 +14,6 @@ import OnboardingOrderType from './content/onboarding/ordertype';
 import OnboardingQueue from './content/onboarding/queue';
 import OnboardingAcceptOrder from './content/onboarding/acceptorder';
 import FAQ from './content/pages/Docs/FAQ';
-import LoginPage from './content/login';
 import Logout from './content/login/logout';
 
 const Loader = (Component) => (props) => (
@@ -33,9 +32,8 @@ const Crypto = Loader(lazy(() => import('src/content/dashboards/Crypto')));
 // Applications
 
 //const Messenger = Loader(lazy(() => import('src/content/applications/Messenger')));
-const Transactions = Loader(lazy(() => import('src/content/applications/Transactions')));
 const UserProfile = Loader(lazy(() => import('src/content/applications/Users/profile')));
-const UserSettings = Loader(lazy(() => import('src/content/applications/Users/settings')));
+const UserSettings = Loader(lazy(() => import('src/content/pages/settings/Users')));
 
 // Components
 
@@ -56,6 +54,7 @@ const Status500 = Loader(lazy(() => import('src/content/pages/Status/Status500')
 const StatusComingSoon = Loader(lazy(() => import('src/content/pages/Status/ComingSoon')));
 const StatusMaintenance = Loader(lazy(() => import('src/content/pages/Status/Maintenance')));
 
+const LoginPage = Loader(lazy(() => import('src/content/login')));
 
 const routes: RouteObject[] = [
   {
@@ -185,7 +184,7 @@ const routes: RouteObject[] = [
     ]
   },
   {
-    path: 'management',
+    path: 'settings',
     element: (
       <SidebarLayout />
     ),
@@ -194,15 +193,16 @@ const routes: RouteObject[] = [
         path: '',
         element: (
           <Navigate
-            to="/management/transactions"
+            to="/settings/users"
             replace
           />
         )
       },
       {
-        path: 'transactions',
-        element: <Transactions />
+        path: 'users',
+        element: <UserSettings />
       },
+
       {
         path: 'profile',
         children: [

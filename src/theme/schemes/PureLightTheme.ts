@@ -48,7 +48,7 @@ const colors = {
   },
   layout: {
     general: {
-      bodyBg: '#f2f5f9'
+      bodyBg: '#F2F2F2'
     },
     sidebar: {
       background: '#011936E0',
@@ -57,7 +57,7 @@ const colors = {
       menuItemColor: themeColors.white,
       menuItemColorActive: themeColors.primary,
       menuItemBg: 'transparent',
-      menuItemBgActive: '#f2f5f9',
+      menuItemBgActive: '#F2F2F2',
       menuItemIconColor: lighten(themeColors.secondary, 0.3),
       menuItemIconColorActive: themeColors.primary,
       menuItemHeadingColor: themeColors.greyTextColor,
@@ -217,7 +217,8 @@ export const PureLightTheme = createTheme({
     borderRadiusSm: '4px',
     borderRadius: '6px',
     borderRadiusLg: '10px',
-    borderRadiusXl: '18px'
+    borderRadiusXl: '18px',
+    borderColor: '#0000001F'
   },
   sidebar: {
     background: colors.layout.sidebar.background,

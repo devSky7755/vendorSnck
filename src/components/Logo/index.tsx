@@ -36,7 +36,7 @@ const LogoText = styled(Box)(
 
 function Logo() {
   return (
-    <LogoWrapper to="/overview">
+    <LogoWrapper to="/dashboards">
       <LogoSignWrapper>
         <img src='/icon_512.png' alt="logo" width='100%' height='100%'></img>
       </LogoSignWrapper>

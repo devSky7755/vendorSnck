@@ -74,7 +74,7 @@ function Logo() {
 
   return (
     <Tooltip title="Snackr - Vendor" arrow>
-      <LogoWrapper to="/overview">
+      <LogoWrapper to="/dashboards">
         <LogoSignWrapper>
           <LogoSign>
             <LogoSignInner />

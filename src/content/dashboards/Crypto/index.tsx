@@ -10,6 +10,8 @@ import AccountSecurity from './AccountSecurity';
 import WatchList from './WatchList';
 
 function DashboardCrypto() {
+  return <div></div>
+  /*
   return (
     <>
       <Helmet>
@@ -43,6 +45,7 @@ function DashboardCrypto() {
       <Footer />
     </>
   );
+  */
 }
 
 export default DashboardCrypto;

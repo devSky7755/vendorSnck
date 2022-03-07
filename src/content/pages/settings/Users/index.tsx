@@ -6,11 +6,11 @@ import Footer from 'src/components/Footer';
 
 import RecentOrders from './RecentOrders';
 
-function ApplicationsTransactions() {
+function UsersSetting() {
   return (
     <>
       <Helmet>
-        <title>Transactions - Applications</title>
+        <title>Users</title>
       </Helmet>
       <PageTitleWrapper>
         <PageHeader />
@@ -21,7 +21,7 @@ function ApplicationsTransactions() {
           direction="row"
           justifyContent="center"
           alignItems="stretch"
-          spacing={3}
+          spacing={2}
         >
           <Grid item xs={12}>
             <RecentOrders />
@@ -33,4 +33,4 @@ function ApplicationsTransactions() {
   );
 }
 
-export default ApplicationsTransactions;
+export default UsersSetting;
