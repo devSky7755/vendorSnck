@@ -15,6 +15,7 @@ import OnboardingQueue from './content/onboarding/queue';
 import OnboardingAcceptOrder from './content/onboarding/acceptorder';
 import FAQ from './content/pages/Docs/FAQ';
 import LoginPage from './content/login';
+import Logout from './content/login/logout';
 
 const Loader = (Component) => (props) => (
   <Suspense fallback={<SuspenseLoader />}>
@@ -73,6 +74,12 @@ const routes: RouteObject[] = [
       {
         path: 'login',
         element: <LoginPage />
+      },
+      {
+        path: 'logout',
+        element: (
+          <Logout />
+        )
       },
       {
         path: 'terms_policy',
@@ -173,22 +180,8 @@ const routes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: (
-          <Navigate
-            to="/dashboards/crypto"
-            replace
-          />
-        )
-      },
-      {
-        path: 'crypto',
         element: <Crypto />
-      }/*,
-      {
-        path: 'messenger',
-        element: <Messenger />
       }
-      */
     ]
   },
   {

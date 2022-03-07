@@ -53,3 +53,8 @@
     background: #21212114;
     cursor: no-drop !important;
 }
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}

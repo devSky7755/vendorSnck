@@ -13,7 +13,7 @@ function Footer() {
     <FooterWrapper>
       <Container maxWidth="lg">
         <Box
-          py={3}
+          py={2}
           display={{ xs: 'block', md: 'flex' }}
           alignItems="center"
           textAlign={{ xs: 'center', md: 'left' }}
@@ -24,13 +24,6 @@ function Footer() {
               &copy; 2022 - Snackr - Vendor
             </Typography>
           </Box>
-          {
-            /*
-            <Typography sx={{ pt: { xs: 2, md: 0 } }} variant="subtitle1">
-              Crafted by <Link href="https://bloomui.com" target="_blank" rel="noopener noreferrer">BloomUI.com</Link>
-            </Typography>
-            */
-          }
         </Box>
       </Container>
     </FooterWrapper>

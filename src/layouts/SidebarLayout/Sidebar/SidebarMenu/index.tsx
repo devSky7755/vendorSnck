@@ -11,15 +11,14 @@ const MenuWrapper = styled(List)(
     padding: 0;
 
     & > .MuiList-root {
-      padding: 0 ${theme.spacing(2)} ${theme.spacing(2)};
+      padding-top: ${theme.spacing(2)} 0 0;
     }
 
     .MuiListSubheader-root {
       text-transform: uppercase;
-      font-weight: bold;
       font-size: ${theme.typography.pxToRem(12)};
       color: ${theme.sidebar.menuItemHeadingColor};
-      padding: ${theme.spacing(0.8, 2)};
+      padding: ${theme.spacing(2)};
       line-height: 1.4;
     }
 `
@@ -193,7 +192,6 @@ const reduceChildRoutes = ({
 
 function SidebarMenu() {
   const location = useLocation();
-
 
   return (
     <>

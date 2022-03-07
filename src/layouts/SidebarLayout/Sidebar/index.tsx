@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { SidebarContext } from 'src/contexts/SidebarContext';
 
-import { Box, Drawer, Hidden } from '@mui/material';
+import { Box, Drawer, Hidden, Typography } from '@mui/material';
 
 import { styled } from '@mui/material/styles';
 import SidebarMenu from './SidebarMenu';
@@ -25,10 +25,9 @@ const SidebarWrapper = styled(Box)(
 
 const TopSection = styled(Box)(
   ({ theme }) => `
-        display: flex;
-        height: 88px;
+        height: 78px;
         align-items: center;
-        margin: 0 ${theme.spacing(2)} ${theme.spacing(2)};
+        padding: ${theme.spacing(2)};
         border-bottom: ${theme.sidebar.dividerBg} solid 1px;
 `
 );
@@ -46,13 +45,14 @@ function Sidebar() {
         <Hidden lgDown>
           <SidebarWrapper>
             <Scrollbars autoHide>
-              {
-                /*
-                <TopSection>
-                  <Logo />
-                </TopSection>
-                */
-              }
+              <TopSection>
+                <Box sx={{ mb: 1 }}>
+                  <Typography variant='h5' color={'white'}>HotDog Stand</Typography>
+                </Box>
+                <Box>
+                  <Typography component='span'>Jack Jackson</Typography>
+                </Box>
+              </TopSection>
               <SidebarMenu />
             </Scrollbars>
           </SidebarWrapper>
@@ -67,13 +67,14 @@ function Sidebar() {
           >
             <SidebarWrapper>
               <Scrollbars autoHide>
-                {
-                  /*
-                  <TopSection>
-                    <Logo />
-                  </TopSection>
-                  */
-                }
+                <TopSection>
+                  <Box sx={{ mb: 1 }}>
+                    <Typography variant='h5' color={'white'}>HotDog Stand</Typography>
+                  </Box>
+                  <Box>
+                    <Typography component='span'>Jack Jackson</Typography>
+                  </Box>
+                </TopSection>
                 <SidebarMenu />
               </Scrollbars>
             </SidebarWrapper>

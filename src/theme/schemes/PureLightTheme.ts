@@ -53,7 +53,7 @@ const colors = {
     sidebar: {
       background: '#011936E0',
       textColor: themeColors.greyTextColor,
-      dividerBg: '#f2f5f9',
+      dividerBg: '#011936',
       menuItemColor: themeColors.white,
       menuItemColorActive: themeColors.primary,
       menuItemBg: 'transparent',

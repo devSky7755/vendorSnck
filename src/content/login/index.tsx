@@ -43,7 +43,7 @@ function LoginPage() {
             <Container maxWidth='sm' sx={{ mt: 10 }}>
                 <Grid container spacing={4}>
                     <Grid item xs={12} className='text-center'>
-                        <Box style={{ width: 240 }} className='m-auto'>
+                        <Box style={{ width: 240 }} className='mx-auto'>
                             <MultiToggle options={options} selectedOption={viewMode} onSelectOption={value => {
                                 setViewMode(value);
                             }}></MultiToggle>
@@ -64,7 +64,7 @@ function LoginPage() {
                                             onChange={(value, index) => { }}
                                             type="numeric"
                                             inputMode="number"
-                                            inputStyle={{ borderColor: 'blue', borderWidth: 4, fontSize: '20px', fontWeight: 600, color: 'blue' }}
+                                            inputStyle={{ borderColor: 'blue', borderWidth: 1, fontSize: '20px', fontWeight: 600, color: 'blue' }}
                                             onComplete={(value, index) => { }}
                                             autoSelect={true}
                                             regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
@@ -72,7 +72,7 @@ function LoginPage() {
                                     </PhoneWrapper>
                                     <PhoneWrapper>
                                         <Button variant='contained' color='primary' fullWidth onClick={() => {
-                                            navigate('/onboarding/ordertype');
+                                            navigate('/dashboards');
                                         }}>Next</Button>
                                     </PhoneWrapper>
                                 </Card>
@@ -99,7 +99,7 @@ function LoginPage() {
                                     </PhoneWrapper>
                                     <PhoneWrapper>
                                         <Button variant='contained' color='primary' fullWidth onClick={() => {
-                                            navigate('/dashboard');
+                                            navigate('/dashboards');
                                         }}>Next</Button>
                                     </PhoneWrapper>
                                 </Card>

@@ -31,122 +31,62 @@ export interface MenuItems {
 
 const menuItems: MenuItems[] = [
   {
-    heading: 'Dashboards',
+    heading: 'Orders',
     items: [
       {
-        name: 'Crypto',
-        link: '/dashboards/crypto',
-        icon: BrightnessLowTwoToneIcon
-      }/*,
-      {
-        name: 'Messenger',
-        icon: MmsTwoToneIcon,
-        link: '/dashboards/messenger'
+        name: 'News',
+        link: '/orders/new',
       },
-      */
+      {
+        name: 'Preparing',
+        link: '/orders/perparing',
+      },
+      {
+        name: 'Delivery',
+        link: '/orders/delivery',
+      },
+      {
+        name: 'Pickup',
+        link: '/orders/pickup',
+      },
+      {
+        name: 'All',
+        link: '/orders/all',
+      }
     ]
   },
   {
-    heading: 'Management',
+    heading: 'Location Settings',
     items: [
       {
-        name: 'Transactions',
-        icon: TableChartTwoToneIcon,
-        link: '/management/transactions'
+        name: 'Order Settings',
+        link: '/settings/orders'
       },
+      {
+        name: 'Menu Items',
+        link: '/settings/menus'
+      },
+      {
+        name: 'Users',
+        link: '/settings/users'
+      },
+      {
+        name: 'Printers',
+        link: '/settings/printers'
+      },
+    ]
+  },
+  {
+    heading: 'User Profile',
+    items: [
       {
         name: 'User Profile',
-        icon: AccountCircleTwoToneIcon,
-        link: '/management/profile',
-        items: [
-          {
-            name: 'Profile Details',
-            link: '/management/profile/details'
-          },
-          {
-            name: 'User Settings',
-            link: '/management/profile/settings'
-          }
-        ]
-      }
-    ]
-  },
-  {
-    heading: 'Components',
-    items: [
-      {
-        name: 'Buttons',
-        icon: BallotTwoToneIcon,
-        link: '/components/buttons'
+        link: '/profile',
       },
       {
-        name: 'Modals',
-        icon: BeachAccessTwoToneIcon,
-        link: '/components/modals'
+        name: 'Logout',
+        link: '/logout',
       },
-      {
-        name: 'Accordions',
-        icon: EmojiEventsTwoToneIcon,
-        link: '/components/accordions'
-      },
-      {
-        name: 'Tabs',
-        icon: FilterVintageTwoToneIcon,
-        link: '/components/tabs'
-      },
-      {
-        name: 'Badges',
-        icon: HowToVoteTwoToneIcon,
-        link: '/components/badges'
-      },
-      {
-        name: 'Tooltips',
-        icon: LocalPharmacyTwoToneIcon,
-        link: '/components/tooltips'
-      },
-      {
-        name: 'Avatars',
-        icon: RedeemTwoToneIcon,
-        link: '/components/avatars'
-      },
-      {
-        name: 'Cards',
-        icon: SettingsTwoToneIcon,
-        link: '/components/cards'
-      },
-      {
-        name: 'Forms',
-        icon: TrafficTwoToneIcon,
-        link: '/components/forms'
-      },
-    ]
-  },
-  {
-    heading: 'Extra Pages',
-    items: [
-      {
-        name: 'Status',
-        icon: VerifiedUserTwoToneIcon,
-        link: '/status',
-        items: [
-          {
-            name: 'Error 404',
-            link: '/status/404'
-          },
-          {
-            name: 'Error 500',
-            link: '/status/500'
-          },
-          {
-            name: 'Maintenance',
-            link: '/status/maintenance'
-          },
-          {
-            name: 'Coming Soon',
-            link: '/status/coming-soon'
-          }
-        ]
-      }
     ]
   }
 ];
