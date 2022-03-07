@@ -14,6 +14,7 @@ import OnboardingOrderType from './content/onboarding/ordertype';
 import OnboardingQueue from './content/onboarding/queue';
 import OnboardingAcceptOrder from './content/onboarding/acceptorder';
 import FAQ from './content/pages/Docs/FAQ';
+import LoginPage from './content/login';
 
 const Loader = (Component) => (props) => (
   <Suspense fallback={<SuspenseLoader />}>
@@ -64,10 +65,14 @@ const routes: RouteObject[] = [
         path: '',
         element: (
           <Navigate
-            to="onboarding"
+            to="login"
             replace
           />
         )
+      },
+      {
+        path: 'login',
+        element: <LoginPage />
       },
       {
         path: 'terms_policy',

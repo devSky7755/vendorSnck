@@ -1,0 +1,55 @@
+.toggle-wrapper {
+    margin: 0.5em auto;
+}
+
+.toggle-wrapper label {
+    padding: 0.3em;
+    font-size: 17px;
+    display: block;
+}
+
+.toggleContainer {
+    width: 100%;
+    position: relative;
+    background: #21212114;
+    border: 1px solid #eeeeee;
+    border-radius: 100px;
+}
+
+.toggleContainer .toggleOption {
+    display: inline-block;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    color: #1976D2;
+    font-size: 1em;
+    border-radius: 100px;
+}
+
+.toggleContainer .toggleOption.selected {
+    color: #1976D2;
+    cursor: initial;
+    border-radius: 100px;
+}
+
+.toggleContainer .toggle {
+    position: absolute;
+    height: 100%;
+    bottom: 0;
+    left: 0;
+    transition: all 0.4s ease-in-out;
+    background: white;
+    border-radius: 100px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 3px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 3px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.optionDisabled {
+    background: #21212114;
+    cursor: no-drop !important;
+}
