@@ -669,6 +669,7 @@ export const PureLightTheme = createTheme({
       styleOverrides: {
         root: {
           padding: 0,
+          borderRadius: 0
         },
         elevation0: {
           boxShadow: 'none'

@@ -53,16 +53,19 @@ function BulkActions() {
             Delete
           </ButtonError>
         </Box>
-        <IconButton
-          color="primary"
-          onClick={openMenu}
-          ref={moreRef}
-          sx={{ ml: 2, p: 1 }}
-        >
-          <MoreVertTwoToneIcon />
-        </IconButton>
+        {
+          /*
+          <IconButton
+            color="primary"
+            onClick={openMenu}
+            ref={moreRef}
+            sx={{ ml: 2, p: 1 }}
+          >
+            <MoreVertTwoToneIcon />
+          </IconButton>
+          */
+        }
       </Box>
-
       <Menu
         keepMounted
         anchorEl={moreRef.current}

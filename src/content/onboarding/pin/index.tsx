@@ -51,7 +51,7 @@ function OnboardingPin() {
                             type="numeric"
                             inputMode="number"
                             style={{ padding: '10px' }}
-                            inputStyle={{ fontSize: '20px', fontWeight: 600 }}
+                            inputStyle={{ fontSize: '28px', fontWeight: 500 }}
                             inputFocusStyle={{ borderColor: 'blue' }}
                             onComplete={(value, index) => { }}
                             autoSelect={true}
