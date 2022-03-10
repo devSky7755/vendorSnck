@@ -61,7 +61,9 @@ function UserProfile() {
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item xs={12}>
+                    {
+                        /*
+                        <Grid item xs={12}>
                         <ColoredBox sx={{ mr: 2, py: 4 }}>
                             <Typography sx={{ px: 4, pb: 2 }} style={{ textAlign: 'center' }}>
                                 Your Owner PIN can be used to access all areas
@@ -85,19 +87,25 @@ function UserProfile() {
                             </Box>
                         </ColoredBox>
                     </Grid>
-                    <Grid item xs={12}>
-                        <Typography component="h5" variant='h5'>
-                            Password
-                        </Typography>
-                        <Box sx={{ pt: 1, pb: 2 }}>
-                            <Typography component={'span'}>
-                                It's a good idea to use a strong password that you're not using elsewhere
+                    */
+                    }
+                    {
+                        /*
+                        <Grid item xs={12}>
+                            <Typography component="h5" variant='h5'>
+                                Password
                             </Typography>
-                        </Box>
-                        <Box>
-                            <Button color='primary'>CHANGE PASSWORD</Button>
-                        </Box>
-                    </Grid>
+                            <Box sx={{ pt: 1, pb: 2 }}>
+                                <Typography component={'span'}>
+                                    It's a good idea to use a strong password that you're not using elsewhere
+                                </Typography>
+                            </Box>
+                            <Box>
+                                <Button color='primary'>CHANGE PASSWORD</Button>
+                            </Box>
+                        </Grid>
+                        */
+                    }
                 </Grid>
             </Container>
             <Footer />

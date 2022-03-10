@@ -21,7 +21,7 @@ const PhoneWrapper = styled(Box)(
 `
 );
 
-const steps = ['Your Phone', '2-Step Verification', 'Pin'];
+const steps = ['Your Phone', '2-Step Verification'];
 
 function OnboardingVerification() {
     const [code, setCode] = useState('');
@@ -63,7 +63,7 @@ function OnboardingVerification() {
                     </PhoneWrapper>
                     <PhoneWrapper>
                         <Button variant='contained' color='primary' fullWidth onClick={() => {
-                            navigate('/onboarding/pin')
+                            navigate('/onboarding/ordertype')
                         }}>Verify</Button>
                     </PhoneWrapper>
                     <div>

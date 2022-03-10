@@ -9,7 +9,7 @@ const tempUsers: TeamUser[] = [
     name: 'Jack Johnson',
     status: 'Active',
     lastSeen: '15 min ago',
-    lastSeenTimeStamp: 0
+    lastSeenTimeStamp: 0,
   },
   {
     id: 51,

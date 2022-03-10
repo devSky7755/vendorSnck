@@ -20,7 +20,7 @@ function FAQ() {
                 <PageTitle
                     heading="How to use the Snackr Admin Panel" />
             </PageTitleWrapper>
-            <Container maxWidth="lg">
+            <Container maxWidth="lg" sx={{ pt: 4 }}>
                 <Grid container spacing={0}>
                     <Grid item xs={12}>
                         <Accordion style={{ marginBottom: '16px' }}>

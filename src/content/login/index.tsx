@@ -73,7 +73,7 @@ const keyboards = [
 function LoginPage() {
     const navigate = useNavigate();
 
-    const [viewMode, setViewMode] = useState(0);
+    const [viewMode, setViewMode] = useState(1);
     const [showVerify, setShowVerify] = useState(false);
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('');
@@ -93,17 +93,21 @@ function LoginPage() {
             </Helmet>
             <Container maxWidth='sm' sx={{ mt: 10 }}>
                 <Grid container spacing={4}>
-                    <Grid item xs={12} className='text-center'>
-                        <Box style={{ width: 240 }} className='mx-auto'>
-                            <MultiToggle options={options} selectedOption={viewMode} onSelectOption={value => {
-                                setViewMode(value);
-                            }}></MultiToggle>
-                        </Box>
-                    </Grid>
+                    {
+                        /*
+                        <Grid item xs={12} className='text-center'>
+                            <Box style={{ width: 240 }} className='mx-auto'>
+                                <MultiToggle options={options} selectedOption={viewMode} onSelectOption={value => {
+                                    setViewMode(value);
+                                }}></MultiToggle>
+                            </Box>
+                        </Grid>
+                        */
+                    }
                     <Grid item xs={12}>
                         {
                             viewMode === 0 ? (
-                                <Card sx={{ p: 8, mb: 10, borderRadius: 0 }}>
+                                <Card sx={{ p: 8, pt: 8, mb: 10, borderRadius: 0 }}>
                                     <Typography sx={{ mb: 2 }} variant="h1">
                                         Enter Your PIN
                                     </Typography>
@@ -164,7 +168,7 @@ function LoginPage() {
                                 </Card>
                             ) : (
                                 showVerify ? (
-                                    <Card sx={{ p: 8, mb: 10, borderRadius: 0 }}>
+                                    <Card sx={{ p: 8, mt: 4, mb: 10, borderRadius: 0 }}>
                                         <Typography sx={{ mb: 2 }} variant="h1">
                                             2-Step Verification
                                         </Typography>
@@ -197,7 +201,7 @@ function LoginPage() {
                                         </div>
                                     </Card>
                                 ) : (
-                                    <Card sx={{ p: 8, mb: 10, borderRadius: 0 }}>
+                                    <Card sx={{ p: 8, mt: 4, mb: 10, borderRadius: 0 }}>
                                         <Typography sx={{ mb: 2 }} variant="h1">
                                             Login With Phone
                                         </Typography>
