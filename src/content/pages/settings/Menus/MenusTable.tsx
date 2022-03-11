@@ -27,31 +27,31 @@ import Label from 'src/components/Label';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import BulkActions from './BulkActions';
-import { TeamUser, UserRole, TeamUserStatus } from 'src/models/team_user';
+import { MenuItem as MenuItemModel, MenuItemStatus } from 'src/models/menu_item';
 
-interface UsersTableProps {
+interface MenusTableProps {
   className?: string;
-  users: TeamUser[];
-  onEditingUser: Function
+  menus: MenuItemModel[];
+  onEditingMenu: Function
 }
 
 interface Filters {
-  status?: TeamUserStatus;
+  status?: MenuItemStatus;
 }
 
-const getStatusLabel = (userStatus: TeamUserStatus): JSX.Element => {
-  const color = userStatus === 'Active' ? 'success' : 'warning';
-  return <Label color={color}>{userStatus}</Label>;
+const getStatusLabel = (menuStatus: MenuItemStatus): JSX.Element => {
+  const color = menuStatus === 'Available' ? 'success' : 'warning';
+  return <Label color={color}>{menuStatus}</Label>;
 };
 
 const applyFilters = (
-  users: TeamUser[],
+  menus: MenuItemModel[],
   filters: Filters
-): TeamUser[] => {
-  return users.filter((user) => {
+): MenuItemModel[] => {
+  return menus.filter((menu) => {
     let matches = true;
 
-    if (filters.status && user.status !== filters.status) {
+    if (filters.status && menu.status !== filters.status) {
       matches = false;
     }
 
@@ -60,19 +60,19 @@ const applyFilters = (
 };
 
 const applyPagination = (
-  users: TeamUser[],
+  menus: MenuItemModel[],
   page: number,
   limit: number
-): TeamUser[] => {
-  return users.slice(page * limit, page * limit + limit);
+): MenuItemModel[] => {
+  return menus.slice(page * limit, page * limit + limit);
 };
 
-const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
+const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
 
-  const [selectedUsers, setSelectedUsers] = useState<number[]>(
+  const [selectedMenus, setSelectedMenus] = useState<number[]>(
     []
   );
-  const selectedBulkActions = selectedUsers.length > 0;
+  const selectedBulkActions = selectedMenus.length > 0;
   const [page, setPage] = useState<number>(0);
   const [limit, setLimit] = useState<number>(5);
   const [filters, setFilters] = useState<Filters>({
@@ -85,12 +85,12 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
       name: 'All'
     },
     {
-      id: 'Active',
-      name: 'Active'
+      id: 'Available',
+      name: 'Available'
     },
     {
-      id: 'Not Active',
-      name: 'Not Active'
+      id: 'Not Available',
+      name: 'Not Available'
     }
   ];
 
@@ -107,28 +107,28 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
     }));
   };
 
-  const handleSelectAllUsers = (
+  const handleSelectAllMenus = (
     event: ChangeEvent<HTMLInputElement>
   ): void => {
-    setSelectedUsers(
+    setSelectedMenus(
       event.target.checked
-        ? users.map((user) => user.id)
+        ? menus.map((menu) => menu.id)
         : []
     );
   };
 
-  const handleSelectOneUser = (
+  const handleSelectOneMenu = (
     event: ChangeEvent<HTMLInputElement>,
-    userId: number
+    menuId: number
   ): void => {
-    if (!selectedUsers.includes(userId)) {
-      setSelectedUsers((prevSelected) => [
+    if (!selectedMenus.includes(menuId)) {
+      setSelectedMenus((prevSelected) => [
         ...prevSelected,
-        userId
+        menuId
       ]);
     } else {
-      setSelectedUsers((prevSelected) =>
-        prevSelected.filter((id) => id !== userId)
+      setSelectedMenus((prevSelected) =>
+        prevSelected.filter((id) => id !== menuId)
       );
     }
   };
@@ -141,17 +141,17 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
     setLimit(parseInt(event.target.value));
   };
 
-  const filteredUsers = applyFilters(users, filters);
-  const paginatedUsers = applyPagination(
-    filteredUsers,
+  const filteredMenus = applyFilters(menus, filters);
+  const paginatedMenus = applyPagination(
+    filteredMenus,
     page,
     limit
   );
-  const selectedSomeUsers =
-    selectedUsers.length > 0 &&
-    selectedUsers.length < users.length;
-  const selectedAllUsers =
-    selectedUsers.length === users.length;
+  const selectedSomeMenus =
+    selectedMenus.length > 0 &&
+    selectedMenus.length < menus.length;
+  const selectedAllMenus =
+    selectedMenus.length === menus.length;
   const theme = useTheme();
 
   return (
@@ -193,38 +193,37 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
               <TableCell padding="checkbox">
                 <Checkbox
                   color="primary"
-                  checked={selectedAllUsers}
-                  indeterminate={selectedSomeUsers}
-                  onChange={handleSelectAllUsers}
+                  checked={selectedAllMenus}
+                  indeterminate={selectedSomeMenus}
+                  onChange={handleSelectAllMenus}
                 />
               </TableCell>
-              <TableCell>User ID</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>Last Seen</TableCell>
+              <TableCell>Price</TableCell>
               <TableCell align="right"></TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedUsers.map((user) => {
-              const isUserSelected = selectedUsers.includes(
-                user.id
+            {paginatedMenus.map((menu) => {
+              const isMenuSelected = selectedMenus.includes(
+                menu.id
               );
               return (
                 <TableRow
                   hover
-                  key={user.id}
-                  selected={isUserSelected}
+                  key={menu.id}
+                  selected={isMenuSelected}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
                       color="primary"
-                      checked={isUserSelected}
+                      checked={isMenuSelected}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                        handleSelectOneUser(event, user.id)
+                        handleSelectOneMenu(event, menu.id)
                       }
-                      value={isUserSelected}
+                      value={isMenuSelected}
                     />
                   </TableCell>
                   <TableCell>
@@ -235,7 +234,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
                       gutterBottom
                       noWrap
                     >
-                      {user.id}
+                      {menu.name}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -246,7 +245,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
                       gutterBottom
                       noWrap
                     >
-                      {user.name} {user.surname}
+                      {getStatusLabel(menu.status)}
                     </Typography>
                   </TableCell>
                   <TableCell>
@@ -257,26 +256,14 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
                       gutterBottom
                       noWrap
                     >
-                      {getStatusLabel(user.status)}
-                    </Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {user.lastSeen}
+                      ${menu.price.toFixed(2)}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
 
                   </TableCell>
-
                   <TableCell align="right">
-                    <Tooltip title="Edit User" arrow>
+                    <Tooltip title="Edit Menu" arrow>
                       <IconButton
                         sx={{
                           '&:hover': {
@@ -285,7 +272,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
                           color: theme.palette.primary.main
                         }}
                         onClick={() => {
-                          onEditingUser(user);
+                          onEditingMenu(menu);
                         }}
                         color="inherit"
                         size="small"
@@ -293,7 +280,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
                         <EditTwoToneIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="Delete User" arrow>
+                    <Tooltip title="Delete Menu" arrow>
                       <IconButton
                         sx={{
                           '&:hover': { background: theme.colors.error.lighter },
@@ -315,7 +302,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
       <Box p={2}>
         <TablePagination
           component="div"
-          count={filteredUsers.length}
+          count={filteredMenus.length}
           onPageChange={handlePageChange}
           onRowsPerPageChange={handleLimitChange}
           page={page}
@@ -327,12 +314,12 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
   );
 };
 
-UsersTable.propTypes = {
-  users: PropTypes.array.isRequired
+MenusTable.propTypes = {
+  menus: PropTypes.array.isRequired
 };
 
-UsersTable.defaultProps = {
-  users: []
+MenusTable.defaultProps = {
+  menus: []
 };
 
-export default UsersTable;
+export default MenusTable;

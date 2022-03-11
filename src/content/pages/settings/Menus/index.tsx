@@ -5,9 +5,9 @@ import { Box, styled, TextField, InputAdornment, Card } from '@mui/material';
 import Footer from 'src/components/Footer';
 import { useState } from 'react';
 import SearchTwoTone from '@mui/icons-material/SearchTwoTone';
-import { TeamUser } from 'src/models/team_user';
-import UsersTable from './UsersTable';
-import EditUserDialog from './EditUser';
+import { MenuItem } from 'src/models/menu_item';
+import MenusTable from './MenusTable';
+import EditMenuDialog from './EditMenu';
 
 const SearchWrapper = styled(Box)(
   ({ theme }) => `
@@ -25,69 +25,82 @@ const TableWrapper = styled(Box)(
 `
 );
 
-const tempUsers: TeamUser[] = [
+const tempMenus: MenuItem[] = [
   {
-    id: 52,
-    role: 'Runner',
-    name: 'Jack',
-    surname: 'Jackson',
-    status: 'Active',
-    lastSeen: '15 min ago',
-    lastSeenTimeStamp: 0,
+    id: 0,
+    name: 'Soda',
+    category: 'Soft Drinks',
+    status: 'Available',
+    price: 2,
+    currentAvailable: 100
   },
   {
-    id: 51,
-    role: 'Runner',
-    name: 'Dave',
-    surname: 'Davidson',
-    status: 'Not Active',
-    lastSeen: '5 days ago',
-    lastSeenTimeStamp: 0
+    id: 1,
+    name: 'Orange Juice',
+    category: 'Soft Drinks',
+    status: 'Not Available',
+    price: 5,
+    currentAvailable: 0
   },
   {
-    id: 31,
-    role: 'Packer',
-    name: 'Frank',
-    surname: 'Frankson',
-    status: 'Active',
-    lastSeen: '5 min ago',
-    lastSeenTimeStamp: 0
+    id: 2,
+    name: 'Beef Dog',
+    category: 'Hot Dogs',
+    status: 'Available',
+    price: 3,
+    currentAvailable: 100
   },
+  {
+    id: 3,
+    name: 'Vegan Dog',
+    category: 'Hot Dogs',
+    status: 'Available',
+    price: 4,
+    currentAvailable: 100
+  },
+  {
+    id: 4,
+    name: 'NY Style Dog',
+    category: 'Hot Dogs',
+    status: 'Available',
+    price: 5,
+    currentAvailable: 100
+  }
 ];
 
-function UsersSetting() {
+function MenuSettings() {
   const [showSearch, setShowSearch] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [users, setUsers] = useState(tempUsers);
+  const [menus, setMenus] = useState(tempMenus);
 
   const onToggleSearch = () => {
     setShowSearch(!showSearch);
   }
 
-  const onAddUser = () => {
+  const onAddMenu = () => {
     setEditing({
       role: 'Admin'
     });
     setEditOpen(true);
   }
 
-  const onEditing = (user) => {
-    setEditing(user);
+  const onEditing = (menu) => {
+    setEditing(menu);
     setEditOpen(true);
   }
 
-  const onEdit = (user) => {
+  const onEdit = (menu) => {
     setEditOpen(false);
   }
 
   return (
     <>
       <Helmet>
-        <title>Users</title>
+        <title>Menus</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader onAddUser={onAddUser} onToggleSearch={onToggleSearch} />
+        <PageHeader onAddMenu={onAddMenu} onToggleSearch={onToggleSearch} />
       </PageTitleWrapper>
       <Box>
         {
@@ -101,20 +114,20 @@ function UsersSetting() {
                 </InputAdornment>
               )
             }}
-              type='search' variant='standard' fullWidth placeholder='Search by email, name, surname, phone number'></TextField>
+              type='search' variant='standard' fullWidth placeholder='Search by name, category, tags'></TextField>
           </SearchWrapper>
         }
         {
           editOpen && editing &&
-          <EditUserDialog
-            user={editing}
+          <EditMenuDialog
+            menu={editing}
             open={editOpen}
             onClose={onEdit}
           />
         }
         <TableWrapper>
           <Card>
-            <UsersTable users={users} onEditingUser={(user) => onEditing(user)} />
+            <MenusTable menus={menus} onEditingMenu={(menu) => onEditing(menu)} />
           </Card>
         </TableWrapper>
       </Box>
@@ -123,4 +136,4 @@ function UsersSetting() {
   );
 }
 
-export default UsersSetting;
+export default MenuSettings;

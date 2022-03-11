@@ -20,7 +20,7 @@ const PageTitleWrapper: FC<PageTitleWrapperProps> = ({ children }) => {
   return (
     <>
       <PageTitle>
-        <Box sx={{ pl: 2 }}>
+        <Box sx={{ px: 2 }}>
           {children}
         </Box>
       </PageTitle>

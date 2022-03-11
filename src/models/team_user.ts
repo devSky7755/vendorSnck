@@ -3,10 +3,11 @@ export type UserRole = 'Admin' | 'Runner' | 'Packer';
 
 export interface TeamUser {
   id: number;
-  role: UserRole,
-  email?: string,
-  phone?: string,
+  role: UserRole;
+  email?: string;
+  phone?: string;
   name: string;
+  surname: string;
   status: TeamUserStatus;
   lastSeen: string;
   lastSeenTimeStamp: number;
