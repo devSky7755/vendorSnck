@@ -36,6 +36,7 @@ const UserProfile = Loader(lazy(() => import('src/content/pages/UserProfile')));
 const UserSettings = Loader(lazy(() => import('src/content/pages/settings/Users')));
 const MenuSettings = Loader(lazy(() => import('src/content/pages/settings/Menus')));
 const OrderSettings = Loader(lazy(() => import('src/content/pages/settings/Orders')));
+const PrinterSettings = Loader(lazy(() => import('src/content/pages/settings/Printers')));
 
 // Components
 
@@ -223,6 +224,10 @@ const routes: RouteObject[] = [
       {
         path: 'orders',
         element: <OrderSettings />
+      },
+      {
+        path: 'printers',
+        element: <PrinterSettings />
       }
     ]
   },

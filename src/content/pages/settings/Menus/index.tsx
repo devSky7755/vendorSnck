@@ -11,7 +11,7 @@ import EditMenuDialog from './EditMenu';
 
 const SearchWrapper = styled(Box)(
   ({ theme }) => `
-        padding: ${theme.spacing(2)};
+        padding: ${theme.spacing(1)} ${theme.spacing(2)};
         background: white;
         border: 1px solid ${theme.general.borderColor};
 `

@@ -18,7 +18,7 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
         </Typography>
       </Grid>
       <Grid item>
-        <IconButton color='primary' onClick={() => {
+        <IconButton color='primary' size='small' onClick={() => {
           if (props.onToggleSearch) {
             props.onToggleSearch();
           }

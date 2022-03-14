@@ -4,8 +4,9 @@ import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import { SearchOutlined } from '@mui/icons-material';
 
 interface PageHeaderProps {
+  showSearch: boolean,
   onToggleSearch?: Function,
-  onAddUser?: Function
+  onAddPrinter?: Function
 }
 
 
@@ -14,26 +15,30 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
         <Typography variant="h3" component="h3" gutterBottom>
-          Users
+          Printers
         </Typography>
       </Grid>
       <Grid item>
-        <IconButton color='primary' size='small' onClick={() => {
-          if (props.onToggleSearch) {
-            props.onToggleSearch();
-          }
-        }}>
-          <SearchOutlined />
-        </IconButton>
+        {
+          props.showSearch &&
+          <IconButton color='primary' size='small' onClick={() => {
+            if (props.onToggleSearch) {
+              props.onToggleSearch();
+            }
+          }}>
+            <SearchOutlined />
+          </IconButton>
+        }
+
         <Button
           color='primary'
           sx={{ mt: { xs: 2, md: 0 } }}
           startIcon={<AddTwoToneIcon fontSize="small" />}
           onClick={() => {
-            if (props.onAddUser) props.onAddUser();
+            if (props.onAddPrinter) props.onAddPrinter();
           }}
         >
-          Add User
+          Add Printer
         </Button>
       </Grid>
     </Grid>

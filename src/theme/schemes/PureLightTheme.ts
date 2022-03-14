@@ -737,6 +737,7 @@ export const PureLightTheme = createTheme({
         }
       }
     },
+    /*
     MuiTabs: {
       styleOverrides: {
         root: {
@@ -781,6 +782,7 @@ export const PureLightTheme = createTheme({
         }
       }
     },
+    */
     MuiMenu: {
       styleOverrides: {
         paper: {
