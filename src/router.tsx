@@ -26,8 +26,7 @@ const Loader = (Component) => (props) => (
 
 
 // Dashboards
-
-const Crypto = Loader(lazy(() => import('src/content/dashboards/Crypto')));
+const Dashboard = Loader(lazy(() => import('src/content/dashboards')));
 
 // Applications
 
@@ -182,7 +181,7 @@ const routes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <Crypto />
+        element: <Dashboard />
       }
     ]
   },

@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Line } from 'react-chartjs-2';
 import { alpha, useTheme } from '@mui/material';
 
-interface WatchListColumn1ChartProps {
+interface TotalSalesChartProps {
   data: any[];
   labels: string[];
 }
 
-const WatchListColumn1Chart: FC<WatchListColumn1ChartProps> = ({
+const TotalSalesChart: FC<TotalSalesChartProps> = ({
   data: dataProp,
   labels,
   ...rest
@@ -28,11 +28,10 @@ const WatchListColumn1Chart: FC<WatchListColumn1ChartProps> = ({
         {
           data: dataProp,
           borderWidth: 1,
-          backgroundColor: primaryGradient,
           borderColor: theme.colors.primary.main,
           pointBorderWidth: 0,
-          pointRadius: 0,
-          pointHoverRadius: 0
+          pointRadius: 2,
+          pointHoverRadius: 2
         }
       ],
       labels
@@ -53,20 +52,20 @@ const WatchListColumn1Chart: FC<WatchListColumn1ChartProps> = ({
         {
           gridLines: {
             display: false,
-            drawBorder: false
+            drawBorder: true
           },
           ticks: {
-            display: false
+            display: true
           }
         }
       ],
       yAxes: [
         {
           gridLines: {
-            display: false
+            display: true
           },
           ticks: {
-            display: false
+            display: true
           }
         }
       ]
@@ -88,7 +87,7 @@ const WatchListColumn1Chart: FC<WatchListColumn1ChartProps> = ({
       callbacks: {
         title: () => { },
         label: (tooltipItem: any) => {
-          return `Price: $${tooltipItem.yLabel}`;
+          return `Sales: $${tooltipItem.yLabel}`;
         }
       }
     }
@@ -101,9 +100,9 @@ const WatchListColumn1Chart: FC<WatchListColumn1ChartProps> = ({
   );
 };
 
-WatchListColumn1Chart.propTypes = {
+TotalSalesChart.propTypes = {
   data: PropTypes.array.isRequired,
   labels: PropTypes.array.isRequired
 };
 
-export default WatchListColumn1Chart;
+export default TotalSalesChart;

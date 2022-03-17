@@ -452,6 +452,15 @@ export const PureLightTheme = createTheme({
         }
       }
     },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          ":last-child": {
+            paddingBottom: 8
+          }
+        }
+      }
+    },
     MuiRadio: {
       styleOverrides: {
         root: {

@@ -11,4 +11,8 @@ export interface TeamUser {
   status: TeamUserStatus;
   lastSeen: string;
   lastSeenTimeStamp: number;
+
+  average?: number;
+  average_change?: number;
+  daily_count?: number;
 }

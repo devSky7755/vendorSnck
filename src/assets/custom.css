@@ -71,6 +71,14 @@
     border-bottom: 1px solid #0000001F;
 }
 
+.border-right {
+    border-right: 1px solid #0000001F;
+}
+
+.border-left {
+    border-left: 1px solid #0000001F;
+}
+
 .py-0 {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
@@ -83,4 +91,8 @@
 
 .font-bold {
     font-weight: bold !important;
+}
+
+.d-inline-flex {
+    display: inline-flex;
 }
