@@ -903,13 +903,13 @@ export const PureLightTheme = createTheme({
       styleOverrides: {
         root: {
           borderBottomColor: colors.alpha.black[10],
-          fontSize: 14
+          fontSize: 13,
+          padding: 8
         },
         head: {
-          textTransform: 'uppercase',
-          fontSize: 13,
+          fontSize: 14,
           fontWeight: 'bold',
-          color: colors.alpha.black[70]
+          color: 'black'
         }
       }
     },

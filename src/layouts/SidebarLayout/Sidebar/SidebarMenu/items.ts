@@ -23,7 +23,7 @@ const menuItems: MenuItems[] = [
       },
       {
         name: 'Preparing',
-        link: '/orders/perparing',
+        link: '/orders/preparing',
       },
       {
         name: 'Delivery',

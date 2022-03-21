@@ -5,7 +5,7 @@ import { Box, styled, TextField, InputAdornment, Card } from '@mui/material';
 import Footer from 'src/components/Footer';
 import { useState } from 'react';
 import SearchTwoTone from '@mui/icons-material/SearchTwoTone';
-import { MenuItem } from 'src/models/menu_item';
+import { MenuItem, tempMenus } from 'src/models/menu_item';
 import MenusTable from './MenusTable';
 import EditMenuDialog from './EditMenu';
 
@@ -24,49 +24,6 @@ const TableWrapper = styled(Box)(
         border: 1px solid ${theme.general.borderColor};
 `
 );
-
-const tempMenus: MenuItem[] = [
-  {
-    id: 0,
-    name: 'Soda',
-    category: 'Soft Drinks',
-    status: 'Available',
-    price: 2,
-    currentAvailable: 100
-  },
-  {
-    id: 1,
-    name: 'Orange Juice',
-    category: 'Soft Drinks',
-    status: 'Not Available',
-    price: 5,
-    currentAvailable: 0
-  },
-  {
-    id: 2,
-    name: 'Beef Dog',
-    category: 'Hot Dogs',
-    status: 'Available',
-    price: 3,
-    currentAvailable: 100
-  },
-  {
-    id: 3,
-    name: 'Vegan Dog',
-    category: 'Hot Dogs',
-    status: 'Available',
-    price: 4,
-    currentAvailable: 100
-  },
-  {
-    id: 4,
-    name: 'NY Style Dog',
-    category: 'Hot Dogs',
-    status: 'Available',
-    price: 5,
-    currentAvailable: 100
-  }
-];
 
 function MenuSettings() {
   const [showSearch, setShowSearch] = useState(false);

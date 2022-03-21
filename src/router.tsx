@@ -28,17 +28,18 @@ const Loader = (Component) => (props) => (
 // Dashboards
 const Dashboard = Loader(lazy(() => import('src/content/dashboards')));
 
-// Applications
+// Settings
 
-//const Messenger = Loader(lazy(() => import('src/content/applications/Messenger')));
 const UserProfile = Loader(lazy(() => import('src/content/pages/UserProfile')));
 const UserSettings = Loader(lazy(() => import('src/content/pages/settings/Users')));
 const MenuSettings = Loader(lazy(() => import('src/content/pages/settings/Menus')));
 const OrderSettings = Loader(lazy(() => import('src/content/pages/settings/Orders')));
 const PrinterSettings = Loader(lazy(() => import('src/content/pages/settings/Printers')));
 
-// Components
+//Applications
+//const Messenger = Loader(lazy(() => import('src/content/applications/Messenger')));
 
+// Components
 const Buttons = Loader(lazy(() => import('src/content/pages/Components/Buttons')));
 const Modals = Loader(lazy(() => import('src/content/pages/Components/Modals')));
 const Accordions = Loader(lazy(() => import('src/content/pages/Components/Accordions')));
@@ -50,13 +51,15 @@ const Cards = Loader(lazy(() => import('src/content/pages/Components/Cards')));
 const Forms = Loader(lazy(() => import('src/content/pages/Components/Forms')));
 
 // Status
-
 const Status404 = Loader(lazy(() => import('src/content/pages/Status/Status404')));
 const Status500 = Loader(lazy(() => import('src/content/pages/Status/Status500')));
 const StatusComingSoon = Loader(lazy(() => import('src/content/pages/Status/ComingSoon')));
 const StatusMaintenance = Loader(lazy(() => import('src/content/pages/Status/Maintenance')));
 
 const LoginPage = Loader(lazy(() => import('src/content/login')));
+
+//Orders
+const OrdersNew = Loader(lazy(() => import('src/content/orders/new')));
 
 const routes: RouteObject[] = [
   {
@@ -227,6 +230,43 @@ const routes: RouteObject[] = [
       {
         path: 'printers',
         element: <PrinterSettings />
+      }
+    ]
+  },
+  {
+    path: 'orders',
+    element: (
+      <SidebarLayout />
+    ),
+    children: [
+      {
+        path: '',
+        element: (
+          <Navigate
+            to="/orders/new"
+            replace
+          />
+        )
+      },
+      {
+        path: 'new',
+        element: <OrdersNew />
+      },
+      {
+        path: 'preparing',
+        element: <OrdersNew />
+      },
+      {
+        path: 'delivery',
+        element: <OrdersNew />
+      },
+      {
+        path: 'pickup',
+        element: <OrdersNew />
+      },
+      {
+        path: 'all',
+        element: <OrdersNew />
       }
     ]
   },

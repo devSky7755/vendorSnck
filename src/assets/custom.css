@@ -96,3 +96,16 @@
 .d-inline-flex {
     display: inline-flex;
 }
+
+tr.group-header-row {
+    background: #0000000A !important;
+}
+
+.border-warning {
+    border: 1px solid #FF864E;
+}
+
+.alchol-label {
+    font-size: 10px !important;
+    line-height: 2 !important;
+}

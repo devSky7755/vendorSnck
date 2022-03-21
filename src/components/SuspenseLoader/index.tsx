@@ -4,6 +4,7 @@ import { Box, CircularProgress } from '@mui/material';
 
 function SuspenseLoader() {
   useEffect(() => {
+    NProgress.settings.showSpinner = false;
     NProgress.start();
 
     return () => {
@@ -18,7 +19,7 @@ function SuspenseLoader() {
       alignItems="center"
       justifyContent="center"
     >
-      <CircularProgress size={64} disableShrink thickness={3} />
+        <CircularProgress size={64} disableShrink thickness={3} />
     </Box>
   );
 }
