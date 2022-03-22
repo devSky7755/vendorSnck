@@ -8,7 +8,6 @@ import { temp_orders_new } from 'src/models/order';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
-        max-height: calc(100% - 100px);
         padding: ${theme.spacing(0)};
         background: white;
         border: 1px solid ${theme.general.borderColor};
@@ -17,8 +16,7 @@ const TableWrapper = styled(Box)(
 
 const FooterWrapper = styled(Box)(
   ({ theme }) => `
-        bottom: 0;
-        position: sticky;
+        margin-top: auto;
         box-shadow: 0px -1px 16px rgba(159, 162, 191, 0.18), 0px -2px 2px rgba(159, 162, 191, 0.32);
         width: 100%;
 `
@@ -77,21 +75,23 @@ function OrdersPreparing() {
           onClose={onEdit}
         />
       }
-      <Box sx={{ mb: 7 }}>
-        <TableWrapper>
-          <Card>
-            <OrdersPreparingTable orders={orders} selected={selected} onSelectionChanged={onSelectionChanged} />
-          </Card>
-        </TableWrapper>
-        <Drawer anchor='right' variant='persistent'>
+      <Box style={{ height: '100%', display: 'flex', flexDirection: 'column' }} >
+        <Box>
+          <TableWrapper>
+            <Card>
+              <OrdersPreparingTable orders={orders} selected={selected} onSelectionChanged={onSelectionChanged} />
+            </Card>
+          </TableWrapper>
+          <Drawer anchor='right' variant='persistent'>
 
-        </Drawer>
+          </Drawer>
+        </Box>
+        <FooterWrapper>
+          <Card sx={{ p: 1 }}>
+            <BulkActions selected={selected} onView={onView} onPrint={onPrint} onIssue={onIssue} onReset={onReset} />
+          </Card>
+        </FooterWrapper>
       </Box>
-      <FooterWrapper>
-        <Card sx={{ p: 1 }}>
-          <BulkActions selected={selected} onView={onView} onPrint={onPrint} onIssue={onIssue} onReset={onReset} />
-        </Card>
-      </FooterWrapper>
     </>
   );
 }

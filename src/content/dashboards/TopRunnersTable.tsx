@@ -31,7 +31,7 @@ const TopRunnersTable: FC<TopRunnersTableProps> = ({ runners }) => {
                                 hover
                                 key={runner.id}
                             >
-                                <TableCell sx={{ px: 0 }} align='left'>
+                                <TableCell sx={{ px: 0, py: 2 }} align='left'>
                                     <Typography
                                         variant="body1"
                                         fontWeight="400"

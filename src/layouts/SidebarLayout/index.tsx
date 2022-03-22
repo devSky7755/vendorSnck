@@ -47,7 +47,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = () => {
         <MainContent>
           <Sidebar />
           <MainContainer>
-            <div style={{ overflow: 'auto' }}>
+            <div style={{ overflow: 'auto', height: '100%' }}>
               <Outlet />
             </div>
           </MainContainer>
