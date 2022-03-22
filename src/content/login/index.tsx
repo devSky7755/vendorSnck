@@ -80,7 +80,7 @@ function LoginPage({ token, admin, lastLoggedIn, login }) {
     const [showVerify, setShowVerify] = useState(false);
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('');
-    const [codeErr, setCodeError] = useState(null);
+    const [codeErr, setCodeError] = useState(false);
     const [pinCode, setPinCode] = useState('');
 
     useEffect(() => {
@@ -185,7 +185,7 @@ function LoginPage({ token, admin, lastLoggedIn, login }) {
                                         </Typography>
                                         <Typography component="span" variant="subtitle1">
                                             A text message with a verificiation code<br />
-                                            has been sent to <b>+61 403 911 104</b>
+                                            has been sent to <b>{phone}</b>
                                         </Typography>
                                         <PhoneWrapper>
                                             <TextField
@@ -193,8 +193,10 @@ function LoginPage({ token, admin, lastLoggedIn, login }) {
                                                 label='Verification Code'
                                                 fullWidth
                                                 value={code}
-                                                helperText='Enter 6-digit code'
-                                                inputProps={{ maxLength: 6 }}
+                                                helperText={
+                                                    codeErr ? 'Wrong verification code' : 'Enter 4-digit code'
+                                                }
+                                                inputProps={{ maxLength: 4 }}
                                                 error={codeErr}
                                                 style={{ fontSize: 18 }}
                                                 onChange={(e) => {
@@ -203,7 +205,7 @@ function LoginPage({ token, admin, lastLoggedIn, login }) {
                                             />
                                         </PhoneWrapper>
                                         <PhoneWrapper>
-                                            <Button variant='contained' color='primary' fullWidth onClick={() => {
+                                            <Button variant='contained' color='primary' disabled={!code || code.length !== 4} fullWidth onClick={() => {
                                                 navigate('/dashboards')
                                             }}>Verify</Button>
                                         </PhoneWrapper>
@@ -233,7 +235,7 @@ function LoginPage({ token, admin, lastLoggedIn, login }) {
                                             />
                                         </PhoneWrapper>
                                         <PhoneWrapper>
-                                            <Button variant='contained' color='primary' fullWidth onClick={() => {
+                                            <Button disabled={!phone || phone.length < 8} variant='contained' color='primary' fullWidth onClick={() => {
                                                 setShowVerify(true);
                                             }}>Next</Button>
                                         </PhoneWrapper>
