@@ -1,7 +1,5 @@
-import { FC, ReactNode, useState, useContext } from 'react';
+import { FC, ReactNode, useState } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
-import clsx from 'clsx';
-import { SidebarContext } from 'src/contexts/SidebarContext';
 
 import PropTypes from 'prop-types';
 import { Button, Badge, Collapse, ListItem } from '@mui/material';
@@ -40,7 +38,6 @@ const SidebarMenuItem: FC<SidebarMenuItemProps> = ({
     return (
       <ListItem component="div" className="Mui-children" key={name} {...rest}>
         <Button
-          className={clsx({ 'Mui-active': menuToggle })}
           //startIcon={Icon && <Icon />}
           endIcon={
             menuToggle ? <ExpandLessTwoToneIcon /> : <ExpandMoreTwoToneIcon />

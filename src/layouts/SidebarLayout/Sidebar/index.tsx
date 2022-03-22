@@ -1,11 +1,9 @@
-import { useContext } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import { SidebarContext } from 'src/contexts/SidebarContext';
-
 import { Box, Drawer, Hidden, Typography } from '@mui/material';
-
 import { styled } from '@mui/material/styles';
 import SidebarMenu from './SidebarMenu';
+import { connect } from 'react-redux';
+import { toggleSidebar } from 'src/reducers/setting/action'
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -32,14 +30,12 @@ const TopSection = styled(Box)(
 `
 );
 
-function Sidebar() {
-  const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
-
+function Sidebar({ showSidebar, toggleSidebar }) {
   const closeSidebar = () => {
     toggleSidebar();
   }
 
-  if (sidebarToggle) {
+  if (showSidebar) {
     return (
       <>
         <Hidden lgDown>
@@ -60,7 +56,7 @@ function Sidebar() {
         <Hidden lgUp>
           <Drawer
             anchor="left"
-            open={sidebarToggle}
+            open={showSidebar}
             onClose={closeSidebar}
             variant="temporary"
             elevation={9}
@@ -90,4 +86,9 @@ function Sidebar() {
   }
 }
 
-export default Sidebar;
+function reduxState(state) {
+  return {
+    showSidebar: (state.setting && state.setting.showSidebar) || false
+  }
+}
+export default connect(reduxState, { toggleSidebar })(Sidebar);

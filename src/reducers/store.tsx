@@ -1,7 +1,5 @@
 import { applyMiddleware, compose, createStore } from 'redux';
 import reducers from './index';
-import { createBrowserHistory } from 'history'
-import { routerMiddleware } from 'connected-react-router';
 import thunkMiddleware from 'redux-thunk';
 import { logger } from 'redux-logger';
 
@@ -13,20 +11,17 @@ const persistConfig = {
     key: 'persist',
     storage,
     stateReconciler: hardSet,
-    whitelist: ['auth']
+    whitelist: ['auth', 'setting']
 }
 
-const history = createBrowserHistory();
-let rootReducer = reducers(history)
+let rootReducer = reducers();
 const persistedReducer = persistReducer(persistConfig, rootReducer)
-
-const routeMiddleware = routerMiddleware(history);
 
 let middlewares = null;
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-    middlewares = [routeMiddleware, thunkMiddleware, logger];
+    middlewares = [thunkMiddleware, logger];
 } else {
-    middlewares = [routeMiddleware, thunkMiddleware];
+    middlewares = [thunkMiddleware];
 }
 
 export default function configureStore(initialState = null) {
@@ -35,5 +30,3 @@ export default function configureStore(initialState = null) {
 
     return store;
 }
-
-export { history };

@@ -159,8 +159,6 @@ const reduceChildRoutes = ({
     end: true
   }, path) : false;
 
-  console.log(item.link, path, exactMatch, item.items);
-
   if (item.items) {
     const partialMatch = item.link ? !!matchPath({
       path: item.link,

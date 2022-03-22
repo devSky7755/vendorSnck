@@ -1,17 +1,20 @@
-import { FC, useContext } from 'react';
+import { FC } from 'react';
 
 import { Box, Hidden, IconButton, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import MenuTwoToneIcon from '@mui/icons-material/MenuTwoTone';
-import { SidebarContext } from 'src/contexts/SidebarContext';
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
 
 import HeaderMenu from './Menu';
 import HeaderButtons from './Buttons';
 import Logo from 'src/components/Logo';
+import { connect } from 'react-redux';
+import { toggleSidebar } from 'src/reducers/setting/action'
 
 interface HeaderProps {
   isBasic?: boolean;
+  showSidebar: boolean;
+  toggleSidebar: Function;
 }
 
 const HeaderWrapper = styled(Box)(
@@ -30,9 +33,7 @@ const HeaderWrapper = styled(Box)(
 );
 
 
-const Header: FC<HeaderProps> = ({ isBasic }) => {
-  const { sidebarToggle, toggleSidebar } = useContext(SidebarContext);
-
+const Header: FC<HeaderProps> = ({ isBasic, showSidebar, toggleSidebar }) => {
   if (isBasic) {
     return (
       <HeaderWrapper display="flex" alignItems="center">
@@ -46,8 +47,10 @@ const Header: FC<HeaderProps> = ({ isBasic }) => {
       <HeaderWrapper display="flex" alignItems="center">
         <Box display="flex" alignItems="center">
           <Tooltip arrow title="Toggle Menu">
-            <IconButton onClick={toggleSidebar} style={{ marginRight: '12px', color: 'white' }}>
-              {!sidebarToggle ? <MenuTwoToneIcon /> : <CloseTwoToneIcon />}
+            <IconButton onClick={() => {
+              toggleSidebar();
+            }} style={{ marginRight: '12px', color: 'white' }}>
+              {!showSidebar ? <MenuTwoToneIcon /> : <CloseTwoToneIcon />}
             </IconButton>
           </Tooltip>
           <Logo />
@@ -63,4 +66,10 @@ const Header: FC<HeaderProps> = ({ isBasic }) => {
   }
 }
 
-export default Header;
+function reduxState(state) {
+  return {
+    showSidebar: (state.setting && state.setting.showSidebar) || false
+  }
+}
+export default connect(reduxState, { toggleSidebar })(Header);
+

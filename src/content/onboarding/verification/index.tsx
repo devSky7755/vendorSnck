@@ -1,9 +1,10 @@
 import { Box, Container, Card, Typography, TextField, Button } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import OnboardingStepper from '../OnboardingStepper';
 import { useNavigate } from 'react-router';
+import { connect } from 'react-redux';
 
 const OnboardingWrapper = styled(Box)(
     () => `
@@ -23,11 +24,18 @@ const PhoneWrapper = styled(Box)(
 
 const steps = ['Your Phone', '2-Step Verification'];
 
-function OnboardingVerification() {
+function OnboardingVerification({ phone }) {
     const [code, setCode] = useState('');
-    const [err, setError] = useState(null);
+    const [message, setMessage] = useState('Enter 4-digit code');
+    const [err, setError] = useState(false);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!phone) {
+            navigate('/onboarding/phone');
+        }
+    }, [phone])
 
     return (
         <OnboardingWrapper>
@@ -36,7 +44,7 @@ function OnboardingVerification() {
             </Helmet>
             <Container maxWidth='sm'>
                 <Box sx={{ mt: 10 }}>
-                    <OnboardingStepper steps={steps} activeStep={1}></OnboardingStepper>
+                    <OnboardingStepper steps={steps} activeStep={1} error={err}></OnboardingStepper>
                 </Box>
                 <Card sx={{ p: 8, mt: 4, mb: 10, borderRadius: 0 }}>
                     <Typography sx={{ mb: 2 }} variant="h1">
@@ -44,17 +52,18 @@ function OnboardingVerification() {
                     </Typography>
                     <Typography component="span" variant="subtitle1">
                         A text message with a verificiation code<br />
-                        has been sent to <b>+61 403 911 104</b>
+                        has been sent to <b>{phone}</b>
                     </Typography>
                     <PhoneWrapper>
                         <TextField
+                            inputProps={{ maxLength: 4, inputMode: 'numeric', pattern: '[0-9]*' }}
                             variant='outlined'
                             label='Verification Code'
                             fullWidth
                             value={code}
-                            helperText='Enter 6-digit code'
-                            inputProps={{ maxLength: 6 }}
+                            helperText={message}
                             error={err}
+
                             style={{ fontSize: 18 }}
                             onChange={(e) => {
                                 setCode(e.target.value);
@@ -62,7 +71,9 @@ function OnboardingVerification() {
                         />
                     </PhoneWrapper>
                     <PhoneWrapper>
-                        <Button variant='contained' color='primary' fullWidth onClick={() => {
+                        <Button disabled={!code || code.length !== 4} variant='contained' color='primary' fullWidth onClick={() => {
+                            //setMessage('Wrong verification code');
+                            //setError(true);
                             navigate('/onboarding/ordertype')
                         }}>Verify</Button>
                     </PhoneWrapper>
@@ -75,4 +86,10 @@ function OnboardingVerification() {
     );
 }
 
-export default OnboardingVerification;
+function reduxState(state) {
+    return {
+        phone: state.auth && state.auth.admin && state.auth.admin.mobileNo
+    }
+}
+export default connect(reduxState)(OnboardingVerification);
+

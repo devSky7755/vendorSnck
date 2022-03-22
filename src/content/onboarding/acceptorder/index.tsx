@@ -49,11 +49,15 @@ function OnboardingAcceptOrder() {
                         Next we recommend to:
                     </Typography>
                     <PhoneWrapper>
-                        <Button color='primary'>Add your team member</Button>
+                        <Button color='primary' onClick={() => {
+                            navigate('/settings/users');
+                        }}>Add your team member</Button>
                     </PhoneWrapper>
                     <StyledDivider />
                     <PhoneWrapper>
-                        <Button color='primary'>Review your menu</Button>
+                        <Button onClick={() => {
+                            navigate('/settings/menus');
+                        }} color='primary'>Review your menu</Button>
                     </PhoneWrapper>
                     <PhoneWrapper>
                         <Button variant='contained' color='primary' fullWidth

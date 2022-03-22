@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router';
 import MultiToggle from 'react-multi-toggle'
 import MuiPhoneNumber from 'material-ui-phone-number';
 import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
+import { connect } from 'react-redux';
+import { login } from 'src/reducers/auth/action';
 
 const OnboardingWrapper = styled(Box)(
     () => `
@@ -70,7 +72,8 @@ const keyboards = [
     ['', '0', 'B']
 ];
 
-function LoginPage() {
+
+function LoginPage({ token, admin, lastLoggedIn, login }) {
     const navigate = useNavigate();
 
     const [viewMode, setViewMode] = useState(1);
@@ -85,6 +88,14 @@ function LoginPage() {
             setViewMode(1);
         }
     }, [pinCode])
+
+    useEffect(() => {
+        if (token) {
+            navigate('/dashboards');
+        } else if (!lastLoggedIn) {
+            navigate('/onboarding');
+        }
+    }, [token])
 
     return (
         <OnboardingWrapper>
@@ -228,15 +239,18 @@ function LoginPage() {
                                         </PhoneWrapper>
                                     </Card>
                                 )
-
                             )
                         }
                     </Grid>
                 </Grid>
-
             </Container>
         </OnboardingWrapper >
     );
 }
 
-export default LoginPage;
+function reduxState(state) {
+    return {
+        ...state.auth
+    }
+}
+export default connect(reduxState, { login })(LoginPage);

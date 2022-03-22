@@ -59,6 +59,7 @@ const InputSlider: React.FC<InputSliderProps> = (props) => {
                 <Grid item>
                     <Input
                         value={value}
+                        disableUnderline
                         size="small"
                         onChange={handleInputChange}
                         onBlur={handleBlur}

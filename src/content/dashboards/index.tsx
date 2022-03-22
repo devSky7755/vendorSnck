@@ -58,7 +58,7 @@ const temp_top_items: MenuItem[] = [
     currentAvailable: 100
   },
   {
-    id: 1,
+    id: 5,
     name: 'Sprite',
     category: 'Soft Drinks',
     status: 'Not Available',

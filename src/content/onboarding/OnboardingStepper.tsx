@@ -7,7 +7,8 @@ import StepLabel from '@mui/material/StepLabel';
 
 interface OnboardingStepperProps {
     steps: string[];
-    activeStep?: number
+    activeStep?: number;
+    error?: boolean;
 }
 
 const OnboardingStepper: React.FC<OnboardingStepperProps> = (props) => {
@@ -22,7 +23,9 @@ const OnboardingStepper: React.FC<OnboardingStepperProps> = (props) => {
                         <Step key={label} {...stepProps} active={index === activeStep}>
                             {
                                 index <= activeStep ? (
-                                    <StepLabel StepIconProps={{ sx: { color: '#FF864E !important' } }}>{label}</StepLabel>
+                                    <StepLabel error={index === activeStep && props.error}
+                                        StepIconProps={{ sx: { color: index === activeStep && props.error ? 'inherit' : '#FF864E !important' } }}
+                                    >{label}</StepLabel>
                                 ) : (
                                     <StepLabel >{label}</StepLabel>
                                 )
