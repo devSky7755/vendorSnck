@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   List,
   ListItem,
@@ -10,6 +11,7 @@ import { useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import ExpandMoreTwoToneIcon from '@mui/icons-material/ExpandMoreTwoTone';
+import { NotificationsBadge } from '../Buttons/Notifications';
 
 const ListWrapper = styled(Box)(
   ({ theme }) => `
@@ -90,10 +92,13 @@ function HeaderMenu() {
             component={NavLink}
             to="/orders/preparing"
           >
-            <ListItemText
-              primaryTypographyProps={{ noWrap: true }}
-              primary="PREPARING"
-            />
+            <NotificationsBadge showZero={false} badgeContent={2} color='warning'>
+              <ListItemText
+                primaryTypographyProps={{ noWrap: true }}
+                primary="PREPARING"
+                sx={{ mx: 1 }}
+              />
+            </NotificationsBadge>
           </ListItem>
           <ListItem
             classes={{ root: 'MuiListItem-indicators' }}

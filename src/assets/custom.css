@@ -105,6 +105,10 @@ tr.group-header-row {
     border: 1px solid #FF864E;
 }
 
+.bg-warning {
+    background-color: #FFFAEA;
+}
+
 .alchol-label {
     font-size: 10px !important;
     line-height: 2 !important;

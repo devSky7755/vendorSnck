@@ -16,7 +16,7 @@ import { styled } from '@mui/material/styles';
 
 import { formatDistance, subDays } from 'date-fns';
 
-const NotificationsBadge = styled(Badge)(
+export const NotificationsBadge = styled(Badge)(
   ({ theme }) => `
     
     .MuiBadge-badge {
@@ -24,12 +24,12 @@ const NotificationsBadge = styled(Badge)(
         color: white;
         min-width: 16px; 
         height: 16px;
-        padding: 0;
+        padding: 0;        
 
         &::after {
             position: absolute;
             top: 0;
-            left: 0;
+            left: 10;
             width: 100%;
             height: 100%;
             border-radius: 50%;

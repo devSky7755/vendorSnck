@@ -24,6 +24,7 @@ const menuItems: MenuItems[] = [
       {
         name: 'Preparing',
         link: '/orders/preparing',
+        badge: "2"
       },
       {
         name: 'Delivery',

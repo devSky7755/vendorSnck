@@ -60,6 +60,7 @@ const LoginPage = Loader(lazy(() => import('src/content/login')));
 
 //Orders
 const OrdersNew = Loader(lazy(() => import('src/content/orders/new')));
+const OrdersPreparing = Loader(lazy(() => import('src/content/orders/preparing')));
 
 const routes: RouteObject[] = [
   {
@@ -254,7 +255,7 @@ const routes: RouteObject[] = [
       },
       {
         path: 'preparing',
-        element: <OrdersNew />
+        element: <OrdersPreparing />
       },
       {
         path: 'delivery',

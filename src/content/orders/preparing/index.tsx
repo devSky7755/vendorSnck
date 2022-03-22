@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { Box, styled, Card, Drawer } from '@mui/material';
 import { useState } from 'react';
-import OrdersNewTable from './OrdersNewTable';
+import OrdersPreparingTable from './OrdersPreparingTable';
 import EditOrderDialog from './EditOrder';
 import BulkActions from './BulkActions';
 import { temp_orders_new } from 'src/models/order';
@@ -24,7 +24,7 @@ const FooterWrapper = styled(Box)(
 `
 );
 
-function OrdersNew() {
+function OrdersPreparing() {
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [orders, setOrders] = useState(temp_orders_new);
@@ -80,7 +80,7 @@ function OrdersNew() {
       <Box sx={{ mb: 7 }}>
         <TableWrapper>
           <Card>
-            <OrdersNewTable orders={orders} selected={selected} onSelectionChanged={onSelectionChanged} />
+            <OrdersPreparingTable orders={orders} selected={selected} onSelectionChanged={onSelectionChanged} />
           </Card>
         </TableWrapper>
         <Drawer anchor='right' variant='persistent'>
@@ -96,4 +96,4 @@ function OrdersNew() {
   );
 }
 
-export default OrdersNew;
+export default OrdersPreparing;

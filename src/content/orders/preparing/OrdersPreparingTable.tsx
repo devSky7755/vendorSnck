@@ -20,8 +20,9 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
+import ErrorIcon from '@mui/icons-material/Error';
 
-interface OrdersNewTableProps {
+interface OrdersPreparingTableProps {
   className?: string;
   orders: Order[];
   selected: number[];
@@ -38,11 +39,12 @@ interface OrderFilter {
 interface GroupedOrder {
   name: string;
   desc: string;
+  warning?: string;
   filter: OrderFilter,
   orders: Order[];
 }
 
-const OrdersNewTable: FC<OrdersNewTableProps> = ({ orders, selected, onSelectionChanged }) => {
+const OrdersPreparingTable: FC<OrdersPreparingTableProps> = ({ orders, selected, onSelectionChanged }) => {
   const [groupedOrders, setGroupedOrders] = useState<GroupedOrder[]>([]);
 
   const [selectedOrders, setSelectedOrders] = useState<number[]>(
@@ -77,12 +79,13 @@ const OrdersNewTable: FC<OrdersNewTableProps> = ({ orders, selected, onSelection
         });
       }
     });
+    grouped[0].warning = "2 orders are late to prepare";
     setGroupedOrders(grouped);
     setExpanded(group_names);
     setSelectedOrders([]);
   }, [orders, showPreOrders])
 
-  useEffect(()=>{
+  useEffect(() => {
     if (!selected) {
       setSelectedOrders([]);
     }
@@ -162,9 +165,6 @@ const OrdersNewTable: FC<OrdersNewTableProps> = ({ orders, selected, onSelection
               <TableCell>Waiting</TableCell>
               <TableCell>Customer</TableCell>
               <TableCell align="right">
-                <Switch checked={showPreOrders} onChange={e => {
-                  setShowPreOrders(e.target.checked);
-                }}></Switch> Pre-orders
                 <IconButton size='small' sx={{ ml: 2 }}>
                   <FilterListIcon />
                 </IconButton>
@@ -237,11 +237,24 @@ const OrdersNewTable: FC<OrdersNewTableProps> = ({ orders, selected, onSelection
                     </TableCell>
                   </TableRow>
                   {
+                    group.warning &&
+                    <TableRow className='bg-warning'>
+                      <TableCell align='center'>
+                        <ErrorIcon color='warning' fontSize='small' sx={{ mt: 0.5 }}></ErrorIcon>
+                      </TableCell>
+                      <TableCell colSpan={7}>
+                        {group.warning}
+                      </TableCell>
+                    </TableRow>
+                  }
+                  {
                     isExpanded && group.orders.map(order => {
                       const isOrderSelected = selectedOrders.includes(order.id);
                       const hasAlchol = order.items && order.items.find(x => x.isAlchol);
+                      const isdelayed = group.warning;
                       return (
                         <TableRow
+                          className={isdelayed ? 'bg-warning' : ''}
                           hover
                           key={order.id}
                         >
@@ -355,12 +368,12 @@ const OrdersNewTable: FC<OrdersNewTableProps> = ({ orders, selected, onSelection
   );
 };
 
-OrdersNewTable.propTypes = {
+OrdersPreparingTable.propTypes = {
   orders: PropTypes.array.isRequired
 };
 
-OrdersNewTable.defaultProps = {
+OrdersPreparingTable.defaultProps = {
   orders: []
 };
 
-export default OrdersNewTable;
+export default OrdersPreparingTable;

@@ -34,7 +34,7 @@ const SubMenuWrapper = styled(List)(
       }
 
       .MuiListItem-root {
-        padding: 2px ${theme.spacing(2)};
+        padding: 2px ${theme.spacing(1)};
     
         .MuiButton-root {
           display: flex;
@@ -46,17 +46,21 @@ const SubMenuWrapper = styled(List)(
           padding-top: ${theme.spacing(0.8)};
           padding-bottom: ${theme.spacing(0.8)};
           position: relative;
+          border-radius: 0;
 
           .MuiBadge-root {
             position: absolute;
             right: ${theme.spacing(4)};
+            
 
             .MuiBadge-standard {
-              background: ${theme.colors.primary.main};
-              font-size: ${theme.typography.pxToRem(9)};
-              font-weight: bold;
+              background: #0000004D;
+              font-size: ${theme.typography.pxToRem(12)};
               text-transform: uppercase;
               color: ${theme.palette.primary.contrastText};
+              border-radius: 4px;
+              width: 26px;
+              height: 26px;
             }
           }
     
@@ -82,6 +86,7 @@ const SubMenuWrapper = styled(List)(
           }
 
           &.Mui-active,
+          &.active,
           &:hover {
             background-color: ${theme.sidebar.menuItemBgActive};
             color: ${theme.sidebar.menuItemColorActive};
@@ -111,8 +116,10 @@ const SubMenuWrapper = styled(List)(
             .MuiButton-root {
               font-size: ${theme.typography.pxToRem(13)};
               padding: ${theme.spacing(0.5, 2, 0.5, 6.5)};
+              border: 0;
 
               &.Mui-active,
+              &.active,
               &:hover {
                 background-color: ${theme.sidebar.menuItemBg};
               }
@@ -151,6 +158,8 @@ const reduceChildRoutes = ({
     path: item.link,
     end: true
   }, path) : false;
+
+  console.log(item.link, path, exactMatch, item.items);
 
   if (item.items) {
     const partialMatch = item.link ? !!matchPath({
