@@ -41,10 +41,10 @@ const PrintersTable: FC<PrintersTableProps> = ({ printers, onEditingPrinter }) =
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell sx={{ px: 3 }}>Name</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Printer Model</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell align="right" sx={{ px: 3 }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -56,6 +56,7 @@ const PrintersTable: FC<PrintersTableProps> = ({ printers, onEditingPrinter }) =
                 >
                   <TableCell>
                     <Typography
+                      sx={{ ml: 2 }}
                       variant="body1"
                       fontWeight="bold"
                       color="text.primary"
@@ -87,7 +88,7 @@ const PrintersTable: FC<PrintersTableProps> = ({ printers, onEditingPrinter }) =
                       {printer.model}
                     </Typography>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell align="right" sx={{ pr: 2 }}>
                     <Tooltip title="Edit Printer" arrow>
                       <IconButton
                         sx={{

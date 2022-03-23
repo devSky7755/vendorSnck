@@ -202,7 +202,7 @@ function Dashboard() {
                       <TopRunnersTable runners={temp_runners} />
                     </Box>
                     <Box className='d-inline-flex' sx={{ pt: 2, pb: 1 }}>
-                      <Link to='/settings/users'>All Runners</Link>
+                      <Link to='/settings/users?role=runner'>All Runners</Link>
                       <ChevronRightIcon fontSize='small' style={{ width: '1rem' }} sx={{ ml: 1 }} />
                     </Box>
                   </CardContent>

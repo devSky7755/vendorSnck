@@ -59,14 +59,6 @@ const applyFilters = (
   });
 };
 
-const applyPagination = (
-  printQueues: PrintQueue[],
-  page: number,
-  limit: number
-): PrintQueue[] => {
-  return printQueues.slice(page * limit, page * limit + limit);
-};
-
 const PrintQueuesTable: FC<PrintQueuesTableProps> = ({ printQueues }) => {
 
   const [selectedPrintQueues, setSelectedPrintQueues] = useState<string[]>(
@@ -133,20 +125,7 @@ const PrintQueuesTable: FC<PrintQueuesTableProps> = ({ printQueues }) => {
     }
   };
 
-  const handlePageChange = (event: any, newPage: number): void => {
-    setPage(newPage);
-  };
-
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
-
   const filteredPrintQueues = applyFilters(printQueues, filters);
-  const paginatedPrintQueues = applyPagination(
-    filteredPrintQueues,
-    page,
-    limit
-  );
   const selectedSomePrintQueues =
     selectedPrintQueues.length > 0 &&
     selectedPrintQueues.length < printQueues.length;
@@ -192,6 +171,7 @@ const PrintQueuesTable: FC<PrintQueuesTableProps> = ({ printQueues }) => {
             <TableRow>
               <TableCell padding="checkbox">
                 <Checkbox
+                  size='small'
                   color="primary"
                   checked={selectedAllPrintQueues}
                   indeterminate={selectedSomePrintQueues}
@@ -206,7 +186,7 @@ const PrintQueuesTable: FC<PrintQueuesTableProps> = ({ printQueues }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedPrintQueues.map((printQueue) => {
+            {filteredPrintQueues.map((printQueue) => {
               const isPrintQueueSelected = selectedPrintQueues.includes(
                 printQueue.id
               );
@@ -218,6 +198,7 @@ const PrintQueuesTable: FC<PrintQueuesTableProps> = ({ printQueues }) => {
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
+                      size='small'
                       color="primary"
                       checked={isPrintQueueSelected}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
@@ -304,17 +285,6 @@ const PrintQueuesTable: FC<PrintQueuesTableProps> = ({ printQueues }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box p={2}>
-        <TablePagination
-          component="div"
-          count={filteredPrintQueues.length}
-          onPageChange={handlePageChange}
-          onRowsPerPageChange={handleLimitChange}
-          page={page}
-          rowsPerPage={limit}
-          rowsPerPageOptions={[5, 10, 25, 30]}
-        />
-      </Box>
     </Card>
   );
 };
