@@ -263,7 +263,7 @@ const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
 
                   </TableCell>
                   <TableCell align="right">
-                    <Tooltip title="Edit Menu" arrow>
+                    <Tooltip title="Edit Menu Item" arrow>
                       <IconButton
                         sx={{
                           '&:hover': {
