@@ -18,7 +18,7 @@ const menuItems: MenuItems[] = [
     heading: 'Orders',
     items: [
       {
-        name: 'News',
+        name: 'New',
         link: '/orders/new',
       },
       {
