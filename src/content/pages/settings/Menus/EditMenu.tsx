@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import { MenuItem as MenuItemModel } from 'src/models/menu_item';
 import { Box, Button, Checkbox, DialogActions, Grid, IconButton, MenuItem, Switch, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import MuiPhoneNumber from 'material-ui-phone-number';
 import CheckboxMultiSelect from 'src/components/MultiSelect/CheckboxSelect';
 
 

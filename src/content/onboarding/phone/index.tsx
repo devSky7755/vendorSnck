@@ -62,6 +62,7 @@ function OnboardingPhone({ setPhone }) {
                             value={phone}
                             style={{ fontSize: 18 }}
                             defaultCountry={'us'}
+                            disableAreaCodes={true}
                             onChange={(value) => {
                                 setPhoneNumber(value);
                             }}
