@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import { MenuItem as MenuItemModel } from 'src/models/menu_item';
 import { Box, Button, Checkbox, DialogActions, Grid, IconButton, MenuItem, Switch, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import MuiPhoneNumber from 'material-ui-phone-number';
 import CheckboxMultiSelect from 'src/components/MultiSelect/CheckboxSelect';
 
 
@@ -51,7 +50,7 @@ const EditMenuDialog: React.FC<EditMenuInterface> = (props) => {
             onClose(null);
         }} open={open} PaperProps={{ style: { maxWidth: 400 } }}>
             <DialogTitle className='border-bottom d-flex font-bold' sx={{ px: 2, py: 1 }}>
-                Edit Menu
+                Edit Menu Item
                 <IconButton className='float-right' sx={{ p: 0 }} size='small' onClick={() => {
                     onClose(null);
                 }}>

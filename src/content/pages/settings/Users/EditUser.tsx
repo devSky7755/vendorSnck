@@ -137,6 +137,7 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                                 value={editing.phone}
                                 style={{ fontSize: 18 }}
                                 defaultCountry={'us'}
+                                disableAreaCodes={true}
                                 onChange={(value) => {
                                     setEditingUser({
                                         ...editing,

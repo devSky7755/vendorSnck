@@ -229,6 +229,7 @@ function LoginPage({ token, admin, lastLoggedIn, login }) {
                                                 value={phone}
                                                 style={{ fontSize: 18 }}
                                                 defaultCountry={'us'}
+                                                disableAreaCodes={true}
                                                 onChange={(value) => {
                                                     setPhone(value);
                                                 }}

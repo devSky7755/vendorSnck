@@ -263,7 +263,7 @@ const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
 
                   </TableCell>
                   <TableCell align="right">
-                    <Tooltip title="Edit Menu" arrow>
+                    <Tooltip title="Edit Menu Item" arrow>
                       <IconButton
                         sx={{
                           '&:hover': {
@@ -280,7 +280,7 @@ const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
                         <EditTwoToneIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="Delete Menu" arrow>
+                    <Tooltip title="Delete Menu Item" arrow>
                       <IconButton
                         sx={{
                           '&:hover': { background: theme.colors.error.lighter },
