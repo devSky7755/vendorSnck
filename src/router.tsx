@@ -59,8 +59,7 @@ const StatusMaintenance = Loader(lazy(() => import('src/content/pages/Status/Mai
 const LoginPage = Loader(lazy(() => import('src/content/login')));
 
 //Orders
-const OrdersNew = Loader(lazy(() => import('src/content/orders/new')));
-const OrdersPreparing = Loader(lazy(() => import('src/content/orders/preparing')));
+const OrdersPage = Loader(lazy(() => import('src/content/orders')));
 
 const routes: RouteObject[] = [
   {
@@ -251,23 +250,23 @@ const routes: RouteObject[] = [
       },
       {
         path: 'new',
-        element: <OrdersNew />
+        element: <OrdersPage type='New' />
       },
       {
         path: 'preparing',
-        element: <OrdersPreparing />
+        element: <OrdersPage type='Preparing' />
       },
       {
         path: 'delivery',
-        element: <OrdersNew />
+        element: <OrdersPage type='Delivery' />
       },
       {
         path: 'pickup',
-        element: <OrdersNew />
+        element: <OrdersPage type='Pickup' />
       },
       {
         path: 'all',
-        element: <OrdersNew />
+        element: <OrdersPage type='All' />
       }
     ]
   },

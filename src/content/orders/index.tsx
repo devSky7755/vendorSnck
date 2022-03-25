@@ -1,10 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 import { Box, styled, Card, Drawer } from '@mui/material';
-import { useState } from 'react';
-import OrdersPreparingTable from './OrdersPreparingTable';
+import { useEffect, useState } from 'react';
+import OrdersTable from './OrdersTable';
 import EditOrderDialog from './EditOrder';
 import BulkActions from './BulkActions';
-import { temp_orders_new } from 'src/models/order';
+import { temp_orders } from 'src/models/order';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -18,23 +18,41 @@ const FooterWrapper = styled(Box)(
   ({ theme }) => `
         margin-top: auto;
         box-shadow: 0px -1px 16px rgba(159, 162, 191, 0.18), 0px -2px 2px rgba(159, 162, 191, 0.32);
-        width: 100%;
 `
 );
 
-function OrdersPreparing() {
+function OrdersPage({ type }) {
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [orders, setOrders] = useState(temp_orders_new);
+  const [orders, setOrders] = useState([]);
   const [selected, setSelectedOrders] = useState([]);
   const [showOrderDetail, setShowOrderDetail] = useState(false);
 
-  const onAddOrder = () => {
-    setEditing({
-      role: 'Admin'
-    });
-    setEditOpen(true);
-  }
+  useEffect(() => {
+    let filtered = [];
+    switch (type) {
+      case 'New':
+        filtered = temp_orders.filter(x => x.status == 'Ready' || x.status === 'Preparing');
+        break;
+      case 'Preparing':
+        filtered = temp_orders.filter(x => x.status === 'Preparing');
+        break;
+      case 'Delivery':
+        filtered = temp_orders.filter(x => x.order_type === 'Delivery');
+        break;
+      case 'Pickup':
+        filtered = temp_orders.filter(x => x.order_type === 'Pickup');
+        break;
+      default:
+        filtered = temp_orders.filter(x => true);
+        break;
+    }
+    setOrders(filtered);
+    setSelectedOrders([]);
+    setShowOrderDetail(false);
+    setEditOpen(false);
+    setEditing(null);
+  }, [type])
 
   const onEditing = (order) => {
     setEditing(order);
@@ -52,6 +70,7 @@ function OrdersPreparing() {
   const onView = () => {
 
   }
+
   const onReset = () => {
     setSelectedOrders(null);
   }
@@ -76,14 +95,13 @@ function OrdersPreparing() {
         />
       }
       <Box style={{ height: '100%', display: 'flex', flexDirection: 'column' }} >
-        <Box>
+        <Box >
           <TableWrapper>
             <Card>
-              <OrdersPreparingTable orders={orders} selected={selected} onSelectionChanged={onSelectionChanged} />
+              <OrdersTable orders={orders} selected={selected} type={type} onSelectionChanged={onSelectionChanged} />
             </Card>
           </TableWrapper>
           <Drawer anchor='right' variant='persistent'>
-
           </Drawer>
         </Box>
         <FooterWrapper>
@@ -96,4 +114,4 @@ function OrdersPreparing() {
   );
 }
 
-export default OrdersPreparing;
+export default OrdersPage;

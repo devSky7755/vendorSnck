@@ -21,8 +21,10 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import ErrorIcon from '@mui/icons-material/Error';
+import OrderStatuses from '../dashboards/OrderStatuses';
 
-interface OrdersPreparingTableProps {
+interface OrdersTableProps {
+  type: string;
   className?: string;
   orders: Order[];
   selected: number[];
@@ -40,13 +42,27 @@ interface GroupedOrder {
   name: string;
   desc: string;
   warning?: string;
+  error?: string;
   filter: OrderFilter,
   orders: Order[];
 }
 
-const OrdersPreparingTable: FC<OrdersPreparingTableProps> = ({ orders, selected, onSelectionChanged }) => {
-  const [groupedOrders, setGroupedOrders] = useState<GroupedOrder[]>([]);
+const formatAMPM = (date) => {
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
 
+  hours %= 12;
+  hours = hours || 12;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  const strTime = `${hours}:${minutes} ${ampm}`;
+
+  return strTime;
+};
+
+const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelectionChanged }) => {
+  const [groupedOrders, setGroupedOrders] = useState<GroupedOrder[]>([]);
   const [selectedOrders, setSelectedOrders] = useState<number[]>(
     []
   );
@@ -54,32 +70,48 @@ const OrdersPreparingTable: FC<OrdersPreparingTableProps> = ({ orders, selected,
   const [showPreOrders, setShowPreOrders] = useState(false);
 
   useEffect(() => {
-    const steps = [0, 300, 900, 1500];
-    const group_names = ['12:00 PM', '12:10 PM', '12:20PM'];
+    orders.sort((x, y) => {
+      if (x.duetime < y.duetime) return -1;
+      if (x.duetime > y.duetime) return 1;
+      return 0;
+    });
+
     let grouped: GroupedOrder[] = [];
-    steps.forEach((due, id) => {
-      if (id === steps.length - 1) return;
-      let filtered = orders.filter(x => x.due_time >= due && x.due_time < steps[id + 1]);
-      if (showPreOrders) {
+
+    let last_duetime = 0;
+    if (orders.length > 0) {
+      last_duetime = orders[orders.length - 1].duetime;
+    }
+    let current_time = Date.now();
+    let endtime = current_time + 5 * 60 * 1000;
+    let starttime = 0;
+    let index = 0;
+    let group_names = [];
+
+    while (last_duetime > starttime) {
+      let filtered = orders.filter(x => x.duetime >= starttime && x.duetime < endtime);
+      if (type === 'New' && showPreOrders) {
         filtered = filtered.filter(x => x.status === 'Preparing');
-      } else {
-        filtered = filtered.filter(x => x.status !== 'Preparing');
       }
       if (filtered.length > 0) {
+        const group_time = formatAMPM(new Date(endtime));
+        group_names.push(group_time);
         grouped.push({
-          name: group_names[id],
-          desc: `${steps[id + 1] / 60} mins`,
+          name: group_time,
+          desc: `${Math.round(endtime - current_time) / 60000} mins`,
           filter: {
-            property: 'due_time',
+            property: 'duetime',
             is_number: true,
-            lower: due,
-            upper: steps[id + 1],
+            lower: starttime,
+            upper: endtime,
           },
           orders: filtered
         });
       }
-    });
-    grouped[0].warning = "2 orders are late to prepare";
+
+      starttime = endtime;
+      endtime += 10 * 60 * 1000;
+    }
     setGroupedOrders(grouped);
     setExpanded(group_names);
     setSelectedOrders([]);
@@ -90,6 +122,10 @@ const OrdersPreparingTable: FC<OrdersPreparingTableProps> = ({ orders, selected,
       setSelectedOrders([]);
     }
   }, [selected])
+
+  useEffect(() => {
+    onSelectionChanged(selectedOrders);
+  }, [selectedOrders])
 
   const handleSelectAllOrders = (
     event: ChangeEvent<HTMLInputElement>
@@ -134,15 +170,17 @@ const OrdersPreparingTable: FC<OrdersPreparingTableProps> = ({ orders, selected,
     }
   };
 
-  useEffect(() => {
-    onSelectionChanged(selectedOrders);
-  }, [selectedOrders])
+  const handlePreOrders = (e) => {
+    setShowPreOrders(e.target.checked);
+  }
 
   const selectedSomeOrders =
     selectedOrders.length > 0 &&
     selectedOrders.length < orders.length;
   const selectedAllOrders =
     selectedOrders.length === orders.length;
+
+  const current_time = Date.now();
 
   return (
     <Card>
@@ -165,6 +203,13 @@ const OrdersPreparingTable: FC<OrdersPreparingTableProps> = ({ orders, selected,
               <TableCell>Waiting</TableCell>
               <TableCell>Customer</TableCell>
               <TableCell align="right">
+                {
+                  type === 'New' &&
+                  <Fragment>
+                    <Switch onChange={handlePreOrders}></Switch> Pre-orders
+                  </Fragment>
+                }
+
                 <IconButton size='small' sx={{ ml: 2 }}>
                   <FilterListIcon />
                 </IconButton>
@@ -249,6 +294,7 @@ const OrdersPreparingTable: FC<OrdersPreparingTableProps> = ({ orders, selected,
                   }
                   {
                     isExpanded && group.orders.map(order => {
+                      const waiting = current_time - order.created;
                       const isOrderSelected = selectedOrders.includes(order.id);
                       const hasAlchol = order.items && order.items.find(x => x.isAlchol);
                       const isdelayed = group.warning;
@@ -320,7 +366,7 @@ const OrdersPreparingTable: FC<OrdersPreparingTableProps> = ({ orders, selected,
                               gutterBottom
                               noWrap
                             >
-                              {Math.floor(order.waiting / 60)} mins
+                              {Math.floor(waiting / 60000)} mins
                             </Typography>
                           </TableCell>
                           <TableCell>
@@ -368,12 +414,12 @@ const OrdersPreparingTable: FC<OrdersPreparingTableProps> = ({ orders, selected,
   );
 };
 
-OrdersPreparingTable.propTypes = {
+OrdersTable.propTypes = {
   orders: PropTypes.array.isRequired
 };
 
-OrdersPreparingTable.defaultProps = {
+OrdersTable.defaultProps = {
   orders: []
 };
 
-export default OrdersPreparingTable;
+export default OrdersTable;
