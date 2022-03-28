@@ -14,6 +14,7 @@ import persistStore from 'redux-persist/es/persistStore';
 import { PersistGate } from 'redux-persist/integration/react';
 import { positions, Provider as AlertProvider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
+import 'typeface-roboto'
 
 const store = configureStore();
 const persistor = persistStore(store);

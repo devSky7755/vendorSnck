@@ -36,7 +36,7 @@ function EventSelector() {
     return (
         <Grid container alignItems="center">
             <Grid item>
-                <Typography sx={{ mr: 1 }} variant='caption'>Event:</Typography>
+                <Typography sx={{ mr: 1 }} variant='body2' color={'rgba(0, 0, 0, 0.6)'}>Event:</Typography>
             </Grid>
             <Grid item>
                 <Select

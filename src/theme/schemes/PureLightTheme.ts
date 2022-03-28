@@ -1,5 +1,6 @@
 import { alpha, createTheme, lighten, darken } from '@mui/material';
 import '@mui/lab/themeAugmentation';
+import { lineHeight } from '@mui/system';
 
 const themeColors = {
   primary: '#5569ff',
@@ -349,10 +350,12 @@ export const PureLightTheme = createTheme({
     MuiFormHelperText: {
       styleOverrides: {
         root: {
+          fontSize: '12px',
+          lineHeight: '16px',
+          fontWeight: 'normal',
           textTransform: 'none',
           marginLeft: 8,
           marginRight: 8,
-          fontWeight: 'bold'
         }
       }
     },
@@ -564,11 +567,11 @@ export const PureLightTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          fontWeight: 'bold',
-          textTransform: 'none',
-          paddingLeft: 16,
-          paddingRight: 16,
-
+          textTransform: 'uppercase',
+          paddingLeft: 14,
+          paddingRight: 14,
+          paddingTop: 10,
+          paddingBottom: 10,
           '.MuiSvgIcon-root': {
             transition: 'all .2s'
           }
@@ -1081,14 +1084,13 @@ export const PureLightTheme = createTheme({
   },
   typography: {
     fontFamily: [
-      'Inter',
-      '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"'
+      'Roboto'
     ].join(','),
     fontSize: 14,
     htmlFontSize: 15,
     h1: {
       fontWeight: 700,
-      fontSize: 30
+      fontSize: '34px'
     },
     h2: {
       fontWeight: 700,
@@ -1101,39 +1103,49 @@ export const PureLightTheme = createTheme({
       color: colors.alpha.black[100]
     },
     h4: {
-      fontWeight: 700,
-      fontSize: 16
+      fontWeight: 'normal',
+      lineHeight: '36px',
+      fontSize: '34px'
     },
     h5: {
-      fontWeight: 700,
-      fontSize: 14
+      fontSize: '24px',
+      fontWeight: 400,
+      lineHeight: '24px',
+      letterSpacing: '0.18px'
     },
     h6: {
       fontSize: 15
     },
     body1: {
-      fontSize: 14
+      fontSize: '16px',
+      fontWeight: 'normal',
+      lineHeight: '24px'
     },
     body2: {
-      fontSize: 14,
+      fontSize: '14px',
+      lineHeight: '20px',
+      fontWeight: 400
     },
     button: {
-      fontSize: 14,
-      fontWeight: 700
+      fontSize: '14px',
+      lineHeight: '16px',
+      letterSpacing: '1.25px',
+      fontWeight: 500
     },
     caption: {
-      fontSize: 13,
-      textTransform: 'uppercase',
-      color: colors.alpha.black[50]
+      fontSize: '12px',
+      lineHeight: '16px',
     },
     subtitle1: {
-      fontSize: 14,
-      color: colors.alpha.black[70]
+      fontSize: '16px',
+      lineHeight: '24px',
+      fontWeight: 500,
     },
     subtitle2: {
-      fontWeight: 400,
-      fontSize: 15,
-      color: colors.alpha.black[70]
+      fontWeight: 500,
+      fontSize: '14px',
+      lineHeight: '24px',
+      letterSpacing: '0.1px'
     },
     overline: {
       fontSize: 13,

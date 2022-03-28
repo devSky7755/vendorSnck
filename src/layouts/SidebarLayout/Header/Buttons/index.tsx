@@ -37,7 +37,7 @@ function HeaderButtons({ pauseUntil, refreshPause }) {
   return (
     <Box sx={{ mr: 1 }}>
       <Box component="span" sx={{ mr: 2 }}>
-        <Button variant='outlined' size='small' style={{ fontWeight: 'normal', borderColor: '#FFFFFFBD', color: 'white', width: 160 }}
+        <Button variant='outlined' size='small' style={{ fontWeight: 'normal', textTransform: 'none', borderColor: '#FFFFFFBD', color: 'white', width: 160, height: 40 }}
           onClick={() => {
             refresh_pause();
           }}

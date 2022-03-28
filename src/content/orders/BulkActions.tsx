@@ -17,7 +17,7 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
 
   return (
     <>
-      <Box display="flex" alignItems="center" justifyContent='flex-start'>
+      <Box display="flex" alignItems="center" justifyContent='flex-start' style={{ marginTop: 8, paddingRight: 8 }}>
         <Box display="flex" alignItems="center">
           <Button
             color='primary'

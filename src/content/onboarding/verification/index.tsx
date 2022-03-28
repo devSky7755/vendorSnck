@@ -50,9 +50,12 @@ function OnboardingVerification({ phone }) {
                     <Typography sx={{ mb: 2 }} variant="h1">
                         2-Step Verification
                     </Typography>
-                    <Typography component="span" variant="subtitle1">
+                    <Typography component="span" variant="body1">
                         A text message with a verificiation code<br />
-                        has been sent to <b>{phone}</b>
+                        has been sent to &nbsp;
+                    </Typography>
+                    <Typography component="span" variant="body1" style={{ fontWeight: 500 }}>
+                        {phone}
                     </Typography>
                     <PhoneWrapper>
                         <TextField
@@ -63,8 +66,7 @@ function OnboardingVerification({ phone }) {
                             value={code}
                             helperText={message}
                             error={err}
-
-                            style={{ fontSize: 18 }}
+                            style={{ fontSize: 16, fontWeight: 500 }}
                             onChange={(e) => {
                                 setCode(e.target.value);
                             }}

@@ -29,7 +29,7 @@ function FAQ() {
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
                             >
-                                <Typography variant='h5'>How to add team members?</Typography>
+                                <Typography variant='subtitle1'>How to add team members?</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
@@ -46,7 +46,7 @@ function FAQ() {
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
                             >
-                                <Typography variant='h5'>Order preparation flow overview</Typography>
+                                <Typography variant='subtitle1'>Order preparation flow overview</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
@@ -63,7 +63,7 @@ function FAQ() {
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
                             >
-                                <Typography variant='h5'>Managing your menu and items</Typography>
+                                <Typography variant='subtitle1'>Managing your menu and items</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
@@ -80,7 +80,7 @@ function FAQ() {
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
                             >
-                                <Typography variant='h5'>Location availability</Typography>
+                                <Typography variant='subtitle1'>Location availability</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
@@ -97,7 +97,7 @@ function FAQ() {
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
                             >
-                                <Typography variant='h5'>Cancelling orders</Typography>
+                                <Typography variant='subtitle1'>Cancelling orders</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
@@ -114,7 +114,7 @@ function FAQ() {
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
                             >
-                                <Typography variant='h5'>Bulk control of your orders</Typography>
+                                <Typography variant='subtitle1'>Bulk control of your orders</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>

@@ -9,17 +9,23 @@ const MenuWrapper = styled(List)(
   ({ theme }) => `
     margin-bottom: ${theme.spacing(1)};
     padding: 0;
+    padding-bottom: ${theme.spacing(1)};
+    border-bottom: ${theme.sidebar.dividerBg} solid 1px;
+
+    &:last-child {
+      border-bottom: none;
+    }
 
     & > .MuiList-root {
       padding-top: ${theme.spacing(2)} 0 0;
     }
 
     .MuiListSubheader-root {
-      text-transform: uppercase;
-      font-size: ${theme.typography.pxToRem(12)};
+      font-size: 14px;
+      letter-spacing: 0.1px;
+      line-height: 24px;
       color: ${theme.sidebar.menuItemHeadingColor};
-      padding: ${theme.spacing(2)};
-      line-height: 1.4;
+      padding: ${theme.spacing(2)} ${theme.spacing(2)} ${theme.spacing(1)};
     }
 `
 );
@@ -30,11 +36,11 @@ const SubMenuWrapper = styled(List)(
       padding: 0;
 
       .MuiList-root .MuiList-root .MuiListItem-root .MuiButton-root {
-        font-weight: normal !important;
+        font-weight: 500;
       }
 
       .MuiListItem-root {
-        padding: 2px ${theme.spacing(1)};
+        padding: 1px ${theme.spacing(1)};
     
         .MuiButton-root {
           display: flex;
@@ -42,9 +48,12 @@ const SubMenuWrapper = styled(List)(
           background-color: ${theme.sidebar.menuItemBg};
           width: 100%;
           justify-content: flex-start;
-          font-size: ${theme.typography.pxToRem(13)};
-          padding-top: ${theme.spacing(0.8)};
-          padding-bottom: ${theme.spacing(0.8)};
+          font-size: 14px;
+          font-weight: 500;
+          text-transform: none;
+          letter-spacing: 0.1px;
+          padding-top: ${theme.spacing(1.3)};
+          padding-bottom: ${theme.spacing(1.3)};
           position: relative;
           border-radius: 0;
 

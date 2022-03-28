@@ -29,26 +29,26 @@ function TotalSales() {
       <Box sx={{ p: 3 }}>
         <Grid container>
           <Grid item xs={4}>
-            <Typography variant="h5" noWrap>
+            <Typography variant="subtitle2" noWrap>
               Total Sales
             </Typography>
-            <Typography variant="h3" noWrap>
+            <Typography variant="h5" noWrap>
               $4,200.41
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <Typography variant="h5" noWrap>
+            <Typography variant="subtitle2" noWrap>
               Avg. Sale
             </Typography>
-            <Typography variant="h3" noWrap>
+            <Typography variant="h5" noWrap>
               $12.41
             </Typography>
           </Grid>
           <Grid item xs={4}>
-            <Typography variant="h5" noWrap>
+            <Typography variant="subtitle2" noWrap>
               Customers
             </Typography>
-            <Typography variant="h3" noWrap>
+            <Typography variant="h5" noWrap>
               410
             </Typography>
           </Grid>

@@ -23,13 +23,13 @@ const LogoSignWrapper = styled(Box)(
 
 const LogoTextWrapper = styled(Box)(
   ({ theme }) => `
-        margin-top: 6px;
+        margin-top: 10px;
 `
 );
 
 const LogoText = styled(Box)(
   ({ theme }) => `
-        font-size: ${theme.typography.pxToRem(18)};
+        font-size: 24px;
         font-weight: ${theme.typography.fontWeightBold};
 `
 );

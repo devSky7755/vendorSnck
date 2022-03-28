@@ -20,7 +20,7 @@ const OnboardingWrapper = styled(Box)(
 
 const PhoneWrapper = styled(Box)(
     () => `
-    padding: 16px 32px 16px 32px;
+    padding: 32px 32px 16px 32px;
 `
 );
 
@@ -51,7 +51,7 @@ function OnboardingPhone({ setPhone }) {
                     <Typography sx={{ mb: 2 }} variant="h1">
                         Welcome to Snackr
                     </Typography>
-                    <Typography component="span" variant="subtitle1">
+                    <Typography component="span" variant='body1'>
                         Let’s make sure it’s really you.<br />
                         Your phone number will be used for 2-Step Verification.
                     </Typography>
@@ -60,7 +60,7 @@ function OnboardingPhone({ setPhone }) {
                             variant='outlined'
                             fullWidth
                             value={phone}
-                            style={{ fontSize: 18 }}
+                            style={{ fontSize: 16, fontWeight: 500 }}
                             defaultCountry={'us'}
                             disableAreaCodes={true}
                             onChange={(value) => {
@@ -68,8 +68,11 @@ function OnboardingPhone({ setPhone }) {
                             }}
                         />
                     </PhoneWrapper>
-                    <div style={{ textAlign: 'left', paddingLeft: 32 }}>
-                        <Checkbox checked={touAgreed} onChange={onToggleAggrement}></Checkbox> I agree to Snackr <Link target='_blank' to={'/terms_policy'}>Terms &amp; Privacy Policy</Link>
+                    <div style={{ textAlign: 'left', paddingLeft: 32, display: 'flex' }}>
+                        <Checkbox checked={touAgreed} onChange={onToggleAggrement}></Checkbox>
+                        <Typography variant='body2' className='my-auto'>
+                            I agree to Snackr <Link target='_blank' to={'/terms_policy'}>Terms &amp; Privacy Policy</Link>
+                        </Typography>
                     </div>
                     <PhoneWrapper>
                         <Button disabled={disabled} variant='contained' color='primary' fullWidth onClick={() => {

@@ -150,15 +150,15 @@ function Dashboard() {
               <Grid item xs={6}>
                 <Card sx={{ px: 1 }}>
                   <CardContent sx={{ px: 1, py: 2 }}>
-                    <Typography variant="h5" noWrap className='d-inline-flex'>
+                    <Typography variant="subtitle2" noWrap className='d-inline-flex'>
                       Avg. Pickup Time
                     </Typography>
                     <Box>
-                      <Typography variant="h2" gutterBottom noWrap sx={{ py: 1 }}>
+                      <Typography variant="h4" gutterBottom noWrap sx={{ py: 1 }}>
                         3:45  min
                       </Typography>
                       <div className='d-inline-flex'>
-                        <Typography component={'small'} color={'#48AA2F'}>0:32</Typography>
+                        <Typography variant='subtitle2' component={'small'} color={'#48AA2F'}>0:32</Typography>
                         <ArrowDropDownIcon style={{ color: '#48AA2F' }} fontSize='small' />
                       </div>
                     </Box>
@@ -168,15 +168,15 @@ function Dashboard() {
               <Grid item xs={6}>
                 <Card sx={{ px: 1 }}>
                   <CardContent sx={{ px: 1, py: 2 }}>
-                    <Typography variant="h5" noWrap className='d-inline-flex'>
+                    <Typography variant="subtitle2" noWrap className='d-inline-flex'>
                       Avg. Preparing Time
                     </Typography>
                     <Box>
-                      <Typography variant="h2" gutterBottom noWrap sx={{ py: 1 }}>
+                      <Typography variant="h4" gutterBottom noWrap sx={{ py: 1 }}>
                         1:45  min
                       </Typography>
                       <div className='d-inline-flex'>
-                        <Typography component={'small'} color={'#48AA2F'}>0:12</Typography>
+                        <Typography variant='subtitle2' component={'small'} color={'#48AA2F'}>0:12</Typography>
                         <ArrowDropDownIcon style={{ color: '#48AA2F' }} fontSize='small' />
                       </div>
                     </Box>
@@ -186,22 +186,22 @@ function Dashboard() {
               <Grid item xs={12} md={6}>
                 <Card sx={{ px: 1 }}>
                   <CardContent sx={{ px: 1, py: 2 }}>
-                    <Typography variant="h5" noWrap className='d-inline-flex'>
+                    <Typography variant="subtitle2" noWrap className='d-inline-flex'>
                       Avg. Delivery Time
                     </Typography>
                     <Box>
-                      <Typography variant="h2" gutterBottom noWrap sx={{ py: 1 }}>
+                      <Typography variant="h4" gutterBottom noWrap sx={{ py: 1 }}>
                         6:45  min
                       </Typography>
                       <div className='d-inline-flex'>
-                        <Typography component={'small'} color={'#FF5625'}>0:15</Typography>
+                        <Typography variant='subtitle2' component={'small'} color={'#FF5625'}>0:15</Typography>
                         <ArrowDropUpIcon style={{ color: '#FF5625' }} fontSize='small' />
                       </div>
                     </Box>
                     <Box sx={{ pt: 1 }}>
                       <TopRunnersTable runners={temp_runners} />
                     </Box>
-                    <Box className='d-inline-flex' sx={{ pt: 2, pb: 1 }}>
+                    <Box className='d-inline-flex' sx={{ pt: 3, pb: 1 }}>
                       <Link to='/settings/users?role=runner'>All Runners</Link>
                       <ChevronRightIcon fontSize='small' style={{ width: '1rem' }} sx={{ ml: 1 }} />
                     </Box>
@@ -211,10 +211,10 @@ function Dashboard() {
               <Grid item xs={12} md={6}>
                 <Card sx={{ px: 1 }}>
                   <CardContent sx={{ py: 2, px: 1 }}>
-                    <Typography variant="h5" noWrap>
+                    <Typography variant="subtitle2" noWrap>
                       Top Items
                     </Typography>
-                    <Box sx={{ pt: 4 }}>
+                    <Box sx={{ pt: 1 }}>
                       <TopItemsTable menus={temp_top_items} />
                     </Box>
                     <Box className='d-inline-flex' sx={{ pt: 3, pb: 1 }}>

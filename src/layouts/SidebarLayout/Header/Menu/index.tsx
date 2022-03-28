@@ -34,7 +34,7 @@ const ListWrapper = styled(Box)(
                   visibility: hidden;
                   display: block;
                   position: absolute;
-                  bottom: -10px;
+                  bottom: -12px;
                   left: 0px;
                   transition: all .2s;
                   border-radius: ${theme.general.borderRadiusLg};
@@ -82,7 +82,7 @@ function HeaderMenu() {
             to="/orders/new"
           >
             <ListItemText
-              primaryTypographyProps={{ noWrap: true }}
+              primaryTypographyProps={{ noWrap: true, variant: 'button' }}
               primary="NEW"
             />
           </ListItem>
@@ -94,7 +94,7 @@ function HeaderMenu() {
           >
             <NotificationsBadge showZero={false} badgeContent={2} color='warning'>
               <ListItemText
-                primaryTypographyProps={{ noWrap: true }}
+                primaryTypographyProps={{ noWrap: true, variant: 'button' }}
                 primary="PREPARING"
                 sx={{ mx: 1 }}
               />
@@ -107,7 +107,7 @@ function HeaderMenu() {
             to="/orders/delivery"
           >
             <ListItemText
-              primaryTypographyProps={{ noWrap: true }}
+              primaryTypographyProps={{ noWrap: true, variant: 'button' }}
               primary="DELIVERY"
             />
           </ListItem>
@@ -118,7 +118,7 @@ function HeaderMenu() {
             to="/orders/pickup"
           >
             <ListItemText
-              primaryTypographyProps={{ noWrap: true }}
+              primaryTypographyProps={{ noWrap: true, variant: 'button' }}
               primary="PICKUP"
             />
           </ListItem>
@@ -129,7 +129,7 @@ function HeaderMenu() {
             to="/orders/all"
           >
             <ListItemText
-              primaryTypographyProps={{ noWrap: true }}
+              primaryTypographyProps={{ noWrap: true, variant: 'button' }}
               primary="ALL"
             />
           </ListItem>

@@ -28,7 +28,7 @@ const TopItemsTable: FC<TopItemsTableProps> = ({ menus }) => {
                                 hover
                                 key={menu.id}
                             >
-                                <TableCell sx={{ px: 0 }} align='left'>
+                                <TableCell sx={{ px: 0 }} align='left' height={46}>
                                     <Typography
                                         variant="body1"
                                         fontWeight="400"

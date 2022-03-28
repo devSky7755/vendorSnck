@@ -42,11 +42,11 @@ function Sidebar({ showSidebar, toggleSidebar }) {
           <SidebarWrapper>
             <Scrollbars autoHide>
               <TopSection>
-                <Box sx={{ mb: 1 }}>
-                  <Typography variant='h5' color={'white'}>HotDog Stand</Typography>
+                <Box>
+                  <Typography variant='subtitle2' color={'white'}>HotDog Stand</Typography>
                 </Box>
                 <Box>
-                  <Typography component='span'>Jack Jackson</Typography>
+                  <Typography component='span' variant='body2'>Jack Jackson</Typography>
                 </Box>
               </TopSection>
               <SidebarMenu />
@@ -64,11 +64,11 @@ function Sidebar({ showSidebar, toggleSidebar }) {
             <SidebarWrapper>
               <Scrollbars autoHide>
                 <TopSection>
-                  <Box sx={{ mb: 1 }}>
-                    <Typography variant='h5' color={'white'}>HotDog Stand</Typography>
+                  <Box>
+                    <Typography variant='subtitle2' color={'white'}>HotDog Stand</Typography>
                   </Box>
                   <Box>
-                    <Typography component='span'>Jack Jackson</Typography>
+                    <Typography component='span' variant='body2'>Jack Jackson</Typography>
                   </Box>
                 </TopSection>
                 <SidebarMenu />
