@@ -18,7 +18,7 @@ function FAQ() {
             </Helmet>
             <PageTitleWrapper>
                 <PageTitle
-                    heading="How to use the Snackr Admin Panel" />
+                    heading="How to use the Snackr Vendor App" />
             </PageTitleWrapper>
             <Container maxWidth="lg" sx={{ pt: 4 }}>
                 <Grid container spacing={0}>

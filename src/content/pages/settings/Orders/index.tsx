@@ -128,7 +128,7 @@ const OrderSettings: FC<OrdersSettingProp> = ({ pauseUntil, pauseFor }) => {
                     </Grid>
                     <Grid item xs={12} sx={{ mt: 0 }}>
                         <Typography variant='subtitle1'>
-                            Pickup order queue
+                            Maximum orders in pickup queue
                         </Typography>
                         <BorderedBox>
                             <InputSlider maxValue={30}></InputSlider>

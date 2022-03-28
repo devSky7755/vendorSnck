@@ -56,7 +56,7 @@ function OnboardingQueue() {
                     </PhoneWrapper>
                     <StyledDivider />
                     <PhoneWrapper>
-                        <InputSlider label='Pickup order queue' maxValue={30}></InputSlider>
+                        <InputSlider label='Maximum orders in pickup queue' maxValue={30}></InputSlider>
                     </PhoneWrapper>
                     <PhoneWrapper>
                         <Button variant='contained' color='primary' fullWidth onClick={() => {
