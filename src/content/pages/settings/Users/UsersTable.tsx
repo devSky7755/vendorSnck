@@ -13,7 +13,6 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TablePagination,
   TableRow,
   TableContainer,
   Select,
@@ -57,14 +56,6 @@ const applyFilters = (
 
     return matches;
   });
-};
-
-const applyPagination = (
-  users: TeamUser[],
-  page: number,
-  limit: number
-): TeamUser[] => {
-  return users.slice(page * limit, page * limit + limit);
 };
 
 const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
@@ -133,20 +124,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
     }
   };
 
-  const handlePageChange = (event: any, newPage: number): void => {
-    setPage(newPage);
-  };
-
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
-
   const filteredUsers = applyFilters(users, filters);
-  const paginatedUsers = applyPagination(
-    filteredUsers,
-    page,
-    limit
-  );
   const selectedSomeUsers =
     selectedUsers.length > 0 &&
     selectedUsers.length < users.length;
@@ -156,12 +134,16 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
 
   return (
     <Card>
-      {selectedBulkActions && (
-        <Box flex={1} px={2} py={1} height={59}>
-          <BulkActions />
-        </Box>
-      )}
-      {!selectedBulkActions && (
+      {
+        /*
+        selectedBulkActions && (
+          <Box flex={1} px={2} py={1} height={59}>
+            <BulkActions />
+          </Box>
+        )
+        */
+      }
+      {(
         <CardHeader
           action={
             <Box width={150}>
@@ -193,6 +175,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
               <TableCell padding="checkbox">
                 <Checkbox
                   color="primary"
+                  size='small'
                   checked={selectedAllUsers}
                   indeterminate={selectedSomeUsers}
                   onChange={handleSelectAllUsers}
@@ -207,7 +190,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedUsers.map((user) => {
+            {filteredUsers.map((user) => {
               const isUserSelected = selectedUsers.includes(
                 user.id
               );
@@ -220,6 +203,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
                   <TableCell padding="checkbox">
                     <Checkbox
                       color="primary"
+                      size='small'
                       checked={isUserSelected}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
                         handleSelectOneUser(event, user.id)
@@ -228,26 +212,10 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
                     />
                   </TableCell>
                   <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {user.id}
-                    </Typography>
+                    {user.id}
                   </TableCell>
                   <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {user.name} {user.surname}
-                    </Typography>
+                    {user.name} {user.surname}
                   </TableCell>
                   <TableCell>
                     <Typography
@@ -261,15 +229,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {user.lastSeen}
-                    </Typography>
+                    {user.lastSeen}
                   </TableCell>
                   <TableCell align="right">
 
@@ -312,17 +272,6 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box p={2}>
-        <TablePagination
-          component="div"
-          count={filteredUsers.length}
-          onPageChange={handlePageChange}
-          onRowsPerPageChange={handleLimitChange}
-          page={page}
-          rowsPerPage={limit}
-          rowsPerPageOptions={[5, 10, 25, 30]}
-        />
-      </Box>
     </Card>
   );
 };

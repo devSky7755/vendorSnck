@@ -58,7 +58,7 @@ const OrderSettings: FC<OrdersSettingProp> = ({ pauseUntil, pauseFor }) => {
                 <title>Order Settings</title>
             </Helmet>
             <PageTitleWrapper>
-                <Typography variant="h3" component="h3" sx={{ py: 0.5 }}>
+                <Typography variant="h5" component="h5" sx={{ py: 0.5 }}>
                     Order Settings
                 </Typography>
             </PageTitleWrapper>

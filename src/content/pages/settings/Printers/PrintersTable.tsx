@@ -41,7 +41,7 @@ const PrintersTable: FC<PrintersTableProps> = ({ printers, onEditingPrinter }) =
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ px: 3 }}>Name</TableCell>
+              <TableCell sx={{ px: 2 }}>Name</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Printer Model</TableCell>
               <TableCell align="right" sx={{ px: 3 }}>Actions</TableCell>
@@ -54,39 +54,14 @@ const PrintersTable: FC<PrintersTableProps> = ({ printers, onEditingPrinter }) =
                   hover
                   key={printer.id}
                 >
-                  <TableCell>
-                    <Typography
-                      sx={{ ml: 2 }}
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {printer.name}
-                    </Typography>
+                  <TableCell sx={{ px: 2 }}>
+                    {printer.name}
                   </TableCell>
                   <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {getStatusLabel(printer.status)}
-                    </Typography>
+                    {getStatusLabel(printer.status)}
                   </TableCell>
                   <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {printer.model}
-                    </Typography>
+                    {printer.model}
                   </TableCell>
                   <TableCell align="right" sx={{ pr: 2 }}>
                     <Tooltip title="Edit Printer" arrow>
@@ -106,7 +81,7 @@ const PrintersTable: FC<PrintersTableProps> = ({ printers, onEditingPrinter }) =
                         <EditTwoToneIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="Delete Printer" arrow>
+                    <Tooltip title="Delete Printer" arrow > 
                       <IconButton
                         sx={{
                           '&:hover': { background: theme.colors.error.lighter },

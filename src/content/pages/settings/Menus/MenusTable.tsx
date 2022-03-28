@@ -13,7 +13,6 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TablePagination,
   TableRow,
   TableContainer,
   Select,
@@ -59,13 +58,6 @@ const applyFilters = (
   });
 };
 
-const applyPagination = (
-  menus: MenuItemModel[],
-  page: number,
-  limit: number
-): MenuItemModel[] => {
-  return menus.slice(page * limit, page * limit + limit);
-};
 
 const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
 
@@ -133,20 +125,8 @@ const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
     }
   };
 
-  const handlePageChange = (event: any, newPage: number): void => {
-    setPage(newPage);
-  };
-
-  const handleLimitChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setLimit(parseInt(event.target.value));
-  };
-
   const filteredMenus = applyFilters(menus, filters);
-  const paginatedMenus = applyPagination(
-    filteredMenus,
-    page,
-    limit
-  );
+
   const selectedSomeMenus =
     selectedMenus.length > 0 &&
     selectedMenus.length < menus.length;
@@ -156,12 +136,7 @@ const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
 
   return (
     <Card>
-      {selectedBulkActions && (
-        <Box flex={1} px={2} py={1} height={59}>
-          <BulkActions />
-        </Box>
-      )}
-      {!selectedBulkActions && (
+      {(
         <CardHeader
           action={
             <Box width={150}>
@@ -193,6 +168,7 @@ const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
               <TableCell padding="checkbox">
                 <Checkbox
                   color="primary"
+                  size='small'
                   checked={selectedAllMenus}
                   indeterminate={selectedSomeMenus}
                   onChange={handleSelectAllMenus}
@@ -206,7 +182,7 @@ const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedMenus.map((menu) => {
+            {filteredMenus.map((menu) => {
               const isMenuSelected = selectedMenus.includes(
                 menu.id
               );
@@ -218,6 +194,7 @@ const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
+                      size='small'
                       color="primary"
                       checked={isMenuSelected}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
@@ -227,37 +204,13 @@ const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
                     />
                   </TableCell>
                   <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {menu.name}
-                    </Typography>
+                    {menu.name}
                   </TableCell>
                   <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {getStatusLabel(menu.status)}
-                    </Typography>
+                    {getStatusLabel(menu.status)}
                   </TableCell>
                   <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      ${menu.price.toFixed(2)}
-                    </Typography>
+                    ${menu.price.toFixed(2)}
                   </TableCell>
                   <TableCell align="right">
 
@@ -299,17 +252,6 @@ const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box p={2}>
-        <TablePagination
-          component="div"
-          count={filteredMenus.length}
-          onPageChange={handlePageChange}
-          onRowsPerPageChange={handleLimitChange}
-          page={page}
-          rowsPerPage={limit}
-          rowsPerPageOptions={[5, 10, 25, 30]}
-        />
-      </Box>
     </Card>
   );
 };

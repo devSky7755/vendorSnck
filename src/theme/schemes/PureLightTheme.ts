@@ -905,13 +905,18 @@ export const PureLightTheme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
+          padding: '6px 8px',
           borderBottomColor: colors.alpha.black[10],
-          fontSize: 13,
-          padding: 8
+          fontSize: '14px',
+          fontWeight: 400,
+          lineHeight: '20px',
+          letterSpacing: '0.25px',
         },
         head: {
-          fontSize: 14,
-          fontWeight: 'bold',
+          fontSize: '14px',
+          fontWeight: 500,
+          lineHeight: '24px',
+          letterSpacing: '0.1px',
           color: 'black'
         }
       }

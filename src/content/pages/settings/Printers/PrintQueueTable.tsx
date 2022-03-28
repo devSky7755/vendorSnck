@@ -13,12 +13,10 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TablePagination,
   TableRow,
   TableContainer,
   Select,
   MenuItem,
-  Typography,
   useTheme,
   CardHeader
 } from '@mui/material';
@@ -26,7 +24,6 @@ import {
 import Label from 'src/components/Label';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import BulkActions from './BulkActions';
 import { PrintQueue, PrintQueueStatus } from 'src/models/printer';
 
 interface PrintQueuesTableProps {
@@ -64,9 +61,6 @@ const PrintQueuesTable: FC<PrintQueuesTableProps> = ({ printQueues }) => {
   const [selectedPrintQueues, setSelectedPrintQueues] = useState<string[]>(
     []
   );
-  const selectedBulkActions = selectedPrintQueues.length > 0;
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
   const [filters, setFilters] = useState<Filters>({
     status: null
   });
@@ -135,12 +129,7 @@ const PrintQueuesTable: FC<PrintQueuesTableProps> = ({ printQueues }) => {
 
   return (
     <Card>
-      {selectedBulkActions && (
-        <Box flex={1} px={2} py={1} height={59}>
-          <BulkActions />
-        </Box>
-      )}
-      {!selectedBulkActions && (
+      {(
         <CardHeader
           action={
             <Box width={150}>
@@ -208,37 +197,13 @@ const PrintQueuesTable: FC<PrintQueuesTableProps> = ({ printQueues }) => {
                     />
                   </TableCell>
                   <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {printQueue.id}
-                    </Typography>
+                    {printQueue.id}
                   </TableCell>
                   <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {getStatusLabel(printQueue.status)}
-                    </Typography>
+                    {getStatusLabel(printQueue.status)}
                   </TableCell>
                   <TableCell>
-                    <Typography
-                      variant="body1"
-                      fontWeight="bold"
-                      color="text.primary"
-                      gutterBottom
-                      noWrap
-                    >
-                      {printQueue.time_string}
-                    </Typography>
+                    {printQueue.time_string}
                   </TableCell>
                   <TableCell align="right">
 

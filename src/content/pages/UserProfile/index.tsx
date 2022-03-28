@@ -19,7 +19,7 @@ function UserProfile() {
                 <title>Profile</title>
             </Helmet>
             <PageTitleWrapper>
-                <Typography variant="h3" component="h3" sx={{ py: 1 }}>
+                <Typography variant="h5" component="h5" sx={{ py: 1 }}>
                     User Profile
                 </Typography>
             </PageTitleWrapper>
