@@ -74,13 +74,11 @@ function OnboardingVerification({ phone }) {
                     </PhoneWrapper>
                     <PhoneWrapper>
                         <Button disabled={!code || code.length !== 4} variant='contained' color='primary' fullWidth onClick={() => {
-                            //setMessage('Wrong verification code');
-                            //setError(true);
                             navigate('/onboarding/ordertype')
                         }}>Verify</Button>
                     </PhoneWrapper>
                     <div>
-                        Didn't receive a code? <Button size='small'>Try Again</Button>
+                        Didn't receive a code? <Button size='small' style={{ textTransform: 'none' }} >Try Again</Button>
                     </div>
                 </Card>
             </Container>

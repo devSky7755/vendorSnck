@@ -44,22 +44,22 @@ function OnboardingAcceptOrder() {
                     <Typography sx={{ mb: 2 }} variant="h1">
                         Hot Dog Stand is set up!
                     </Typography>
-                    <Typography component="span" variant="subtitle1">
+                    <Typography component="span" variant="body1">
                         Your venue is available for online orders.<br />
                         Next we recommend to:
                     </Typography>
-                    <PhoneWrapper>
-                        <Button color='primary' onClick={() => {
+                    <PhoneWrapper sx={{ pt: 3 }}>
+                        <Button color='primary' style={{ textTransform: 'none' }} onClick={() => {
                             navigate('/settings/users');
-                        }}>Add your team member</Button>
+                        }}><Typography component="span" variant="subtitle1">Add your team member</Typography></Button>
                     </PhoneWrapper>
                     <StyledDivider />
                     <PhoneWrapper>
-                        <Button onClick={() => {
+                        <Button style={{ textTransform: 'none' }} onClick={() => {
                             navigate('/settings/menus');
-                        }} color='primary'>Review your menu</Button>
+                        }} color='primary'><Typography component="span" variant="subtitle1">Review your menu</Typography></Button>
                     </PhoneWrapper>
-                    <PhoneWrapper>
+                    <PhoneWrapper sx={{ pt: 3 }}>
                         <Button variant='contained' color='primary' fullWidth
                             onClick={() => {
                                 navigate('/help', {

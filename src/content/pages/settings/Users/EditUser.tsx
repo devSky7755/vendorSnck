@@ -43,7 +43,7 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
             onClose(null);
         }} open={open} PaperProps={{ style: { maxWidth: 400 } }}>
             <DialogTitle className='border-bottom d-flex font-bold' sx={{ px: 2, py: 1 }}>
-                Edit User
+                <Typography component='span' variant='h6'>Edit User</Typography>
                 <IconButton className='float-right' sx={{ p: 0 }} size='small' onClick={() => {
                     onClose(null);
                 }}>
@@ -52,7 +52,7 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
             </DialogTitle>
             <Box>
                 <Box sx={{ p: 1 }} style={{ background: '#0000000A' }}>
-                    <Switch ></Switch> <b>Active</b>
+                    <Switch ></Switch> <Typography component='span' variant='subtitle1'>Active</Typography>
                 </Box>
                 <Box sx={{ p: 2 }} className='border-bottom'>
                     <TextField
@@ -61,7 +61,6 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                         size='small'
                         fullWidth
                         value={editing.role}
-                        helperText='Admin has access to all permissions. Can edit the menu, availability, create and delete users, cancel orders, and see all financial data.'
                         onChange={(e) => {
                             const role = e.target.value;
                             if (role === 'Admin' || role === 'Runner' || role === 'Packer') {
@@ -78,9 +77,12 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                             </MenuItem>
                         ))}
                     </TextField>
+                    <Typography variant='body2' sx={{ pt: 2 }}>
+                        Admin has access to all permissions. Can edit the menu, availability, create and delete users, cancel orders, and see all financial data.
+                    </Typography>
                 </Box>
-                <Box sx={{ px: 2, py: 1 }} className='border-bottom'>
-                    <Typography variant='h5' sx={{ pb: 2 }}>User Details</Typography>
+                <Box sx={{ px: 2, pb: 2, pt: 1 }} className='border-bottom'>
+                    <Typography variant='subtitle1' sx={{ pb: 2 }}>User Details</Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
@@ -149,15 +151,14 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                     </Grid>
                 </Box>
                 <Box sx={{ px: 2, py: 1 }} className='border-bottom'>
-                    <Typography variant='h5' sx={{ pb: 1 }}>Locations</Typography>
+                    <Typography variant='subtitle1' sx={{ pb: 1 }}>Locations</Typography>
                     <Grid container spacing={0}>
                         <Grid item xs={12}>
-                            <Checkbox size='small'></Checkbox>HotDog Stand
+                            <Checkbox size='small'></Checkbox><Typography variant='body1' component='span'>HotDog Stand</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                            <Checkbox size='small'></Checkbox>Snackr Kiosk
+                            <Checkbox size='small'></Checkbox><Typography variant='body1' component='span'>Snackr Kiosk</Typography>
                         </Grid>
-
                     </Grid>
                 </Box>
             </Box>

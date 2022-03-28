@@ -30,36 +30,40 @@ function UserProfile() {
                 >
                     <Grid item xs={12}>
                         <Box sx={{ mb: 2 }}>
-                            <Typography variant="h3" component="span">
+                            <Typography variant="h5" component="span">
                                 Jack Jackson
                             </Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} >
-                        <Grid container spacing={2} className='border-bottom'>
-                            <Grid item><EmailOutlinedIcon /></Grid>
-                            <Grid item className='flex-auto'>
-                                <Typography component="span">
-                                    johnson@gmail.com
-                                </Typography>
+                        <Box className='border-bottom' sx={{ pb: 1 }}>
+                            <Grid container spacing={2}>
+                                <Grid item><EmailOutlinedIcon /></Grid>
+                                <Grid item className='flex-auto'>
+                                    <Typography component="span" variant='body1'>
+                                        johnson@gmail.com
+                                    </Typography>
+                                </Grid>
+                                <Grid item className='float-right'>
+                                    <Button color='primary'>CHANGE</Button>
+                                </Grid>
                             </Grid>
-                            <Grid item className='float-right'>
-                                <Button color='primary'>CHANGE</Button>
-                            </Grid>
-                        </Grid>
+                        </Box>
                     </Grid>
                     <Grid item xs={12}>
-                        <Grid container spacing={2} className='border-bottom'>
-                            <Grid item><PhoneIphoneOutlinedIcon /></Grid>
-                            <Grid item className='flex-auto'>
-                                <Typography component="span">
-                                    (555) 123-4553
-                                </Typography>
+                        <Box className='border-bottom' sx={{ pb: 1 }}>
+                            <Grid container spacing={2}>
+                                <Grid item><PhoneIphoneOutlinedIcon /></Grid>
+                                <Grid item className='flex-auto'>
+                                    <Typography component="span" variant='body1'>
+                                        (555) 123-4553
+                                    </Typography>
+                                </Grid>
+                                <Grid item className='float-right'>
+                                    <Button color='primary'>CHANGE</Button>
+                                </Grid>
                             </Grid>
-                            <Grid item className='float-right'>
-                                <Button color='primary'>CHANGE</Button>
-                            </Grid>
-                        </Grid>
+                        </Box>
                     </Grid>
                     {
                         /*

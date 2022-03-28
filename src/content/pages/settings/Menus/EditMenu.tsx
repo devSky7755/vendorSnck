@@ -50,7 +50,7 @@ const EditMenuDialog: React.FC<EditMenuInterface> = (props) => {
             onClose(null);
         }} open={open} PaperProps={{ style: { maxWidth: 400 } }}>
             <DialogTitle className='border-bottom d-flex font-bold' sx={{ px: 2, py: 1 }}>
-                Edit Menu Item
+                <Typography variant='h6' component={'span'}>Edit Menu Item</Typography>
                 <IconButton className='float-right' sx={{ p: 0 }} size='small' onClick={() => {
                     onClose(null);
                 }}>
@@ -59,11 +59,11 @@ const EditMenuDialog: React.FC<EditMenuInterface> = (props) => {
             </DialogTitle>
             <Box>
                 <Box sx={{ p: 1 }} style={{ background: '#0000000A' }}>
-                    <Switch ></Switch> <b>Available</b>
+                    <Switch ></Switch> <Typography variant='subtitle1' component='span'>Available</Typography>
                 </Box>
 
                 <Box sx={{ px: 2, py: 2 }} className='border-bottom'>
-                    <Typography variant='h5' sx={{ pb: 2 }}>Menu Details</Typography>
+                    <Typography variant='subtitle1' sx={{ pb: 2 }}>Menu Details</Typography>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <TextField

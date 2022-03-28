@@ -34,8 +34,8 @@ const EditPrinterDialog: React.FC<EditPrinterInterface> = (props) => {
         <Dialog onClose={() => {
             onClose(null);
         }} open={open} PaperProps={{ style: { maxWidth: 400 } }}>
-            <DialogTitle className='border-bottom d-flex font-bold' sx={{ px: 2, py: 1 }}>
-                Edit Printer
+            <DialogTitle className='border-bottom d-flex' sx={{ px: 2, py: 1 }}>
+                <Typography component='span' variant='h6'>Edit Printer</Typography>
                 <IconButton className='float-right' sx={{ p: 0 }} size='small' onClick={() => {
                     onClose(null);
                 }}>
@@ -44,10 +44,9 @@ const EditPrinterDialog: React.FC<EditPrinterInterface> = (props) => {
             </DialogTitle>
             <Box>
                 <Box sx={{ p: 1 }} style={{ background: '#0000000A' }}>
-                    <Switch ></Switch> <b>Connected</b>
+                    <Switch ></Switch> <Typography component='span' variant='subtitle1'>Connected</Typography>
                 </Box>
-                <Box sx={{ px: 2, py: 1 }} className='border-bottom'>
-                    <Typography variant='h5' sx={{ pb: 2 }}>Printer Details</Typography>
+                <Box sx={{ px: 2, py: 3 }} className='border-bottom'>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
@@ -92,8 +91,8 @@ const EditPrinterDialog: React.FC<EditPrinterInterface> = (props) => {
                         </Grid>
                     </Grid>
                 </Box>
-                <Box sx={{ px: 2, py: 1 }} className='border-bottom'>
-                    <Typography variant='h5' sx={{ pb: 2 }}>Address</Typography>
+                <Box sx={{ px: 2, py: 2 }} className='border-bottom'>
+                    <Typography variant='subtitle1' sx={{ pb: 2 }}>Address</Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
@@ -131,7 +130,7 @@ const EditPrinterDialog: React.FC<EditPrinterInterface> = (props) => {
                     </Grid>
                 </Box>
                 <Box sx={{ px: 2, py: 1 }} className='border-bottom'>
-                    <Typography variant='h5' sx={{ pb: 1 }}>Use this printer for</Typography>
+                    <Typography variant='subtitle1' sx={{ pb: 1 }}>Use this printer for</Typography>
                     <Grid container spacing={0}>
                         <Grid item xs={12}>
                             <Checkbox size='small'></Checkbox>Pickup Orders

@@ -45,16 +45,16 @@ function OnboardingOrderType() {
                     <Typography sx={{ mb: 2 }} variant="h1">
                         Login Successful!
                     </Typography>
-                    <Typography component="span" variant="subtitle1">
+                    <Typography component="span" variant="body1">
                         Setup your location <b>Hot Dog Stand</b><br />
                         to start accepting order
                     </Typography>
-                    <PhoneWrapper>
-                        <Switch></Switch> Accept Pickup Orders
+                    <PhoneWrapper sx={{ mt: 3 }}>
+                        <Switch></Switch><Typography component="span" variant="body1"> Accept Pickup Orders</Typography>
                     </PhoneWrapper>
                     <StyledDivider />
                     <PhoneWrapper>
-                        <Switch></Switch> Accept Delivery Orders
+                        <Switch></Switch><Typography component="span" variant="body1"> Accept Delivery Orders</Typography>
                     </PhoneWrapper>
                     <PhoneWrapper>
                         <Button variant='contained' color='primary' fullWidth onClick={() => {

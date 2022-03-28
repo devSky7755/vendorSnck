@@ -69,7 +69,7 @@ const OrderSettings: FC<OrdersSettingProp> = ({ pauseUntil, pauseFor }) => {
                         <Grid container spacing={1}>
                             <Grid item><PauseCircleFilledOutlinedIcon color='warning' /></Grid>
                             <Grid item className='py-0 my-auto'>
-                                <Typography component="span" variant='h5'>
+                                <Typography component="span" variant='subtitle1'>
                                     Paused orders for {Math.floor(seconds / 60)}:{(seconds % 60).toString().padStart(2, '0')} min
                                 </Typography>
                             </Grid>
@@ -81,21 +81,21 @@ const OrderSettings: FC<OrdersSettingProp> = ({ pauseUntil, pauseFor }) => {
                     spacing={2}
                 >
                     <Grid item xs={12} sx={{ mt: 4 }}>
-                        <Typography component="h5" variant='h5'>
+                        <Typography variant='subtitle1'>
                             Availability
                         </Typography>
                         <BorderedBox>
-                            <Switch></Switch> Available for Orders
+                            <Switch></Switch> <Typography component='span' variant='body1'>Available for Orders</Typography>
                         </BorderedBox>
                         <BorderedBox>
-                            <Switch></Switch> Pickup Orders
+                            <Switch></Switch> <Typography component='span' variant='body1'>Pickup Orders</Typography>
                         </BorderedBox>
                         <BorderedBox>
-                            <Switch></Switch> Delivery Orders
+                            <Switch></Switch> <Typography component='span' variant='body1'>Delivery Orders</Typography>
                         </BorderedBox>
                     </Grid>
                     <Grid item xs={12} sx={{ mt: 4 }}>
-                        <Typography component="h5" variant='h5'>
+                        <Typography variant='subtitle1'>
                             Pause orders
                         </Typography>
                         <BorderedBox sx={{ pt: 2, pb: 2 }}>
@@ -119,7 +119,7 @@ const OrderSettings: FC<OrdersSettingProp> = ({ pauseUntil, pauseFor }) => {
                         </BorderedBox>
                     </Grid>
                     <Grid item xs={12} sx={{ mt: 4 }}>
-                        <Typography component="h5" variant='h5'>
+                        <Typography variant='subtitle1'>
                             Order amount per 10 min
                         </Typography>
                         <BorderedBox>
@@ -127,7 +127,7 @@ const OrderSettings: FC<OrdersSettingProp> = ({ pauseUntil, pauseFor }) => {
                         </BorderedBox>
                     </Grid>
                     <Grid item xs={12} sx={{ mt: 0 }}>
-                        <Typography component="h5" variant='h5'>
+                        <Typography variant='subtitle1'>
                             Pickup order queue
                         </Typography>
                         <BorderedBox>

@@ -43,15 +43,15 @@ function OnboardingQueue() {
                 <Box sx={{ mt: 10 }}>
                     <OnboardingStepper steps={steps} activeStep={1}></OnboardingStepper>
                 </Box>
-                <Card sx={{ p: 8, mt: 4, mb: 10, borderRadius: 0 }}>
+                <Card sx={{ p: 8, pb: 4, mt: 4, mb: 4, borderRadius: 0 }}>
                     <Typography sx={{ mb: 2 }} variant="h1">
                         Queue Setting
                     </Typography>
-                    <Typography component="span" variant="subtitle1">
+                    <Typography component="span" variant="body1">
                         Setup the amount of orders you<br />
                         can accept per 10 minutes.
                     </Typography>
-                    <PhoneWrapper>
+                    <PhoneWrapper sx={{ mt: 3 }}>
                         <InputSlider label='Order amount per 10 min' maxValue={30}></InputSlider>
                     </PhoneWrapper>
                     <StyledDivider />
