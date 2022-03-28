@@ -188,7 +188,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
         <Table size='small'>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              <TableCell padding="checkbox" style={{ height: 52 }}>
                 <Checkbox
                   size='small'
                   color="primary"
@@ -199,8 +199,23 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
               </TableCell>
               <TableCell>Order</TableCell>
               <TableCell>Items</TableCell>
-              <TableCell>Order Type</TableCell>
-              <TableCell>Waiting</TableCell>
+              {
+                type === 'Delivery' &&
+                <TableCell>Delivery Person</TableCell>
+              }
+              {
+                type === 'Pickup' &&
+                <TableCell>User Notified</TableCell>
+              }
+              {
+                (type === 'New' || type === 'Preparing') &&
+                < TableCell > Order Type</TableCell>
+              }
+              <TableCell>
+                {
+                  (type === 'Delivery' || type === 'Pickup') ? 'Due In' : 'Waiting'
+                }
+              </TableCell>
               <TableCell>Customer</TableCell>
               <TableCell align="right">
                 {
@@ -235,7 +250,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                   <TableRow
                     className='group-header-row'
                   >
-                    <TableCell padding="checkbox">
+                    <TableCell padding="checkbox" style={{ height: 52 }}>
                       <Checkbox
                         size='small'
                         color="primary"
@@ -248,8 +263,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                     </TableCell>
                     <TableCell colSpan={5}>
                       <Typography
-                        variant="body1"
-                        fontWeight="bold"
+                        variant="subtitle2"
                         color="text.primary"
                         gutterBottom
                         noWrap
@@ -258,14 +272,9 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                       </Typography>
                     </TableCell>
                     <TableCell align="right">
-                      <Typography
-                        variant="body1"
-                        color="text.primary"
-                        gutterBottom
-                        noWrap
-                      >
-                        <b>{group.orders.length}</b> orders due in <b>{group.desc}</b>
-                      </Typography>
+                      <Typography variant="subtitle2" component='span'>{group.orders.length} </Typography>
+                      <Typography variant="subtitle2" component='span' color='GrayText'>orders due in</Typography>
+                      <Typography variant="subtitle2" component='span'> {group.desc}</Typography>
                     </TableCell>
                     <TableCell align="right">
                       <IconButton size='small' onClick={() => {
@@ -298,13 +307,14 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                       const isOrderSelected = selectedOrders.includes(order.id);
                       const hasAlchol = order.items && order.items.find(x => x.isAlchol);
                       const isdelayed = group.warning;
+
                       return (
                         <TableRow
                           className={isdelayed ? 'bg-warning' : ''}
                           hover
                           key={order.id}
                         >
-                          <TableCell padding="checkbox">
+                          <TableCell padding="checkbox" style={{ height: 52 }}>
                             <Checkbox
                               size='small'
                               color="primary"
@@ -315,53 +325,55 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                             />
                           </TableCell>
                           <TableCell>
-                            <Typography
-                              variant="body1"
-                              color="text.primary"
-                              gutterBottom
-                              noWrap
-                            >
-                              #{order.id}
-                            </Typography>
+                            #{order.id}
                           </TableCell>
                           <TableCell>
-                            <div className='d-inline-flex'>
-                              <Typography
-                                variant="body1"
-
-                                color="text.primary"
-                                gutterBottom
-                                noWrap
-                              >
-                                {order.item_count}
+                            {order.item_count}
+                            {
+                              hasAlchol &&
+                              <Typography variant='caption' className='border-warning alchol-label' color='#FF864E' sx={{ ml: 2, px: 1 }} gutterBottom
+                                noWrap>
+                                ALCHOL
                               </Typography>
-                              {
-                                hasAlchol &&
-                                <Typography variant='caption' className='border-warning alchol-label' color='#FF864E' sx={{ ml: 2, px: 1 }} gutterBottom
-                                  noWrap>
-                                  ALCHOL
+                            }
+                          </TableCell>
+                          {
+                            type === 'Delivery' &&
+                            <TableCell>
+                              <Typography variant='body2' component='span'>
+                                {order.delivery && (order.delivery.name + ' ' + order.delivery.surname)}
+                              </Typography>
+                            </TableCell>
+                          }
+                          {
+                            type === 'Pickup' &&
+                            <TableCell>
+                              <Typography variant='body2' component='span'>
+                                {
+                                  order.user_notified && (
+                                    Math.floor((current_time - order.user_notified) / 60000) + ' mins'
+                                  )
+                                }
+                              </Typography>
+                            </TableCell>
+                          }
+                          {
+                            (type === 'New' || type === 'Preparing') &&
+                            <TableCell>
+                              <div className='d-inline-flex'>
+                                <Typography variant='body2' component='span'>
+                                  {order.order_type}
                                 </Typography>
-                              }
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className='d-inline-flex'>
-                              <Typography
-                                variant="body1"
-                                color="text.primary"
-                                gutterBottom
-                                noWrap
-                              >
-                                {order.order_type}
-                              </Typography>
-                              {
-                                order.order_type === 'Delivery' && <DirectionsRunIcon sx={{ ml: 1 }} color='disabled' fontSize='small' />
-                              }
-                            </div>
-                          </TableCell>
+                                {
+                                  order.order_type === 'Delivery' && <DirectionsRunIcon sx={{ ml: 1 }} color='disabled' fontSize='small' />
+                                }
+                              </div>
+                            </TableCell>
+                          }
+
                           <TableCell>
                             <Typography
-                              variant="body1"
+                              variant="body2"
                               color="text.primary"
                               gutterBottom
                               noWrap
@@ -371,7 +383,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                           </TableCell>
                           <TableCell>
                             <Typography
-                              variant="body1"
+                              variant="body2"
                               color="text.primary"
                               gutterBottom
                               sx={{ mb: 0 }}

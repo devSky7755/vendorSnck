@@ -1,6 +1,6 @@
 import { Customer } from "./customer";
 import { MenuItem, tempMenus } from "./menu_item";
-import { TeamUser } from "./team_user";
+import { TeamUser, tempUsers } from "./team_user";
 
 export type OrderType = 'Delivery' | 'Pickup';
 export type OrderStatus = 'Preparing' | 'Ready' | 'Delivering' | 'Completed' | 'Issued'
@@ -13,6 +13,7 @@ export interface Order {
     status: OrderStatus;
     created: number;
     duetime: number;
+    user_notified?: number;
     customer: Customer;
     delivery?: TeamUser;
 }
@@ -35,6 +36,7 @@ export const temp_orders: Order[] = [
             name: 'Jack Jackson',
             seat: 'Seat 1 | Row B | Section B'
         },
+        delivery: tempUsers[1]
     },
     {
         id: 568,
@@ -42,6 +44,7 @@ export const temp_orders: Order[] = [
         order_type: 'Pickup',
         status: 'Preparing',
         created: Date.now() - 13.2 * 60 * 1000,
+        user_notified: Date.now() - 5.6 * 60 * 1000,
         items: [
             tempMenus[0],
             tempMenus[1]
@@ -66,11 +69,12 @@ export const temp_orders: Order[] = [
             name: 'David Daveson',
             seat: 'Seat 2 | Row C | Section D'
         },
+        delivery: tempUsers[0]
     },
     {
         id: 570,
         item_count: 1,
-        order_type: 'Pickup',
+        order_type: 'Delivery',
         status: 'Ready',
         created: Date.now() - 7.3 * 60 * 1000,
         items: [
@@ -87,6 +91,7 @@ export const temp_orders: Order[] = [
         order_type: 'Pickup',
         status: 'Preparing',
         created: Date.now() - 7.6 * 60 * 1000,
+        user_notified: Date.now() - 3.6 * 60 * 1000,
         items: [
             tempMenus[4]
         ],

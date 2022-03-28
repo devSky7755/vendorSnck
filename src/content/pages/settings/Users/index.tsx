@@ -5,7 +5,7 @@ import { Box, styled, TextField, InputAdornment, Card } from '@mui/material';
 import Footer from 'src/components/Footer';
 import { useState } from 'react';
 import SearchTwoTone from '@mui/icons-material/SearchTwoTone';
-import { TeamUser } from 'src/models/team_user';
+import { TeamUser, tempUsers } from 'src/models/team_user';
 import UsersTable from './UsersTable';
 import EditUserDialog from './EditUser';
 
@@ -24,36 +24,6 @@ const TableWrapper = styled(Box)(
         border: 1px solid ${theme.general.borderColor};
 `
 );
-
-const tempUsers: TeamUser[] = [
-  {
-    id: 52,
-    role: 'Runner',
-    name: 'Jack',
-    surname: 'Jackson',
-    status: 'Active',
-    lastSeen: '15 min ago',
-    lastSeenTimeStamp: 0,
-  },
-  {
-    id: 51,
-    role: 'Runner',
-    name: 'Dave',
-    surname: 'Davidson',
-    status: 'Not Active',
-    lastSeen: '5 days ago',
-    lastSeenTimeStamp: 0
-  },
-  {
-    id: 31,
-    role: 'Packer',
-    name: 'Frank',
-    surname: 'Frankson',
-    status: 'Active',
-    lastSeen: '5 min ago',
-    lastSeenTimeStamp: 0
-  },
-];
 
 function UsersSetting() {
   const [showSearch, setShowSearch] = useState(false);
