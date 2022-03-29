@@ -30,6 +30,7 @@ function MenuSettings() {
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [menus, setMenus] = useState(tempMenus);
+  const [searchStr, setSearchString] = useState(null);
 
   const onToggleSearch = () => {
     setShowSearch(!showSearch);
@@ -71,7 +72,11 @@ function MenuSettings() {
                 </InputAdornment>
               )
             }}
-              type='search' variant='standard' fullWidth placeholder='Search by name, category, tags'></TextField>
+              type='search' variant='standard' fullWidth placeholder='Search by name, category, tags'
+              value={searchStr} onChange={(e) => {
+                setSearchString(e.target.value);
+              }}
+            ></TextField>
           </SearchWrapper>
         }
         {
@@ -84,7 +89,7 @@ function MenuSettings() {
         }
         <TableWrapper>
           <Card>
-            <MenusTable menus={menus} onEditingMenu={(menu) => onEditing(menu)} />
+            <MenusTable search={searchStr} menus={menus} onEditingMenu={(menu) => onEditing(menu)} />
           </Card>
         </TableWrapper>
       </Box>

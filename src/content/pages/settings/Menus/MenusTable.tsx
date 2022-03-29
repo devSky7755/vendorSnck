@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, useState } from 'react';
+import { FC, ChangeEvent, useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
   Tooltip,
@@ -19,23 +19,29 @@ import {
   MenuItem,
   Typography,
   useTheme,
-  CardHeader
+  CardHeader,
+  Menu
 } from '@mui/material';
 
 import Label from 'src/components/Label';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import BulkActions from './BulkActions';
 import { MenuItem as MenuItemModel, MenuItemStatus } from 'src/models/menu_item';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 interface MenusTableProps {
   className?: string;
   menus: MenuItemModel[];
-  onEditingMenu: Function
+  onEditingMenu: Function;
+  search?: string;
 }
 
 interface Filters {
   status?: MenuItemStatus;
+  search?: string;
 }
 
 const getStatusLabel = (menuStatus: MenuItemStatus): JSX.Element => {
@@ -54,22 +60,41 @@ const applyFilters = (
       matches = false;
     }
 
+    if (matches && filters.search && filters.search.length > 0) {
+      if ((menu.name && menu.name.includes(filters.search)) || (menu.category && menu.category.includes(filters.search)) ||
+        (menu.tags && menu.tags.join(' ').includes(filters.search))) {
+        matches = true;
+      } else {
+        matches = false;
+      }
+    }
+
     return matches;
   });
 };
 
+interface GroupedMenu {
+  category: string;
+  menus: MenuItemModel[];
+}
 
-const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
-
-  const [selectedMenus, setSelectedMenus] = useState<number[]>(
-    []
-  );
-  const selectedBulkActions = selectedMenus.length > 0;
-  const [page, setPage] = useState<number>(0);
-  const [limit, setLimit] = useState<number>(5);
+const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu, search }) => {
+  const [selectedMenus, setSelectedMenus] = useState<number[]>([]);
+  const [showFilter, setShowFilter] = useState<boolean>(false);
   const [filters, setFilters] = useState<Filters>({
-    status: null
+    status: null,
+    search: search
   });
+  const [actionID, setActionID] = useState<number>(-1);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [collapsed, setCollapsed] = useState<string[]>([]);
+
+  useEffect(() => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      search: search
+    }));
+  }, [search])
 
   const statusOptions = [
     {
@@ -100,7 +125,8 @@ const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
   };
 
   const handleSelectAllMenus = (
-    event: ChangeEvent<HTMLInputElement>
+    event: ChangeEvent<HTMLInputElement>,
+    menus: MenuItemModel[]
   ): void => {
     setSelectedMenus(
       event.target.checked
@@ -125,18 +151,65 @@ const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
     }
   };
 
+  const handleSelectOneGroup = (
+    event: ChangeEvent<HTMLInputElement>,
+    filtered: MenuItemModel[]
+  ): void => {
+    if (event.target.checked) {
+      const menu_ids = filtered.map(x => x.id);
+      setSelectedMenus((prevSelected) => [
+        ...prevSelected,
+        ...menu_ids
+      ]);
+    } else {
+      setSelectedMenus((prevSelected) =>
+        prevSelected.filter((id) => (filtered.findIndex(o => o.id === id) === -1))
+      );
+    }
+  };
+
+  const handleClickAction = (event: React.MouseEvent<HTMLButtonElement>, menuid: number) => {
+    setActionID(menuid);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseAction = (action: string, menu: MenuItemModel) => {
+    setAnchorEl(null);
+    if (action === 'Edit') {
+      onEditingMenu(menu);
+    }
+  };
+
+  const groupMenus = (menus: MenuItemModel[]) => {
+    let grouped: GroupedMenu[] = [];
+
+    menus.forEach(element => {
+      let exist = grouped.find(x => x.category === element.category);
+      if (exist) {
+        exist.menus.push(element);
+      } else {
+        grouped.push({
+          category: element.category,
+          menus: [element]
+        })
+      }
+    });
+
+    return grouped;
+  }
+
   const filteredMenus = applyFilters(menus, filters);
+  const groupedMenus: GroupedMenu[] = groupMenus(filteredMenus);
 
   const selectedSomeMenus =
     selectedMenus.length > 0 &&
     selectedMenus.length < menus.length;
   const selectedAllMenus =
     selectedMenus.length === menus.length;
-  const theme = useTheme();
 
   return (
     <Card>
-      {(
+      {showFilter && (
         <CardHeader
           action={
             <Box width={150}>
@@ -171,88 +244,149 @@ const MenusTable: FC<MenusTableProps> = ({ menus, onEditingMenu }) => {
                   size='small'
                   checked={selectedAllMenus}
                   indeterminate={selectedSomeMenus}
-                  onChange={handleSelectAllMenus}
+                  onChange={(e) => {
+                    handleSelectAllMenus(e, filteredMenus);
+                  }}
                 />
               </TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Price</TableCell>
-              <TableCell align="right"></TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell align="right">
+                <Tooltip title={showFilter ? 'Hide Filter' : 'Show Filter'} arrow>
+                  <IconButton size='small' onClick={() => {
+                    setShowFilter(x => !x);
+                  }}>
+                    <FilterListIcon fontSize='small' />
+                  </IconButton>
+                </Tooltip>
+              </TableCell>
+              <TableCell align="right" padding="checkbox">
+                <IconButton size='small' onClick={() => {
+                }}>
+                  <MoreVertTwoToneIcon fontSize='small' />
+                </IconButton>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredMenus.map((menu) => {
-              const isMenuSelected = selectedMenus.includes(
-                menu.id
-              );
-              return (
-                <TableRow
-                  hover
-                  key={menu.id}
-                  selected={isMenuSelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      size='small'
-                      color="primary"
-                      checked={isMenuSelected}
-                      onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                        handleSelectOneMenu(event, menu.id)
-                      }
-                      value={isMenuSelected}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    {menu.name}
-                  </TableCell>
-                  <TableCell>
-                    {getStatusLabel(menu.status)}
-                  </TableCell>
-                  <TableCell>
-                    ${menu.price.toFixed(2)}
-                  </TableCell>
-                  <TableCell align="right">
+            {groupedMenus.map((group) => {
+              let group_selected = 0;
+              group.menus.forEach(x => {
+                if (selectedMenus.includes(x.id)) group_selected++;
+              });
+              const isGroupSelected = group_selected === group.menus.length;
+              const isPartSelected = group_selected > 0 && group_selected < group.menus.length;
 
-                  </TableCell>
-                  <TableCell align="right">
-                    <Tooltip title="Edit Menu Item" arrow>
-                      <IconButton
-                        sx={{
-                          '&:hover': {
-                            background: theme.colors.primary.lighter
-                          },
-                          color: theme.palette.primary.main
-                        }}
-                        onClick={() => {
-                          onEditingMenu(menu);
-                        }}
-                        color="inherit"
-                        size="small"
+              const isExpanded = collapsed.includes(group.category) === false;
+
+              return (
+                <Fragment key={group.category}>
+                  <TableRow
+                    className='group-header-row'
+                  >
+                    <TableCell padding="checkbox" style={{ height: 52 }}>
+                      <Checkbox
+                        size='small'
+                        color="primary"
+                        checked={isGroupSelected}
+                        indeterminate={isPartSelected}
+                        onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                          handleSelectOneGroup(event, group.menus)
+                        }
+                      />
+                    </TableCell>
+                    <TableCell colSpan={3}>
+                      <Typography
+                        variant="subtitle2"
+                        color="text.primary"
+                        gutterBottom
+                        noWrap
                       >
-                        <EditTwoToneIcon fontSize="small" />
+                        {group.category}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Typography variant="subtitle2" component='span'>{group.menus.length} </Typography>
+                      <Typography variant="subtitle2" component='span' color='GrayText'>items</Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton size='small' onClick={() => {
+                        if (isExpanded) {
+                          setCollapsed([...collapsed, group.category]);
+                        } else {
+                          setCollapsed(collapsed.filter(x => x !== group.category));
+                        }
+                      }}>
+                        {
+                          isExpanded ? <ExpandLessIcon fontSize='small' /> : <ExpandMoreIcon fontSize='small' />
+                        }
                       </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete Menu Item" arrow>
-                      <IconButton
-                        sx={{
-                          '&:hover': { background: theme.colors.error.lighter },
-                          color: theme.palette.error.main
-                        }}
-                        color="inherit"
-                        size="small"
-                      >
-                        <DeleteTwoToneIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </TableCell>
-                </TableRow>
+                    </TableCell>
+                  </TableRow>
+                  {
+                    isExpanded && group.menus.map(menu => {
+                      const isMenuSelected = selectedMenus.includes(menu.id);
+                      return (
+                        <TableRow
+                          hover
+                          key={menu.id}
+                          selected={isMenuSelected}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox
+                              size='small'
+                              color="primary"
+                              checked={isMenuSelected}
+                              onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                                handleSelectOneMenu(event, menu.id)
+                              }
+                              value={isMenuSelected}
+                            />
+                          </TableCell>
+                          <TableCell>
+                            {menu.name}
+                          </TableCell>
+                          <TableCell>
+                            {getStatusLabel(menu.status)}
+                          </TableCell>
+                          <TableCell>
+                            ${menu.price.toFixed(2)}
+                          </TableCell>
+                          <TableCell align="right">
+
+                          </TableCell>
+                          <TableCell align="right" padding="checkbox">
+                            <IconButton size='small' onClick={(event) => {
+                              handleClickAction(event, menu.id);
+                            }}>
+                              <MoreVertTwoToneIcon fontSize='small' />
+                            </IconButton>
+                            <Menu
+                              anchorEl={anchorEl}
+                              open={anchorEl !== null && actionID === menu.id}
+                              onClose={() => {
+                                handleCloseAction('None', menu);
+                              }}
+                              MenuListProps={{
+                                'aria-labelledby': 'basic-button',
+                              }}
+                            >
+                              <MenuItem onClick={() => handleCloseAction('Edit', menu)}>Edit</MenuItem>
+                              <MenuItem onClick={() => handleCloseAction('Delete', menu)}>Delete</MenuItem>
+                            </Menu>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })
+                  }
+                </Fragment>
               );
             })}
           </TableBody>
         </Table>
       </TableContainer>
-    </Card>
+    </Card >
   );
 };
 

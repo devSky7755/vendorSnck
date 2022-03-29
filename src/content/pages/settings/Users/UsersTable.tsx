@@ -218,9 +218,6 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
   const selectedAllUsers =
     selectedUsers.length === users.length;
 
-
-
-
   const renderUsers = (fusers: TeamUser[], role: UserRole) => {
     const filtered = fusers.filter(x => x.role === role);
     if (filtered.length === 0) {
