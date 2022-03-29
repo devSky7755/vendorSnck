@@ -3,11 +3,13 @@ import PageHeader from './PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import { Box, styled, TextField, InputAdornment, Card } from '@mui/material';
 import Footer from 'src/components/Footer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SearchTwoTone from '@mui/icons-material/SearchTwoTone';
 import { TeamUser, tempUsers } from 'src/models/team_user';
 import UsersTable from './UsersTable';
 import EditUserDialog from './EditUser';
+import { useLocation } from 'react-router';
+import { parseQuery } from 'src/utils/functions';
 
 const SearchWrapper = styled(Box)(
   ({ theme }) => `
@@ -25,11 +27,27 @@ const TableWrapper = styled(Box)(
 `
 );
 
+interface UsersPageQueryParams {
+  role?: string;
+}
+
 function UsersSetting() {
-  const [showSearch, setShowSearch] = useState(false);
-  const [editOpen, setEditOpen] = useState(false);
+  const { search } = useLocation();
+  const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [searchStr, setSearchString] = useState(null);
+  const [editOpen, setEditOpen] = useState<boolean>(false);
   const [editing, setEditing] = useState(null);
-  const [users, setUsers] = useState(tempUsers);
+  const [users, setUsers] = useState<TeamUser[]>(tempUsers);
+  const [userRole, setUserRole] = useState(null);
+
+  useEffect(() => {
+    if (search) {
+      const params: UsersPageQueryParams = parseQuery(search);
+      if (params.role && params.role.toLowerCase() === 'runner') {
+        setUserRole('Runner');
+      }
+    }
+  }, []);
 
   const onToggleSearch = () => {
     setShowSearch(!showSearch);
@@ -37,7 +55,7 @@ function UsersSetting() {
 
   const onAddUser = () => {
     setEditing({
-      role: 'Admin'
+      role: 'Admin',
     });
     setEditOpen(true);
   }
@@ -71,7 +89,12 @@ function UsersSetting() {
                 </InputAdornment>
               )
             }}
-              type='search' variant='standard' fullWidth placeholder='Search by email, name, surname, phone number'></TextField>
+              type='search' variant='standard' fullWidth placeholder='Search by email, name, surname, phone number'
+              value={searchStr} onChange={(e) => {
+                setSearchString(e.target.value);
+              }}
+            >
+            </TextField>
           </SearchWrapper>
         }
         {
@@ -84,7 +107,7 @@ function UsersSetting() {
         }
         <TableWrapper>
           <Card>
-            <UsersTable users={users} onEditingUser={(user) => onEditing(user)} />
+            <UsersTable users={users} onEditingUser={(user) => onEditing(user)} search={searchStr} user_role={userRole} />
           </Card>
         </TableWrapper>
       </Box>

@@ -208,7 +208,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                 <TableCell>User Notified</TableCell>
               }
               {
-                (type === 'New' || type === 'Preparing') &&
+                (type !== 'Delivery' && type !== 'Pickup') &&
                 < TableCell > Order Type</TableCell>
               }
               <TableCell>
@@ -358,7 +358,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                             </TableCell>
                           }
                           {
-                            (type === 'New' || type === 'Preparing') &&
+                            (type !== 'Delivery' && type !== 'Pickup') &&
                             <TableCell>
                               <div className='d-inline-flex'>
                                 <Typography variant='body2' component='span'>

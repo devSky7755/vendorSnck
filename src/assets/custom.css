@@ -113,3 +113,7 @@ tr.group-header-row {
     font-size: 10px !important;
     line-height: 2 !important;
 }
+
+.MuiTableCell-root .MuiIconButton-root svg {
+    color: #00000099;
+}

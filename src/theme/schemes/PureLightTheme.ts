@@ -986,12 +986,12 @@ export const PureLightTheme = createTheme({
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: alpha(colors.alpha.black['100'], 0.95),
-          padding: '8px 16px',
+          backgroundColor: alpha(colors.alpha.black['100'], 0.55),
+          padding: '4px 8px',
           fontSize: 13
         },
         arrow: {
-          color: alpha(colors.alpha.black['100'], 0.95)
+          color: alpha(colors.alpha.black['100'], 0.55)
         }
       }
     },
