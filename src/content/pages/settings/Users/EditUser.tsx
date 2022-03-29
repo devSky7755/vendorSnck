@@ -162,7 +162,7 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                     </Grid>
                 </Box>
             </Box>
-            <DialogActions sx={{ py: 2 }}>
+            <DialogActions sx={{ py: 2, px: 2 }}>
                 <Button color='primary' variant='contained' fullWidth onClick={handleClose}>
                     Save
                 </Button>

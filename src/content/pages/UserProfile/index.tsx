@@ -4,15 +4,31 @@ import { Grid, Container, Typography, Box, Button, styled } from '@mui/material'
 import Footer from 'src/components/Footer';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PhoneIphoneOutlinedIcon from '@mui/icons-material/PhoneIphoneOutlined';
-import PinInput from 'react-pin-input';
-
-const ColoredBox = styled(Box)(
-    ({ theme }) => `
-    background: #E3F2FD;
-    `
-);
+import { useState } from 'react';
+import EmailEditDialog from './EmailEditDialog';
+import PhoneEditDialog from './EditPhoneDialog';
 
 function UserProfile() {
+    const [email, setEmail] = useState<string>('johnson@gmail.com');
+    const [phone, setPhone] = useState<string>('(555) 123-4553');
+    const [emailEdit, setEmailEdit] = useState(false);
+    const [phoneEdit, setPhoneEdit] = useState(false);
+    const [nameEdit, setNameEdit] = useState(false);
+
+    const handleEmailEdit = (value) => {
+        if (value) {
+            setEmail(value);
+        }
+        setEmailEdit(false);
+    }
+
+    const handlePhoneEdit = (value) => {
+        if (value) {
+            setPhone(value);
+        }
+        setPhoneEdit(false);
+    }
+
     return (
         <>
             <Helmet>
@@ -23,6 +39,22 @@ function UserProfile() {
                     User Profile
                 </Typography>
             </PageTitleWrapper>
+            {
+                emailEdit &&
+                <EmailEditDialog
+                    email={email}
+                    open={emailEdit}
+                    onClose={handleEmailEdit}
+                />
+            }
+            {
+                phoneEdit &&
+                <PhoneEditDialog
+                    phone={phone}
+                    open={phoneEdit}
+                    onClose={handlePhoneEdit}
+                />
+            }
             <Container maxWidth="sm" sx={{ mt: 8 }}>
                 <Grid
                     container
@@ -41,11 +73,13 @@ function UserProfile() {
                                 <Grid item><EmailOutlinedIcon /></Grid>
                                 <Grid item className='flex-auto'>
                                     <Typography component="span" variant='body1'>
-                                        johnson@gmail.com
+                                        {email}
                                     </Typography>
                                 </Grid>
                                 <Grid item className='float-right'>
-                                    <Button color='primary'>CHANGE</Button>
+                                    <Button color='primary' onClick={() => {
+                                        setEmailEdit(true);
+                                    }} >CHANGE</Button>
                                 </Grid>
                             </Grid>
                         </Box>
@@ -56,11 +90,13 @@ function UserProfile() {
                                 <Grid item><PhoneIphoneOutlinedIcon /></Grid>
                                 <Grid item className='flex-auto'>
                                     <Typography component="span" variant='body1'>
-                                        (555) 123-4553
+                                        {phone}
                                     </Typography>
                                 </Grid>
                                 <Grid item className='float-right'>
-                                    <Button color='primary'>CHANGE</Button>
+                                    <Button color='primary' onClick={() => {
+                                        setPhoneEdit(true);
+                                    }}>CHANGE</Button>
                                 </Grid>
                             </Grid>
                         </Box>
