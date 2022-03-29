@@ -1,23 +1,19 @@
 import { FC, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Tooltip,
   Divider,
   Card,
   IconButton,
-  Table,
+  Table, Menu, MenuItem,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
   TableContainer,
-  Typography,
-  useTheme,
 } from '@mui/material';
 
 import Label from 'src/components/Label';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import { Printer, PrinterStatus } from 'src/models/printer';
 
 interface PrintersTableProps {
@@ -32,7 +28,20 @@ const getStatusLabel = (printerStatus: PrinterStatus): JSX.Element => {
 };
 
 const PrintersTable: FC<PrintersTableProps> = ({ printers, onEditingPrinter }) => {
-  const theme = useTheme();
+  const [actionID, setActionID] = useState<number>(-1);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleClickAction = (event: React.MouseEvent<HTMLButtonElement>, printerId: number) => {
+    setActionID(printerId);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseAction = (action: string, printer: Printer) => {
+    setAnchorEl(null);
+    if (action === 'Edit') {
+      onEditingPrinter(printer);
+    }
+  };
 
   return (
     <Card>
@@ -44,7 +53,7 @@ const PrintersTable: FC<PrintersTableProps> = ({ printers, onEditingPrinter }) =
               <TableCell sx={{ px: 2 }}>Name</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Printer Model</TableCell>
-              <TableCell align="right" sx={{ px: 3 }}>Actions</TableCell>
+              <TableCell align="right" sx={{ px: 3 }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -63,36 +72,25 @@ const PrintersTable: FC<PrintersTableProps> = ({ printers, onEditingPrinter }) =
                   <TableCell>
                     {printer.model}
                   </TableCell>
-                  <TableCell align="right" sx={{ pr: 2 }}>
-                    <Tooltip title="Edit Printer" arrow>
-                      <IconButton
-                        sx={{
-                          '&:hover': {
-                            background: theme.colors.primary.lighter
-                          },
-                          color: theme.palette.primary.main
-                        }}
-                        onClick={() => {
-                          onEditingPrinter(printer);
-                        }}
-                        color="inherit"
-                        size="small"
-                      >
-                        <EditTwoToneIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete Printer" arrow >
-                      <IconButton
-                        sx={{
-                          '&:hover': { background: theme.colors.error.lighter },
-                          color: theme.palette.error.main
-                        }}
-                        color="inherit"
-                        size="small"
-                      >
-                        <DeleteTwoToneIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
+                  <TableCell align="right" padding="checkbox">
+                    <IconButton size='small' onClick={(event) => {
+                      handleClickAction(event, printer.id);
+                    }}>
+                      <MoreVertTwoToneIcon fontSize='small' />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={anchorEl !== null && actionID === printer.id}
+                      onClose={() => {
+                        handleCloseAction('None', printer);
+                      }}
+                      MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                      }}
+                    >
+                      <MenuItem onClick={() => handleCloseAction('Edit', printer)}>Edit</MenuItem>
+                      <MenuItem onClick={() => handleCloseAction('Delete', printer)}>Delete</MenuItem>
+                    </Menu>
                   </TableCell>
                 </TableRow>
               );

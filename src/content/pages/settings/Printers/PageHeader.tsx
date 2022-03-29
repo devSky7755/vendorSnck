@@ -1,14 +1,10 @@
-import { Typography, Button, Grid, IconButton } from '@mui/material';
+import { Typography, Button, Grid } from '@mui/material';
 
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
-import { SearchOutlined } from '@mui/icons-material';
 
 interface PageHeaderProps {
-  showSearch: boolean,
-  onToggleSearch?: Function,
   onAddPrinter?: Function
 }
-
 
 const PageHeader: React.FC<PageHeaderProps> = (props) => {
   return (
@@ -19,17 +15,6 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
         </Typography>
       </Grid>
       <Grid item>
-        {
-          props.showSearch &&
-          <IconButton color='primary' size='small' onClick={() => {
-            if (props.onToggleSearch) {
-              props.onToggleSearch();
-            }
-          }}>
-            <SearchOutlined />
-          </IconButton>
-        }
-
         <Button
           color='primary'
           sx={{ mt: { xs: 2, md: 0 } }}

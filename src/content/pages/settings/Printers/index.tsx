@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import PageHeader from './PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
-import { Box, styled, TextField, InputAdornment, Card, Tabs, Tab } from '@mui/material';
+import { Box, styled, TextField, InputAdornment, Tabs, Tab } from '@mui/material';
 import Footer from 'src/components/Footer';
 import { useState } from 'react';
 import SearchTwoTone from '@mui/icons-material/SearchTwoTone';
@@ -128,7 +128,7 @@ function PrintersSetting() {
         <title>Printers</title>
       </Helmet>
       <PageTitleWrapper>
-        <PageHeader onAddPrinter={onAddPrinter} onToggleSearch={onToggleSearch} showSearch={tabValue === 1} />
+        <PageHeader onAddPrinter={onAddPrinter} />
       </PageTitleWrapper>
       <Box>
         {

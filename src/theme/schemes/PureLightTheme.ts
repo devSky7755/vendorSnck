@@ -801,8 +801,8 @@ export const PureLightTheme = createTheme({
           padding: 12
         },
         list: {
+          minWidth: 120,
           padding: 12,
-
           '& .MuiMenuItem-root.MuiButtonBase-root': {
             fontSize: 14,
             marginTop: 1,
@@ -986,12 +986,12 @@ export const PureLightTheme = createTheme({
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
-          backgroundColor: alpha(colors.alpha.black['100'], 0.55),
+          backgroundColor: alpha(colors.alpha.black['100'], 0.8),
           padding: '4px 8px',
           fontSize: 13
         },
         arrow: {
-          color: alpha(colors.alpha.black['100'], 0.55)
+          color: alpha(colors.alpha.black['100'], 0.8)
         }
       }
     },
