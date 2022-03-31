@@ -48,7 +48,7 @@ const EditMenuDialog: React.FC<EditMenuInterface> = (props) => {
     return (
         <Dialog onClose={() => {
             onClose(null);
-        }} open={open} PaperProps={{ style: { maxWidth: 400 } }}>
+        }} open={open} PaperProps={{ style: { width: 480 } }}>
             <DialogTitle className='border-bottom d-flex font-bold' sx={{ px: 2, py: 1 }}>
                 <Typography variant='h6' component={'span'}>Edit Menu Item</Typography>
                 <IconButton className='float-right' sx={{ p: 0 }} size='small' onClick={() => {

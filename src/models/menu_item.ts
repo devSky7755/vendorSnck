@@ -10,7 +10,8 @@ export interface MenuItem {
   description?: string;
   addons?: string[],
   tags?: string[],
-  isAlchol?: boolean
+  isAlchol?: boolean,
+  count?: number
 }
 
 export const tempMenus: MenuItem[] = [
@@ -37,6 +38,7 @@ export const tempMenus: MenuItem[] = [
     status: 'Available',
     price: 3,
     currentAvailable: 100,
+    addons: ['Napkins', 'Ketchup'],
     isAlchol: true
   },
   {

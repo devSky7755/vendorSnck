@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { Box, styled, Card, Drawer } from '@mui/material';
+import { Box, styled, Card, Drawer, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import OrdersTable from './OrdersTable';
 import EditOrderDialog from './EditOrder';
@@ -9,7 +9,6 @@ import OrdersDetail from './OrdersDetail';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
-        flex: 1;
         padding: ${theme.spacing(0)};
         background: white;
         border: 1px solid ${theme.general.borderColor};
@@ -18,7 +17,9 @@ const TableWrapper = styled(Box)(
 
 const FooterWrapper = styled(Box)(
   ({ theme }) => `
-        margin-top: auto;
+        position: relative;
+        bottom: 0;
+        padding-top: 2px;
         height: 56px;
         background: white;
         box-shadow: 0px -1px 16px rgba(159, 162, 191, 0.18), 0px -2px 2px rgba(159, 162, 191, 0.32);
@@ -27,7 +28,7 @@ const FooterWrapper = styled(Box)(
 
 const RightSidebarWrapper = styled(Box)(
   ({ theme }) => `
-        width: 240px;
+        height: 100%;
         padding: ${theme.spacing(2)};
         background: white;
         margin-left: auto;
@@ -37,9 +38,10 @@ const RightSidebarWrapper = styled(Box)(
 
 const ContainerWrapper = styled(Box)(
   ({ theme }) => `
+    overflow: auto;
     height: calc(100% - 56px);
     display: flex;
-`
+  `
 );
 
 function OrdersPage({ type }) {
@@ -54,19 +56,19 @@ function OrdersPage({ type }) {
     let filtered = [];
     switch (type) {
       case 'New':
-        filtered = temp_orders.filter(x => x.status == 'Ready' || x.status === 'Preparing');
+        filtered = temp_orders.filter(x => x.status == 'New');
         break;
       case 'Preparing':
         filtered = temp_orders.filter(x => x.status === 'Preparing');
         break;
       case 'Delivery':
-        filtered = temp_orders.filter(x => x.order_type === 'Delivery');
+        filtered = temp_orders.filter(x => x.status === 'Ready' && x.order_type === 'Delivery');
         break;
       case 'Pickup':
-        filtered = temp_orders.filter(x => x.order_type === 'Pickup');
+        filtered = temp_orders.filter(x => x.status === 'Ready' && x.order_type === 'Pickup');
         break;
       default:
-        filtered = temp_orders.filter(x => true);
+        filtered = temp_orders.filter(x => x.status === 'New');
         break;
     }
     setOrders(filtered);
@@ -76,12 +78,7 @@ function OrdersPage({ type }) {
     setEditing(null);
   }, [type])
 
-  const onEditing = (order) => {
-    setEditing(order);
-    setEditOpen(true);
-  }
-
-  const onEdit = (order) => {
+  const onEdited = (order) => {
     setEditOpen(false);
   }
 
@@ -107,6 +104,11 @@ function OrdersPage({ type }) {
 
   }
 
+  const onViewOrder = (order) => {
+    setEditing(order);
+    setEditOpen(true);
+  }
+
   return (
     <>
       <Helmet>
@@ -117,22 +119,28 @@ function OrdersPage({ type }) {
         <EditOrderDialog
           order={editing}
           open={editOpen}
-          onClose={onEdit}
+          onClose={onEdited}
         />
       }
-      <Box style={{ height: '100%', display: 'flex', flexDirection: 'column' }} >
+      <Box style={{ height: '100%' }}>
         <ContainerWrapper>
-          <TableWrapper>
-            <Card>
-              <OrdersTable orders={orders} selected={selected} type={type} onSelectionChanged={onSelectionChanged} />
-            </Card>
-          </TableWrapper>
-          {
-            sideVisible &&
-            <RightSidebarWrapper>
-              <OrdersDetail orders={orders} selected={selected} type={type} onHide={onHideSidebar} />
-            </RightSidebarWrapper>
-          }
+          <Grid container alignItems='stretch'>
+            <Grid item style={{ flex: 1 }}>
+              <TableWrapper>
+                <OrdersTable orders={orders} selected={selected} type={type} onSelectionChanged={onSelectionChanged}
+                  onViewOrder={onViewOrder}
+                />
+              </TableWrapper>
+            </Grid>
+            {
+              sideVisible &&
+              <Grid item style={{ width: 240 }}>
+                <RightSidebarWrapper>
+                  <OrdersDetail orders={orders} selected={selected} type={type} onHide={onHideSidebar} />
+                </RightSidebarWrapper>
+              </Grid>
+            }
+          </Grid>
         </ContainerWrapper>
         <FooterWrapper>
           <BulkActions selected={selected} onView={onView} onPrint={onPrint} onIssue={onIssue} onReset={onReset} />

@@ -33,7 +33,7 @@ const EditPrinterDialog: React.FC<EditPrinterInterface> = (props) => {
     return (
         <Dialog onClose={() => {
             onClose(null);
-        }} open={open} PaperProps={{ style: { maxWidth: 400 } }}>
+        }} open={open} PaperProps={{ style: { width: 480 } }}>
             <DialogTitle className='border-bottom d-flex' sx={{ px: 2, py: 1 }}>
                 <Typography component='span' variant='h6'>Edit Printer</Typography>
                 <IconButton className='float-right' sx={{ p: 0 }} size='small' onClick={() => {

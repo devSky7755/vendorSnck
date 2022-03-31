@@ -44,18 +44,15 @@ const OrdersDetail: FC<OrdersDetailProps> = ({ type, orders, selected, onHide })
             order.items.forEach(item => {
                 let exist = new_list.find(x => x.name === item.name);
                 if (exist) {
-                    exist.currentAvailable++;
+                    exist.count += item.count;
                 } else {
-                    new_list.push({
-                        ...item,
-                        currentAvailable: 1
-                    })
+                    new_list.push({ ...item })
                 }
             });
         });
 
         new_list.sort((x, y) => {
-            return y.currentAvailable - x.currentAvailable;
+            return y.count - x.count;
         })
 
         setItemList(new_list);
@@ -96,7 +93,7 @@ const OrdersDetail: FC<OrdersDetailProps> = ({ type, orders, selected, onHide })
                                             gutterBottom
                                             noWrap
                                         >
-                                            {menu.currentAvailable}
+                                            {menu.count}
                                         </Typography>
                                     </TableCell>
                                     <TableCell align="right">

@@ -105,6 +105,10 @@ tr.group-header-row {
     border: 1px solid #FF864E;
 }
 
+.border-error {
+    border: 1px solid #B00020;
+}
+
 .bg-warning {
     background-color: #FFFAEA;
 }
@@ -114,6 +118,46 @@ tr.group-header-row {
     line-height: 2 !important;
 }
 
-.MuiTableCell-root .MuiIconButton-root svg {
+.MuiTableCell-root .MuiIconButton-root svg,
+.MuiDialogTitle-root .MuiIconButton-root svg {
     color: #00000099;
+}
+
+.MuiDialogTitle-root .MuiIconButton-root svg {
+    height: 20px;
+    width: 20px;
+}
+
+.MuiDialogTitle-root {
+    padding-top: 16px !important;
+    height: 56px;
+}
+
+.color-60-grey {
+    color: #00000099;
+}
+
+.bg-error {
+    background: #FCF5F6;
+}
+
+.bg-error-row {
+    background: #B00020;
+    color: white;
+}
+
+.bg-error-row td {
+    color: white;
+}
+
+.bg-error-row svg {
+    color: white;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.unavailble-item td {
+    color: #B00020;
 }
