@@ -24,7 +24,7 @@ const PhoneWrapper = styled(Box)(
 `
 );
 
-const steps = ['Your Phone', '2-Step Verification'];
+const steps = ['Login', '2-Step Verification'];
 
 function OnboardingPhone({ setPhone }) {
     const [phone, setPhoneNumber] = useState('');
@@ -71,7 +71,7 @@ function OnboardingPhone({ setPhone }) {
                     <div style={{ textAlign: 'left', paddingLeft: 32, display: 'flex' }}>
                         <Checkbox checked={touAgreed} onChange={onToggleAggrement}></Checkbox>
                         <Typography variant='body2' className='my-auto'>
-                            I agree to Snackr <Link target='_blank' to={'/terms_policy'}>Terms &amp; Privacy Policy</Link>
+                            I agree to the Snackr <Link target='_blank' to={'/terms_policy'}>EULA, Terms of Use &amp; Privacy Policy.</Link>
                         </Typography>
                     </div>
                     <PhoneWrapper>

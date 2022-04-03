@@ -21,7 +21,7 @@ const PhoneWrapper = styled(Box)(
 `
 );
 
-const steps = ['Your Phone', '2-Step Verification'];
+const steps = ['Login', '2-Step Verification'];
 
 function OnboardingPin() {
     const navigate = useNavigate();
