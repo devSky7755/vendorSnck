@@ -24,11 +24,12 @@ const menuItems: MenuItems[] = [
       {
         name: 'Preparing',
         link: '/orders/preparing',
-        badge: "2"
+        badge: "3"
       },
       {
         name: 'Delivery',
         link: '/orders/delivery',
+        badge: "2"
       },
       {
         name: 'Pickup',

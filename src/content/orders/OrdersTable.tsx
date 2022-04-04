@@ -34,8 +34,9 @@ interface OrdersTableProps {
 interface OrderFilter {
   property: string;
   is_number: boolean;
-  lower: number;
-  upper: number;
+  lower?: number;
+  upper?: number;
+  value?: string;
 }
 
 interface GroupedOrder {
@@ -80,57 +81,141 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
     });
 
     let grouped: GroupedOrder[] = [];
-
-    let last_duetime = 0;
-    if (orders.length > 0) {
-      last_duetime = orders[orders.length - 1].duetime;
-    }
-    let current_time = Date.now();
-    let endtime = current_time + 5 * 60 * 1000;
-    let starttime = 0;
-    let index = 0;
     let group_names = [];
 
-    while (last_duetime > starttime) {
-      let filtered = orders.filter(x => x.duetime >= starttime && x.duetime < endtime);
-      if (type === 'New' && showPreOrders) {
-        filtered = filtered.filter(x => x.status === 'Preparing');
+    if (type === 'New' || type === 'Preparing' || type === 'All') {
+      let last_duetime = 0;
+      if (orders.length > 0) {
+        last_duetime = orders[orders.length - 1].duetime;
       }
-      if (filtered.length > 0) {
-        const group_time = formatAMPM(new Date(endtime));
-        group_names.push(group_time);
+      let current_time = Date.now();
+      let endtime = current_time + 5 * 60 * 1000;
+      let starttime = 0;
 
-        let warning = '';
-        const late_prepare = filtered.filter(x => (x.status === 'Preparing') && x.duetime < current_time);
-        if (late_prepare.length > 0) {
-          warning = warning + `${late_prepare.length} order(s) are late to prepare`;
+      while (last_duetime > starttime) {
+        let filtered = orders.filter(x => x.duetime >= starttime && x.duetime < endtime);
+        if (type === 'New' && showPreOrders) {
+          filtered = filtered.filter(x => x.status === 'Preparing');
         }
-        let no_item_count = 0;
-        if (type !== 'New') {
-          filtered.forEach(order => {
-            let is_no_item = order.items.find(x => x.currentAvailable === 0);
-            if (is_no_item) no_item_count++;
-          })
+        if (filtered.length > 0) {
+          const group_time = formatAMPM(new Date(endtime));
+          group_names.push(group_time);
+
+          let warning = '';
+          const late_prepare = filtered.filter(x => (x.status === 'Preparing') && x.duetime < current_time);
+          if (late_prepare.length > 0) {
+            warning = warning + `${late_prepare.length} order(s) are late to prepare`;
+          }
+          let no_item_count = 0;
+          if (type !== 'New') {
+            filtered.forEach(order => {
+              let is_no_item = order.items.find(x => x.currentAvailable === 0);
+              if (is_no_item) no_item_count++;
+            })
+          }
+
+          grouped.push({
+            name: group_time,
+            desc: `${Math.round(endtime - current_time) / 60000} mins`,
+            filter: {
+              property: 'duetime',
+              is_number: true,
+              lower: starttime,
+              upper: endtime,
+            },
+            orders: filtered,
+            warning: warning,
+            error: no_item_count > 0 ? `${no_item_count} order(s) with unavailable item` : ''
+          });
         }
 
-        grouped.push({
-          name: group_time,
-          desc: `${Math.round(endtime - current_time) / 60000} mins`,
-          filter: {
-            property: 'duetime',
-            is_number: true,
-            lower: starttime,
-            upper: endtime,
-          },
-          orders: filtered,
-          warning: warning,
-          error: no_item_count > 0 ? `${no_item_count} order(s) with unavailable item` : ''
-        });
+        starttime = endtime;
+        endtime += 10 * 60 * 1000;
+      }
+    } else if (type === 'Delivery') {
+      group_names.push('Ready for delivery');
+      const ready_orders = orders.filter(x => x.status === 'Ready' && x.order_type === 'Delivery');
+      let ready_warning = '';
+      const late_delivery = ready_orders.filter(x => x.duetime < current_time);
+      if (late_delivery.length > 0) {
+        ready_warning = ready_warning + `${late_delivery.length} order(s) are late to dispatch`;
+      }
+      grouped.push({
+        name: 'Ready for delivery',
+        desc: `orders`,
+        filter: {
+          property: 'status',
+          is_number: false,
+          value: 'Ready'
+        },
+        orders: ready_orders,
+        warning: ready_warning,
+      })
+
+      //Delivering
+
+      let delivery_warning = '';
+      const late_delivering = orders.filter(x => x.status === 'Delivering' && x.dispatch_time < current_time - 10 * 60 * 1000);
+      if (late_delivering.length > 0) {
+        delivery_warning = delivery_warning + `${late_delivering.length} order(s) are late to deliver`;
       }
 
-      starttime = endtime;
-      endtime += 10 * 60 * 1000;
+      group_names.push('Delivering');
+      const delivering = orders.filter(x => x.status === 'Delivering');
+      grouped.push({
+        name: 'Delivering',
+        desc: `orders`,
+        filter: {
+          property: 'status',
+          is_number: false,
+          value: 'Delivering'
+        },
+        warning: delivery_warning,
+        orders: delivering
+      })
+    } else if (type === 'Pickup') {
+      group_names.push('Pickup Queue');
+      const ready_orders = orders.filter(x => x.status === 'Ready' && x.order_type === 'Pickup');
+      let ready_warning = '';
+      const late_pickup = ready_orders.filter(x => x.duetime < current_time);
+      if (late_pickup.length > 0) {
+        ready_warning = ready_warning + `${late_pickup.length} order(s) are late to pickup`;
+      }
+      grouped.push({
+        name: 'Pickup Queue',
+        desc: `orders`,
+        filter: {
+          property: 'status',
+          is_number: false,
+          value: 'Ready'
+        },
+        orders: ready_orders,
+        warning: ready_warning,
+      })
+
+      //Delivering
+
+      let delivery_warning = '';
+      const late_delivering = orders.filter(x => x.status === 'Waitlist' && x.dispatch_time < current_time - 10 * 60 * 1000);
+      if (late_delivering.length > 0) {
+        delivery_warning = delivery_warning + `${late_delivering.length} order(s) are late to deliver`;
+      }
+
+      group_names.push('Waitlist');
+      const delivering = orders.filter(x => x.status === 'Waitlist');
+      grouped.push({
+        name: 'Waitlist',
+        desc: `orders`,
+        filter: {
+          property: 'status',
+          is_number: false,
+          value: 'Waitlist'
+        },
+        warning: delivery_warning,
+        orders: delivering
+      })
     }
+
     setGroupedOrders(grouped);
     setExpanded(group_names);
     setSelectedOrders([]);
@@ -304,7 +389,10 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                   </TableCell>
                   <TableCell align="right">
                     <Typography variant="subtitle2" component='span'>{group.orders.length} </Typography>
-                    <Typography variant="subtitle2" component='span' color='GrayText'>orders due in</Typography>
+                    {
+                      (type === 'New' || type === 'Preparing') &&
+                      <Typography variant="subtitle2" component='span' color='GrayText'>orders due in</Typography>
+                    }
                     <Typography variant="subtitle2" component='span'> {group.desc}</Typography>
                   </TableCell>
                   <TableCell align="right">
@@ -345,15 +433,26 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                 }
                 {
                   isExpanded && group.orders.map(order => {
-                    const waiting = current_time - order.created;
+                    let waiting = current_time - order.created;
                     const isOrderSelected = selectedOrders.includes(order.id);
                     const hasAlchol = order.items && order.items.find(x => x.isAlchol);
                     const prepare_delayed = order.status === 'Preparing' && order.duetime < Date.now();
+                    const delivery_delayed = order.status === 'Ready' && order.order_type === 'Delivery' && order.duetime < Date.now();
+                    const deliverying_delayed = order.status === 'Delivering' && order.order_type === 'Delivery' && order.dispatch_time < Date.now() - 10 * 60 * 1000;
+                    const pickup_delayed = order.status === 'Ready' && order.order_type === 'Pickup' && order.duetime < Date.now();
                     const no_item = order.items.find(x => x.currentAvailable === 0);
+
+                    if (type === 'Delivery' && order.status === 'Ready') {
+                      waiting = order.duetime - current_time;
+                    } else if (type === 'Delivery' && order.status === 'Delivering') {
+                      waiting = 10 * 60 * 1000 - current_time + order.dispatch_time;
+                    } else if (type === 'Pickup') {
+                      waiting = order.duetime - current_time;
+                    }
 
                     return (
                       <TableRow
-                        className={prepare_delayed ? 'bg-warning' : (no_item ? 'bg-error' : '')}
+                        className={(prepare_delayed || delivery_delayed || deliverying_delayed || pickup_delayed) ? 'bg-warning' : (no_item ? 'bg-error' : '')}
                         hover
                         key={order.id}
                       >
@@ -391,7 +490,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                           type === 'Delivery' &&
                           <TableCell>
                             <Typography variant='body2' component='span'>
-                              {order.delivery && (order.delivery.name + ' ' + order.delivery.surname)}
+                              {order.delivery_person && (order.delivery_person.name + ' ' + order.delivery_person.surname)}
                             </Typography>
                           </TableCell>
                         }
@@ -424,7 +523,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                         <TableCell>
                           <Typography
                             variant="body2"
-                            color="text.primary"
+                            color={waiting > 0 ? "text.primary" : 'error'}
                             gutterBottom
                             noWrap
                           >
@@ -456,7 +555,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                         </TableCell>
                         <TableCell align="right">
                           {
-                            !no_item && prepare_delayed && <ErrorIcon color='warning' fontSize='small' sx={{ mt: 0.5 }}></ErrorIcon>
+                            !no_item && (prepare_delayed || delivery_delayed || deliverying_delayed || pickup_delayed) && <ErrorIcon color='warning' fontSize='small' sx={{ mt: 0.5 }}></ErrorIcon>
                           }
                           {
                             no_item && <ErrorIcon color='error' fontSize='small' sx={{ mt: 0.5 }}></ErrorIcon>

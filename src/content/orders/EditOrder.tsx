@@ -49,6 +49,14 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
     const duetime = order.duetime - Date.now();
 
     const buttonDisabled = editing.status === 'Preparing' && unavailable.length > 0;
+    let actionName = 'Print';
+    if (editing.status === 'Preparing') actionName = 'Ready';
+    else if (editing.status === 'Ready' && editing.order_type === 'Delivery') actionName = 'Dispatch';
+    else if (editing.status === 'Delivering' && editing.order_type === 'Delivery') actionName = 'Delivered';
+    else if (editing.status === 'Ready' && editing.order_type === 'Pickup') actionName = 'Picked up';
+    else if (editing.status === 'Waitlist' && editing.order_type === 'Pickup') actionName = 'Picked up';
+
+
 
     return (
         <Dialog onClose={() => {
@@ -129,16 +137,31 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
                         </Grid>
                     </Grid>
                 </Box>
-                <Box sx={{ px: 2, pb: 1, pt: 2 }} className='border-bottom'>
-                    <Grid container justifyContent='space-between'>
-                        <Grid item>
-                            <Typography className='color-60-grey' variant='subtitle1'>Delivery Person</Typography>
+                {
+                    editing.order_type === 'Delivery' &&
+                    <Box sx={{ px: 2, pb: 1, pt: 2 }} className='border-bottom'>
+                        <Grid container justifyContent='space-between'>
+                            <Grid item>
+                                <Typography className='color-60-grey' variant='subtitle1'>Delivery Person</Typography>
+                            </Grid>
+                            <Grid item className='ml-auto' sx={{ mt: -0.5 }}>
+                                <Button size='small'>{editing.delivery_person ? 'Re-Assign' : 'Assign'}</Button>
+                            </Grid>
+                            {
+                                editing.delivery_person &&
+                                <Grid item xs={12}>
+                                    <Typography variant='subtitle1'>
+                                        {editing.delivery_person.name} {editing.delivery_person.surname}
+                                    </Typography>
+                                    <Typography variant='body1'>
+                                        #{editing.delivery_person.id}
+                                    </Typography>
+                                </Grid>
+                            }
+
                         </Grid>
-                        <Grid item className='ml-auto' sx={{ mt: -0.5 }}>
-                            <Button size='small'>Assign</Button>
-                        </Grid>
-                    </Grid>
-                </Box>
+                    </Box>
+                }
                 <Box sx={{ px: 2, py: 1 }}>
                     <Box sx={{ pb: 1 }} className='border-bottom'>
                         <Typography sx={{ pb: 1 }} className='color-60-grey' variant='subtitle1'>Order</Typography>
@@ -215,10 +238,10 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
                         <Button color='primary' variant='contained' disabled={buttonDisabled} fullWidth onClick={() => {
-                            handleAction(editing.status === 'New' ? 'Print' : (editing.status === 'Preparing' ? 'Ready' : 'Dispatch'))
+                            handleAction(actionName);
                         }}>
                             {
-                                editing.status === 'New' ? 'Print' : (editing.status === 'Preparing' ? 'Ready' : 'Dispatch')
+                                actionName
                             }
                         </Button>
                     </Grid>

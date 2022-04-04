@@ -62,10 +62,10 @@ function OrdersPage({ type }) {
         filtered = temp_orders.filter(x => x.status === 'Preparing');
         break;
       case 'Delivery':
-        filtered = temp_orders.filter(x => x.status === 'Ready' && x.order_type === 'Delivery');
+        filtered = temp_orders.filter(x => (x.status === 'Ready' && x.order_type === 'Delivery') || x.status === 'Delivering');
         break;
       case 'Pickup':
-        filtered = temp_orders.filter(x => x.status === 'Ready' && x.order_type === 'Pickup');
+        filtered = temp_orders.filter(x => (x.status === 'Ready' && x.order_type === 'Pickup') || x.status === 'Waitlist');
         break;
       default:
         filtered = temp_orders.filter(x => x.status === 'New');
@@ -84,6 +84,18 @@ function OrdersPage({ type }) {
 
   const onSelectionChanged = (selected) => {
     setSelectedOrders(selected);
+  }
+
+  const onAction = (action) => {
+    if (action === 'View') {
+      onView();
+    } else if (action === 'Print') {
+      onPrint();
+    } else if (action === 'Reset') {
+      onReset();
+    } else if (action === 'Issue') {
+      onIssue();
+    }
   }
 
   const onView = () => {
@@ -143,7 +155,7 @@ function OrdersPage({ type }) {
           </Grid>
         </ContainerWrapper>
         <FooterWrapper>
-          <BulkActions selected={selected} onView={onView} onPrint={onPrint} onIssue={onIssue} onReset={onReset} />
+          <BulkActions selected={selected} type={type} onAction={onAction} />
         </FooterWrapper>
       </Box>
     </>

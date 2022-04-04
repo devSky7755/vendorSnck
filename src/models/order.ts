@@ -3,7 +3,7 @@ import { MenuItem, tempMenus } from "./menu_item";
 import { TeamUser, tempUsers } from "./team_user";
 
 export type OrderType = 'Delivery' | 'Pickup';
-export type OrderStatus = 'New' | 'Preparing' | 'Ready' | 'Delivering' | 'Completed' | 'Issued'
+export type OrderStatus = 'New' | 'Preparing' | 'Ready' | 'Delivering' | 'Waitlist' | 'Completed' | 'Issued'
 
 export interface Order {
     id: number;
@@ -14,8 +14,9 @@ export interface Order {
     created: number;
     duetime: number;
     user_notified?: number;
+    dispatch_time?: number;
     customer: Customer;
-    delivery?: TeamUser;
+    delivery_person?: TeamUser;
 }
 
 export const temp_orders: Order[] = [
@@ -27,7 +28,6 @@ export const temp_orders: Order[] = [
         created: Date.now() - 15 * 60 * 1000,
         items: [
             { ...tempMenus[0], count: 2 },
-            { ...tempMenus[1], count: 3 },
             { ...tempMenus[2], count: 1 },
             { ...tempMenus[3], count: 2 },
         ],
@@ -35,8 +35,7 @@ export const temp_orders: Order[] = [
         customer: {
             name: 'Jack Jackson',
             seat: 'Seat 1 | Row B | Section B'
-        },
-        delivery: tempUsers[1]
+        }
     },
     {
         id: 568,
@@ -61,15 +60,14 @@ export const temp_orders: Order[] = [
         status: 'New',
         created: Date.now() - 7 * 60 * 1000,
         items: [
-            { ...tempMenus[2], count: 2 },
-            { ...tempMenus[1], count: 4 },
+            { ...tempMenus[0], count: 2 },
+            { ...tempMenus[3], count: 4 },
         ],
         duetime: Date.now() + 13.2 * 60 * 1000,
         customer: {
             name: 'David Daveson',
             seat: 'Seat 2 | Row C | Section D'
         },
-        delivery: tempUsers[0]
     },
     {
         id: 570,
@@ -79,7 +77,7 @@ export const temp_orders: Order[] = [
         created: Date.now() - 7.3 * 60 * 1000,
         items: [
             { ...tempMenus[0], count: 2 },
-            { ...tempMenus[1], count: 1 },
+            { ...tempMenus[4], count: 1 },
         ],
         duetime: Date.now() + 12.2 * 60 * 1000,
         customer: {
@@ -87,14 +85,14 @@ export const temp_orders: Order[] = [
         },
     },
     {
-        id: 571,
+        id: 671,
         item_count: 1,
         order_type: 'Pickup',
         status: 'New',
         created: Date.now() - 7.6 * 60 * 1000,
         user_notified: Date.now() - 3.6 * 60 * 1000,
         items: [
-            { ...tempMenus[2], count: 3 },
+            { ...tempMenus[4], count: 3 },
         ],
         duetime: Date.now() + 14.8 * 60 * 1000,
         customer: {
@@ -148,7 +146,6 @@ export const temp_orders: Order[] = [
             name: 'Jack Jackson',
             seat: 'Seat 1 | Row B | Section B'
         },
-        delivery: tempUsers[1]
     },
     {
         id: 568,
@@ -181,7 +178,6 @@ export const temp_orders: Order[] = [
             name: 'David Daveson',
             seat: 'Seat 2 | Row C | Section D'
         },
-        delivery: tempUsers[0]
     },
     {
         id: 570,
@@ -200,10 +196,10 @@ export const temp_orders: Order[] = [
     },
     /* ready */
     {
-        id: 571,
+        id: 771,
         item_count: 1,
-        order_type: 'Pickup',
-        status: 'Delivering',
+        order_type: 'Delivery',
+        status: 'Ready',
         created: Date.now() - 7.6 * 60 * 1000,
         user_notified: Date.now() - 3.6 * 60 * 1000,
         items: [
@@ -215,10 +211,87 @@ export const temp_orders: Order[] = [
         },
     },
     {
+        id: 471,
+        item_count: 1,
+        order_type: 'Delivery',
+        status: 'Ready',
+        created: Date.now() - 7.6 * 60 * 1000,
+        user_notified: Date.now() - 3.6 * 60 * 1000,
+        items: [
+            { ...tempMenus[2], count: 3 },
+        ],
+        duetime: Date.now() - 1.8 * 60 * 1000,
+        customer: {
+            name: 'Janet Janetson',
+        },
+    },
+    {
+        id: 572,
+        item_count: 1,
+        order_type: 'Delivery',
+        status: 'Delivering',
+        dispatch_time: Date.now() - 12.6 * 60 * 1000,
+        created: Date.now() - 2.6 * 60 * 1000,
+        items: [
+            { ...tempMenus[3], count: 2 },
+        ],
+        duetime: Date.now() + 22.8 * 60 * 1000,
+        customer: {
+            name: 'Derek Derekson',
+        },
+        delivery_person: tempUsers[0]
+    },
+    {
+        id: 573,
+        item_count: 1,
+        order_type: 'Delivery',
+        status: 'Delivering',
+        dispatch_time: Date.now() - 2.6 * 60 * 1000,
+        created: Date.now() - 2.6 * 60 * 1000,
+        items: [
+            { ...tempMenus[4], count: 2 },
+        ],
+        duetime: Date.now() + 23.8 * 60 * 1000,
+        customer: {
+            name: 'Janet Janetson',
+        },
+        delivery_person: tempUsers[1]
+    },
+    {
+        id: 571,
+        item_count: 1,
+        order_type: 'Pickup',
+        status: 'Ready',
+        created: Date.now() - 7.6 * 60 * 1000,
+        user_notified: Date.now() - 5 * 60 * 1000,
+        items: [
+            { ...tempMenus[2], count: 3 },
+        ],
+        duetime: Date.now() + 14.8 * 60 * 1000,
+        customer: {
+            name: 'Janet Janetson',
+        },
+    },
+    {
+        id: 591,
+        item_count: 1,
+        order_type: 'Pickup',
+        status: 'Ready',
+        created: Date.now() - 7.6 * 60 * 1000,
+        user_notified: Date.now() - 3.6 * 60 * 1000,
+        items: [
+            { ...tempMenus[2], count: 3 },
+        ],
+        duetime: Date.now() - 1.8 * 60 * 1000,
+        customer: {
+            name: 'Janet Janetson',
+        },
+    },
+    {
         id: 572,
         item_count: 1,
         order_type: 'Pickup',
-        status: 'Delivering',
+        status: 'Waitlist',
         created: Date.now() - 2.6 * 60 * 1000,
         items: [
             { ...tempMenus[3], count: 2 },
@@ -232,7 +305,7 @@ export const temp_orders: Order[] = [
         id: 573,
         item_count: 1,
         order_type: 'Pickup',
-        status: 'Delivering',
+        status: 'Waitlist',
         created: Date.now() - 2.6 * 60 * 1000,
         items: [
             { ...tempMenus[4], count: 2 },

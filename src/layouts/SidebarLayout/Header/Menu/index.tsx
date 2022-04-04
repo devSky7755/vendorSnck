@@ -88,7 +88,7 @@ function HeaderMenu() {
             component={NavLink}
             to="/orders/preparing"
           >
-            <NotificationsBadge showZero={false} badgeContent={2} color='warning'>
+            <NotificationsBadge showZero={false} badgeContent={3} color='warning'>
               <ListItemText
                 primaryTypographyProps={{ noWrap: true, variant: 'button' }}
                 primary="PREPARING"
@@ -102,10 +102,13 @@ function HeaderMenu() {
             component={NavLink}
             to="/orders/delivery"
           >
-            <ListItemText
-              primaryTypographyProps={{ noWrap: true, variant: 'button' }}
-              primary="DELIVERY"
-            />
+            <NotificationsBadge showZero={false} badgeContent={2} color='warning'>
+              <ListItemText
+                primaryTypographyProps={{ noWrap: true, variant: 'button' }}
+                primary="DELIVERY"
+                sx={{ mx: 1 }}
+              />
+            </NotificationsBadge>
           </ListItem>
           <ListItem
             classes={{ root: 'MuiListItem-indicators' }}
