@@ -25,8 +25,8 @@ const alertOptions = {
   offset: '10px',
   containerStyle: {
     zIndex: 100,
-    marginTop: 50,
-    marginRight: 17
+    marginTop: 18,
+    marginRight: 18,
   }
 };
 

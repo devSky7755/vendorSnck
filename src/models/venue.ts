@@ -1,0 +1,29 @@
+export interface Venue {
+    id: string;
+    active: boolean;
+    name: string;
+    address?: string;
+    mapsUrl: string;
+    coordinates: string;
+    imageUrl?: string;
+    seatingMapImageUrl?: string;
+    primaryContactName?: string;
+    primaryContactPhone?: string;
+    primaryContactEmail?: string;
+    commission?: number;
+    inVenueLocationHierarchy1?: string;
+    inVenueLocationHierarchy2?: string;
+    inVenueLocationHierarchy3?: string;
+    deliveryEnabled?: boolean;
+    pickupEnabled?: boolean;
+    deliveryFee?: number;
+    pickupFee?: number;
+    serviceFee?: number;
+    liquorLicenseMessage?: string;
+    alcoholLimitPerOrder?: number;
+    alcoholLimitPerDay?: number;
+    timezone: string;
+    seatFields: any[];
+    createdAt: Date;
+    updatedAt: Date;
+}

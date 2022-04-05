@@ -1,13 +1,18 @@
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-
+import { useNavigate } from 'react-router';
 import Sidebar from './Sidebar';
 import Header from './Header';
+import { connect } from 'react-redux';
+import { logout } from 'src/reducers/auth/action';
+import { isVendorApp } from 'src/models/constant';
 
 interface SidebarLayoutProps {
   children?: ReactNode;
+  token?: string;
+  logout?: Function;
 }
 
 const MainWrapper = styled(Box)(
@@ -39,7 +44,19 @@ const MainContainer = styled(Box)(
 `
 );
 
-const SidebarLayout: FC<SidebarLayoutProps> = () => {
+const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout }) => {
+  const navigate = useNavigate();
+
+  /*
+  useEffect(() => {
+    if (!isVendorApp) {
+      if (!token) {
+        navigate('/login');
+      }
+    }
+  }, [token])
+  */
+
   return (
     <>
       <MainWrapper>
@@ -57,4 +74,11 @@ const SidebarLayout: FC<SidebarLayoutProps> = () => {
   );
 };
 
-export default SidebarLayout;
+function reduxState(state) {
+  return {
+    token: state.auth && state.auth.token
+  }
+}
+
+export default connect(reduxState, { logout })(SidebarLayout);
+

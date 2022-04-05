@@ -1,6 +1,6 @@
 import { alpha, createTheme, lighten, darken } from '@mui/material';
 import '@mui/lab/themeAugmentation';
-import { lineHeight } from '@mui/system';
+import { isVendorApp } from 'src/models/constant';
 
 const themeColors = {
   primary: '#5569ff',
@@ -52,13 +52,13 @@ const colors = {
       bodyBg: '#F2F2F2'
     },
     sidebar: {
-      background: '#011936E0',
+      background: isVendorApp ? '#011936E0' : '#000000E0',
       textColor: themeColors.greyTextColor,
-      dividerBg: '#011936',
+      dividerBg: isVendorApp ? '#011936' : '#333333',
       menuItemColor: themeColors.white,
       menuItemColorActive: themeColors.white,
       menuItemBg: 'transparent',
-      menuItemBgActive: '#011936',
+      menuItemBgActive: isVendorApp ? '#011936' : '#333333',
       menuItemIconColor: lighten(themeColors.secondary, 0.3),
       menuItemIconColorActive: themeColors.primary,
       menuItemHeadingColor: themeColors.greyTextColor,
@@ -238,7 +238,7 @@ export const PureLightTheme = createTheme({
   },
   header: {
     height: '56px',
-    background: '#011936',
+    background: isVendorApp ? '#011936' : '#000000',
     boxShadow: colors.shadows.cardSm,
     textColor: themeColors.white,
     indicatorColor: themeColors.appColor

@@ -88,7 +88,7 @@ function OnboardingVerification({ phone }) {
 
 function reduxState(state) {
     return {
-        phone: state.auth && state.auth.admin && state.auth.admin.mobileNo
+        phone: state.auth && state.auth.data && state.auth.data.mobileNo
     }
 }
 export default connect(reduxState)(OnboardingVerification);

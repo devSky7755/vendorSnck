@@ -62,7 +62,8 @@ const SearchInputWrapper = styled(TextField)(
 const DialogTitleWrapper = styled(DialogTitle)(
   ({ theme }) => `
     background: ${theme.colors.alpha.black[5]};
-    padding: ${theme.spacing(3)}
+    padding: ${theme.spacing(3)};
+    height: inherit;
 `
 );
 

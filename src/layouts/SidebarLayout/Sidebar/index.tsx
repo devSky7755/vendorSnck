@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import SidebarMenu from './SidebarMenu';
 import { connect } from 'react-redux';
 import { toggleSidebar } from 'src/reducers/setting/action'
+import { isVendorApp } from 'src/models/constant';
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -41,14 +42,17 @@ function Sidebar({ showSidebar, toggleSidebar }) {
         <Hidden lgDown>
           <SidebarWrapper>
             <Scrollbars autoHide>
-              <TopSection>
-                <Box>
-                  <Typography variant='subtitle2' color={'white'}>HotDog Stand</Typography>
-                </Box>
-                <Box>
-                  <Typography component='span' variant='body2'>Jack Jackson</Typography>
-                </Box>
-              </TopSection>
+              {
+                isVendorApp &&
+                <TopSection>
+                  <Box>
+                    <Typography variant='subtitle2' color={'white'}>HotDog Stand</Typography>
+                  </Box>
+                  <Box>
+                    <Typography component='span' variant='body2'>Jack Jackson</Typography>
+                  </Box>
+                </TopSection>
+              }
               <SidebarMenu />
             </Scrollbars>
           </SidebarWrapper>
@@ -63,14 +67,17 @@ function Sidebar({ showSidebar, toggleSidebar }) {
           >
             <SidebarWrapper>
               <Scrollbars autoHide>
-                <TopSection>
-                  <Box>
-                    <Typography variant='subtitle2' color={'white'}>HotDog Stand</Typography>
-                  </Box>
-                  <Box>
-                    <Typography component='span' variant='body2'>Jack Jackson</Typography>
-                  </Box>
-                </TopSection>
+                {
+                  isVendorApp &&
+                  <TopSection>
+                    <Box>
+                      <Typography variant='subtitle2' color={'white'}>HotDog Stand</Typography>
+                    </Box>
+                    <Box>
+                      <Typography component='span' variant='body2'>Jack Jackson</Typography>
+                    </Box>
+                  </TopSection>
+                }
                 <SidebarMenu />
               </Scrollbars>
             </SidebarWrapper>

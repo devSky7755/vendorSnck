@@ -3,13 +3,13 @@ import { LOGIN, LOGOUT, SET_PHONE } from './action';
 
 interface AuthState {
     token: string;
-    admin: Admin;
-    lastLoggedIn: Date;
+    data?: Admin;
+    lastLoggedIn?: Date;
 }
 
 const authInitState: AuthState = {
     token: null,
-    admin: null,
+    data: null,
     lastLoggedIn: null
 };
 
@@ -21,9 +21,13 @@ export const auth = (state = authInitState, action) => {
                 lastLoggedIn: new Date()
             }
         case LOGOUT:
-            return authInitState;
+            return {
+                ...state,
+                token: null,
+                data: null
+            };
         case SET_PHONE:
-            let newAdmin = state.admin;
+            let newAdmin = state.data;
             if (!newAdmin) {
                 newAdmin = {
                     id: null,
@@ -34,7 +38,7 @@ export const auth = (state = authInitState, action) => {
             }
             return {
                 ...state,
-                admin: { ...newAdmin }
+                data: { ...newAdmin }
             }
         default:
             return state;

@@ -1,9 +1,19 @@
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
+import { connect } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { logout } from 'src/reducers/auth/action';
+import { useAlert } from 'react-alert';
 
-function Logout() {
+interface LogoutProps {
+    logout?: Function;
+}
+
+const Logout: FC<LogoutProps> = ({ logout }) => {
     const navigate = useNavigate();
+    const alert = useAlert();
     useEffect(() => {
+        alert.success('Logout successfully!');
+        logout();
         navigate('/login');
     }, [])
     return (
@@ -11,5 +21,10 @@ function Logout() {
         </div>
     );
 }
+function reduxState(state) {
+    return {
+        ...state.auth
+    }
+}
 
-export default Logout;
+export default connect(reduxState, { logout })(Logout);

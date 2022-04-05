@@ -161,3 +161,7 @@ tr.group-header-row {
 .unavailble-item td {
     color: #B00020;
 }
+
+#__react-alert__ span {
+    text-transform: none;
+}

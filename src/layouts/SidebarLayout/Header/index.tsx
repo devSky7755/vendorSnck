@@ -10,6 +10,7 @@ import HeaderButtons from './Buttons';
 import Logo from 'src/components/Logo';
 import { connect } from 'react-redux';
 import { toggleSidebar } from 'src/reducers/setting/action'
+import { isVendorApp } from 'src/models/constant';
 
 interface HeaderProps {
   isBasic?: boolean;
@@ -54,9 +55,12 @@ const Header: FC<HeaderProps> = ({ isBasic, showSidebar, toggleSidebar }) => {
             </IconButton>
           </Tooltip>
           <Logo />
-          <Hidden mdDown>
-            <HeaderMenu />
-          </Hidden>
+          {
+            isVendorApp &&
+            <Hidden mdDown>
+              <HeaderMenu />
+            </Hidden>
+          }
         </Box>
         <Box display="flex" alignItems="center">
           <HeaderButtons />

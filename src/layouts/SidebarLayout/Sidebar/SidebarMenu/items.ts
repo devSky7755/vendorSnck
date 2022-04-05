@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { isVendorApp } from 'src/models/constant';
 
 export interface MenuItem {
   link?: string;
@@ -127,7 +128,6 @@ const adminMenuItems: MenuItems[] = [
   }
 ];
 
-const appType = 'vendor';
-const menuItems = (appType === 'vendor' ? vendorMenuItems : adminMenuItems);
+const menuItems = (isVendorApp ? vendorMenuItems : adminMenuItems);
 
 export default menuItems;

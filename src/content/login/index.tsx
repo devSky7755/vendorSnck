@@ -3,11 +3,14 @@ import { Box, Container, Card, TextField, Typography, Button, Radio, Grid, Table
 import { Helmet } from 'react-helmet-async';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
+import { useAlert } from 'react-alert';
 import MultiToggle from 'react-multi-toggle'
 import MuiPhoneNumber from 'material-ui-phone-number';
 import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import { connect } from 'react-redux';
 import { login } from 'src/reducers/auth/action';
+import { isVendorApp } from 'src/models/constant';
+import { postAuthentication } from 'src/Api/apiClient';
 
 const OnboardingWrapper = styled(Box)(
     () => `
@@ -73,9 +76,9 @@ const keyboards = [
 ];
 
 
-function LoginPage({ token, admin, lastLoggedIn, login }) {
+function LoginPage({ token, data, lastLoggedIn, login }) {
     const navigate = useNavigate();
-
+    const alert = useAlert();
     const [viewMode, setViewMode] = useState(1);
     const [showVerify, setShowVerify] = useState(false);
     const [phone, setPhone] = useState('');
@@ -93,9 +96,30 @@ function LoginPage({ token, admin, lastLoggedIn, login }) {
         if (token) {
             navigate('/dashboards');
         } else if (!lastLoggedIn) {
-            navigate('/onboarding');
+            if (isVendorApp) {
+                navigate('/onboarding');
+            } else {
+                navigate('/login');
+            }
         }
     }, [token])
+
+    const handlePhoneNumber = () => {
+        const phoneString = phone.replaceAll('(', '').replaceAll(')', '').replaceAll(' ', '');
+        setShowVerify(true);
+        /*
+        postAuthentication(phoneString).then(res => {
+            if (res.success) {
+                alert.success(res.message);
+                setShowVerify(true);
+            } else {
+                alert.error(res.message);
+            }
+        }).catch(ex => {
+            console.log(ex.message);
+        });
+        */
+    }
 
     return (
         <OnboardingWrapper>
@@ -183,7 +207,7 @@ function LoginPage({ token, admin, lastLoggedIn, login }) {
                                         <Typography sx={{ mb: 2 }} variant="h1">
                                             2-Step Verification
                                         </Typography>
-                                        <Typography component="span" variant="subtitle1">
+                                        <Typography sx={{ mb: 2 }} variant="body1">
                                             A text message with a verificiation code<br />
                                             has been sent to <b>{phone}</b>
                                         </Typography>
@@ -198,7 +222,7 @@ function LoginPage({ token, admin, lastLoggedIn, login }) {
                                                 }
                                                 inputProps={{ maxLength: 4 }}
                                                 error={codeErr}
-                                                style={{ fontSize: 18 }}
+                                                style={{ fontSize: 16 }}
                                                 onChange={(e) => {
                                                     setCode(e.target.value);
                                                 }}
@@ -210,7 +234,7 @@ function LoginPage({ token, admin, lastLoggedIn, login }) {
                                             }}>Verify</Button>
                                         </PhoneWrapper>
                                         <div>
-                                            Didn't receive a code? <Button size='small'>Try Again</Button>
+                                            Didn't receive a code? <Button size='small' style={{ textTransform: 'none' }} >Try Again</Button>
                                         </div>
                                     </Card>
                                 ) : (
@@ -218,7 +242,7 @@ function LoginPage({ token, admin, lastLoggedIn, login }) {
                                         <Typography sx={{ mb: 2 }} variant="h1">
                                             Login With Phone
                                         </Typography>
-                                        <Typography component="span" variant="subtitle1">
+                                        <Typography sx={{ mb: 2 }} variant="body1">
                                             Let’s make sure it’s really you.<br />
                                             Your phone number will be used for 2-Step Verification.
                                         </Typography>
@@ -227,7 +251,7 @@ function LoginPage({ token, admin, lastLoggedIn, login }) {
                                                 variant='outlined'
                                                 fullWidth
                                                 value={phone}
-                                                style={{ fontSize: 18 }}
+                                                style={{ fontSize: 16, fontWeight: 500 }}
                                                 defaultCountry={'us'}
                                                 disableAreaCodes={true}
                                                 onChange={(value) => {
@@ -237,7 +261,7 @@ function LoginPage({ token, admin, lastLoggedIn, login }) {
                                         </PhoneWrapper>
                                         <PhoneWrapper>
                                             <Button disabled={!phone || phone.length < 8} variant='contained' color='primary' fullWidth onClick={() => {
-                                                setShowVerify(true);
+                                                handlePhoneNumber();
                                             }}>Next</Button>
                                         </PhoneWrapper>
                                     </Card>

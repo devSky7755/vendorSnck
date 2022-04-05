@@ -15,6 +15,7 @@ import OnboardingQueue from './content/onboarding/queue';
 import OnboardingAcceptOrder from './content/onboarding/acceptorder';
 import FAQ from './content/pages/Docs/FAQ';
 import Logout from './content/login/logout';
+import { isVendorApp } from './models/constant';
 
 const Loader = (Component) => (props) => (
   <Suspense fallback={<SuspenseLoader />}>
@@ -61,7 +62,7 @@ const LoginPage = Loader(lazy(() => import('src/content/login')));
 //Orders
 const OrdersPage = Loader(lazy(() => import('src/content/orders')));
 
-const routes: RouteObject[] = [
+const vendorRoutes: RouteObject[] = [
   {
     path: '*',
     element: <BaseLayout />,
@@ -270,8 +271,112 @@ const routes: RouteObject[] = [
       }
     ]
   },
+];
+
+const adminRoutes: RouteObject[] = [
   {
-    path: 'components',
+    path: '*',
+    element: <BaseLayout />,
+    children: [
+      {
+        path: '',
+        element: (
+          <Navigate
+            to="login"
+            replace
+          />
+        )
+      },
+      {
+        path: 'login',
+        element: <LoginPage />
+      },
+      {
+        path: 'logout',
+        element: (
+          <Logout />
+        )
+      },
+      {
+        path: 'terms_policy',
+        element: <TermsAndPolicy />
+      },
+      {
+        path: 'status',
+        children: [
+          {
+            path: '',
+            element: (
+              <Navigate
+                to="404"
+                replace
+              />
+            )
+          },
+          {
+            path: '404',
+            element: <Status404 />
+          },
+          {
+            path: '500',
+            element: <Status500 />
+          },
+          {
+            path: 'maintenance',
+            element: <StatusMaintenance />
+          },
+          {
+            path: 'coming-soon',
+            element: <StatusComingSoon />
+          },
+        ]
+      },
+      {
+        path: '*',
+        element: <Status404 />
+      },
+    ]
+  },
+  {
+    path: 'help',
+    element: (
+      <SidebarLayout />
+    ),
+    children: [
+      {
+        path: '',
+        element: (
+          <FAQ />
+        )
+      }
+    ]
+  },
+  {
+    path: 'dashboards',
+    element: (
+      <SidebarLayout />
+    ),
+    children: [
+      {
+        path: '',
+        element: <Dashboard />
+      }
+    ]
+  },
+  {
+    path: 'profile',
+    element: (
+      <SidebarLayout />
+    ),
+    children: [
+      {
+        path: '',
+        element: <UserProfile />
+      }
+    ]
+  },
+  {
+    path: 'settings',
     element: (
       <SidebarLayout />
     ),
@@ -280,49 +385,67 @@ const routes: RouteObject[] = [
         path: '',
         element: (
           <Navigate
-            to="/components/buttons"
+            to="/settings/users"
             replace
           />
         )
       },
       {
-        path: 'buttons',
-        element: <Buttons />
+        path: 'users',
+        element: <UserSettings />
       },
       {
-        path: 'modals',
-        element: <Modals />
+        path: 'menus',
+        element: <MenuSettings />
       },
       {
-        path: 'accordions',
-        element: <Accordions />
+        path: 'orders',
+        element: <OrderSettings />
       },
       {
-        path: 'tabs',
-        element: <Tabs />
-      },
-      {
-        path: 'badges',
-        element: <Badges />
-      },
-      {
-        path: 'tooltips',
-        element: <Tooltips />
-      },
-      {
-        path: 'avatars',
-        element: <Avatars />
-      },
-      {
-        path: 'cards',
-        element: <Cards />
-      },
-      {
-        path: 'forms',
-        element: <Forms />
-      },
+        path: 'printers',
+        element: <PrinterSettings />
+      }
     ]
-  }
+  },
+  {
+    path: 'orders',
+    element: (
+      <SidebarLayout />
+    ),
+    children: [
+      {
+        path: '',
+        element: (
+          <Navigate
+            to="/orders/new"
+            replace
+          />
+        )
+      },
+      {
+        path: 'new',
+        element: <OrdersPage type='New' />
+      },
+      {
+        path: 'preparing',
+        element: <OrdersPage type='Preparing' />
+      },
+      {
+        path: 'delivery',
+        element: <OrdersPage type='Delivery' />
+      },
+      {
+        path: 'pickup',
+        element: <OrdersPage type='Pickup' />
+      },
+      {
+        path: 'all',
+        element: <OrdersPage type='All' />
+      }
+    ]
+  },
 ];
 
+const routes = isVendorApp ? vendorRoutes : adminRoutes;
 export default routes;
