@@ -13,7 +13,7 @@ export interface MenuItems {
   heading: string;
 }
 
-const menuItems: MenuItems[] = [
+const vendorMenuItems: MenuItems[] = [
   {
     heading: 'Orders',
     items: [
@@ -76,5 +76,58 @@ const menuItems: MenuItems[] = [
     ]
   }
 ];
+
+const adminMenuItems: MenuItems[] = [
+  {
+    heading: 'Client Management',
+    items: [
+      {
+        name: 'Venues',
+        link: '/venues',
+      },
+      {
+        name: 'Vendor Stands',
+        link: '/vendorStands',
+      },
+      {
+        name: 'Staff',
+        link: '/staff',
+      },
+    ]
+  },
+  {
+    heading: 'Customer Management',
+    items: [
+      {
+        name: 'Customers',
+        link: '/customers',
+      },
+      {
+        name: 'Orders',
+        link: '/orders',
+      },
+      {
+        name: 'Promos',
+        link: '/promos',
+      },
+    ]
+  },
+  {
+    heading: 'Admin Profile',
+    items: [
+      {
+        name: 'Admin Profile',
+        link: '/profile',
+      },
+      {
+        name: 'Logout',
+        link: '/logout',
+      },
+    ]
+  }
+];
+
+const appType = 'vendor';
+const menuItems = (appType === 'vendor' ? vendorMenuItems : adminMenuItems);
 
 export default menuItems;
