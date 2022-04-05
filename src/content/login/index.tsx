@@ -107,7 +107,6 @@ function LoginPage({ token, data, lastLoggedIn, login }) {
     const handlePhoneNumber = () => {
         const phoneString = phone.replaceAll('(', '').replaceAll(')', '').replaceAll(' ', '');
         setShowVerify(true);
-        /*
         postAuthentication(phoneString).then(res => {
             if (res.success) {
                 alert.success(res.message);
@@ -118,7 +117,6 @@ function LoginPage({ token, data, lastLoggedIn, login }) {
         }).catch(ex => {
             console.log(ex.message);
         });
-        */
     }
 
     return (
