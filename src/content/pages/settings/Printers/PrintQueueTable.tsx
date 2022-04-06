@@ -1,5 +1,4 @@
 import { FC, ChangeEvent, useState, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import {
   Tooltip, Menu,
   Divider,
@@ -368,13 +367,4 @@ const PrintQueuesTable: FC<PrintQueuesTableProps> = ({ printQueues }) => {
     </Card>
   );
 };
-
-PrintQueuesTable.propTypes = {
-  printQueues: PropTypes.array.isRequired
-};
-
-PrintQueuesTable.defaultProps = {
-  printQueues: []
-};
-
 export default PrintQueuesTable;

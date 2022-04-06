@@ -23,7 +23,7 @@ export interface Venue {
     alcoholLimitPerOrder?: number;
     alcoholLimitPerDay?: number;
     timezone: string;
-    seatFields: any[];
+    seatFields: string[];
     createdAt: Date;
     updatedAt: Date;
 }

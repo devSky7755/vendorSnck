@@ -8,11 +8,14 @@ import Header from './Header';
 import { connect } from 'react-redux';
 import { logout } from 'src/reducers/auth/action';
 import { isVendorApp } from 'src/models/constant';
+import { getVenues } from 'src/Api/apiClient';
+import { setVenues } from 'src/reducers/venues/action';
 
 interface SidebarLayoutProps {
   children?: ReactNode;
   token?: string;
   logout?: Function;
+  setVenues?: Function;
 }
 
 const MainWrapper = styled(Box)(
@@ -44,8 +47,15 @@ const MainContainer = styled(Box)(
 `
 );
 
-const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout }) => {
+const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout, setVenues }) => {
   const navigate = useNavigate();
+
+  //initialize data
+  useEffect(() => {
+    getVenues().then(venues => {
+      setVenues(venues);
+    })
+  }, []);
 
   useEffect(() => {
     if (!isVendorApp) {
@@ -53,7 +63,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout }) => {
         navigate('/login');
       }
     }
-  }, [token])
+  }, [token]);
 
   return (
     <>
@@ -78,5 +88,5 @@ function reduxState(state) {
   }
 }
 
-export default connect(reduxState, { logout })(SidebarLayout);
+export default connect(reduxState, { logout, setVenues })(SidebarLayout);
 

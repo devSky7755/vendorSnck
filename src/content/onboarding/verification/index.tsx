@@ -5,6 +5,11 @@ import { useEffect, useState } from 'react';
 import OnboardingStepper from '../OnboardingStepper';
 import { useNavigate } from 'react-router';
 import { connect } from 'react-redux';
+import { getVendorStand, postAuthentication, postLogin } from 'src/Api/apiClient';
+import { login } from 'src/reducers/auth/action';
+import { useAlert } from 'react-alert';
+import { isVendorApp } from 'src/models/constant';
+import { setVendorStand } from 'src/reducers/venues/action';
 
 const OnboardingWrapper = styled(Box)(
     () => `
@@ -24,18 +29,61 @@ const PhoneWrapper = styled(Box)(
 
 const steps = ['Login', '2-Step Verification'];
 
-function OnboardingVerification({ phone }) {
+function OnboardingVerification({ phone, login, setVendorStand }) {
     const [code, setCode] = useState('');
     const [message, setMessage] = useState('Enter 4-digit code');
     const [err, setError] = useState(false);
 
     const navigate = useNavigate();
+    const alert = useAlert();
 
     useEffect(() => {
         if (!phone) {
             navigate('/onboarding/phone');
         }
     }, [phone])
+
+    const handleTryAgain = () => {
+        const phoneString = phone.replaceAll('(', '').replaceAll(')', '').replaceAll(' ', '').replace('-', '');
+
+        postAuthentication(phoneString).then(res => {
+            if (res.success) {
+                alert.success('Verification code is resent to your phone!');
+            } else {
+                alert.error(res.message);
+            }
+        }).catch(ex => {
+            console.log(ex.message);
+        });
+    }
+
+    const handleVerify = () => {
+        const phoneString = phone.replaceAll('(', '').replaceAll(')', '').replaceAll(' ', '').replace('-', '');
+
+        postLogin(phoneString, code).then(res => {
+            if (res.success) {
+                login(res.data.token, res.data.admin || res.data.staff);
+                if (isVendorApp) {
+                    getVendorStand(res.data.staff.vendorStandId).then(res => {
+                        if (res) {
+                            setVendorStand(res);
+                            navigate('/onboarding/ordertype')
+                        } else {
+                            alert.error('Cannot find vendor stand');
+                        }
+                    }).catch(e => {
+                        alert.error('Cannot find vendor stand');
+                        console.log(e.message);
+                    });
+                }
+            } else {
+                setError(true);
+                setMessage(res.message);
+            }
+        }).catch(ex => {
+            console.log(ex.message);
+        })
+    }
 
     return (
         <OnboardingWrapper>
@@ -73,12 +121,10 @@ function OnboardingVerification({ phone }) {
                         />
                     </PhoneWrapper>
                     <PhoneWrapper>
-                        <Button disabled={!code || code.length !== 4} variant='contained' color='primary' fullWidth onClick={() => {
-                            navigate('/onboarding/ordertype')
-                        }}>Verify</Button>
+                        <Button disabled={!code || code.length !== 4} variant='contained' color='primary' fullWidth onClick={handleVerify}>Verify</Button>
                     </PhoneWrapper>
                     <div>
-                        Didn't receive a code? <Button size='small' style={{ textTransform: 'none' }} >Try Again</Button>
+                        Didn't receive a code? <Button size='small' style={{ textTransform: 'none' }} onClick={handleTryAgain} >Try Again</Button>
                     </div>
                 </Card>
             </Container>
@@ -91,5 +137,5 @@ function reduxState(state) {
         phone: state.auth && state.auth.data && state.auth.data.mobileNo
     }
 }
-export default connect(reduxState)(OnboardingVerification);
+export default connect(reduxState, { login, setVendorStand })(OnboardingVerification);
 

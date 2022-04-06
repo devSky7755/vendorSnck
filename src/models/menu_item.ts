@@ -1,5 +1,23 @@
 export type MenuItemStatus = 'Available' | 'Not Available';
 
+export interface MenuItemV1 {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl?: any;
+  imageThumbnailUrl?: any;
+  price: number;
+  available: boolean;
+  vendorStandId: string;
+  containsAlcohol: boolean;
+  orderPrecedence: number;
+  mostPopular: boolean;
+  suggestedMenuItemIds: any[];
+  createdAt: Date;
+  updatedAt: Date;
+  menuItemCategoryId?: any;
+}
+
 export interface MenuItem {
   id: number;
   name: string;

@@ -26,6 +26,9 @@ const Loader = (Component) => (props) => (
 // Pages
 
 
+//Admin
+const VenuesPage = Loader(lazy(() => import('src/content/admin/venues')));
+
 // Dashboards
 const Dashboard = Loader(lazy(() => import('src/content/dashboards')));
 
@@ -36,20 +39,6 @@ const UserSettings = Loader(lazy(() => import('src/content/pages/settings/Users'
 const MenuSettings = Loader(lazy(() => import('src/content/pages/settings/Menus')));
 const OrderSettings = Loader(lazy(() => import('src/content/pages/settings/Orders')));
 const PrinterSettings = Loader(lazy(() => import('src/content/pages/settings/Printers')));
-
-//Applications
-//const Messenger = Loader(lazy(() => import('src/content/applications/Messenger')));
-
-// Components
-const Buttons = Loader(lazy(() => import('src/content/pages/Components/Buttons')));
-const Modals = Loader(lazy(() => import('src/content/pages/Components/Modals')));
-const Accordions = Loader(lazy(() => import('src/content/pages/Components/Accordions')));
-const Tabs = Loader(lazy(() => import('src/content/pages/Components/Tabs')));
-const Badges = Loader(lazy(() => import('src/content/pages/Components/Badges')));
-const Tooltips = Loader(lazy(() => import('src/content/pages/Components/Tooltips')));
-const Avatars = Loader(lazy(() => import('src/content/pages/Components/Avatars')));
-const Cards = Loader(lazy(() => import('src/content/pages/Components/Cards')));
-const Forms = Loader(lazy(() => import('src/content/pages/Components/Forms')));
 
 // Status
 const Status404 = Loader(lazy(() => import('src/content/pages/Status/Status404')));
@@ -347,6 +336,20 @@ const adminRoutes: RouteObject[] = [
         path: '',
         element: (
           <FAQ />
+        )
+      }
+    ]
+  },
+  {
+    path: 'venues',
+    element: (
+      <SidebarLayout />
+    ),
+    children: [
+      {
+        path: '',
+        element: (
+          <VenuesPage />
         )
       }
     ]

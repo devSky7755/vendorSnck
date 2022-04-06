@@ -1,9 +1,12 @@
 import { Box, Container, Card, Typography, TextField, Button, Switch, Divider } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import OnboardingStepper from '../OnboardingStepper';
 import { useNavigate } from 'react-router';
+import { connect } from 'react-redux';
+import { setVendorStand } from 'src/reducers/venues/action';
+import { VendorStand } from 'src/models/vendor_stand';
 
 const OnboardingWrapper = styled(Box)(
     () => `
@@ -30,8 +33,14 @@ const StyledDivider = styled(Divider)(
 
 const steps = ['Order Type', 'Queue Setting', 'Accept Orders'];
 
-function OnboardingOrderType() {
+function OnboardingOrderType({ vendorStand, setVendorStand }) {
     const navigate = useNavigate();
+
+    const [vendor, setVendor] = useState<VendorStand>(vendorStand);
+    useEffect(() => {
+        setVendor(vendor);
+    }, [vendorStand])
+
     return (
         <OnboardingWrapper>
             <Helmet>
@@ -46,15 +55,15 @@ function OnboardingOrderType() {
                         Login Successful!
                     </Typography>
                     <Typography component="span" variant="body1">
-                        Setup your location <b>Hot Dog Stand</b><br />
+                        Setup your location <b>{vendor.name}</b><br />
                         to start accepting order
                     </Typography>
                     <PhoneWrapper sx={{ mt: 3 }}>
-                        <Switch></Switch><Typography component="span" variant="body1"> Accept Pickup Orders</Typography>
+                        <Switch checked={vendor.pickupAvailable}></Switch><Typography component="span" variant="body1"> Accept Pickup Orders</Typography>
                     </PhoneWrapper>
                     <StyledDivider />
                     <PhoneWrapper>
-                        <Switch></Switch><Typography component="span" variant="body1"> Accept Delivery Orders</Typography>
+                        <Switch checked={vendor.deliveryAvailable}></Switch><Typography component="span" variant="body1"> Accept Delivery Orders</Typography>
                     </PhoneWrapper>
                     <PhoneWrapper>
                         <Button variant='contained' color='primary' fullWidth onClick={() => {
@@ -67,4 +76,9 @@ function OnboardingOrderType() {
     );
 }
 
-export default OnboardingOrderType;
+function reduxState(state) {
+    return {
+        vendorStand: state.venues && state.venues.vendorStand
+    }
+}
+export default connect(reduxState, { setVendorStand })(OnboardingOrderType);

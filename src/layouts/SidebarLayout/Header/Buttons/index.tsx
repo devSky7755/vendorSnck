@@ -14,6 +14,8 @@ function GetPageTitle(pathname) {
   switch (pathname) {
     case '/dashboards':
       return 'Summary';
+    case '/venues':
+      return 'Venues';
     default:
       return ''
   }

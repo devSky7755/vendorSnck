@@ -1,7 +1,5 @@
 import { FC, ChangeEvent, useState, useEffect, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import {
-  Card,
   Checkbox,
   IconButton,
   Table,
@@ -593,14 +591,6 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
       </Table>
     </TableContainer>
   );
-};
-
-OrdersTable.propTypes = {
-  orders: PropTypes.array.isRequired
-};
-
-OrdersTable.defaultProps = {
-  orders: []
 };
 
 export default OrdersTable;

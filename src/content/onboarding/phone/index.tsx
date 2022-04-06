@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import OnboardingStepper from '../OnboardingStepper';
 import { setPhone } from 'src/reducers/auth/action';
 import { connect } from 'react-redux';
+import { postAuthentication } from 'src/Api/apiClient';
 
 const OnboardingWrapper = styled(Box)(
     () => `
@@ -29,11 +30,29 @@ const steps = ['Login', '2-Step Verification'];
 function OnboardingPhone({ setPhone }) {
     const [phone, setPhoneNumber] = useState('');
     const [touAgreed, setTouAgreed] = useState(false);
+    const [err, setError] = useState(false);
+    const [message, setMessage] = useState('');
 
     const navigate = useNavigate();
 
     const onToggleAggrement = (e) => {
         setTouAgreed(e.target.checked);
+    }
+
+    const handleNext = () => {
+        const phoneString = phone.replaceAll('(', '').replaceAll(')', '').replaceAll(' ', '').replace('-', '');
+        setPhone(phone);
+
+        postAuthentication(phoneString).then(res => {
+            if (res.success) {
+                navigate('/onboarding/verification');
+            } else {
+                setError(true);
+                setMessage(res.message);
+            }
+        }).catch(ex => {
+            console.log(ex.message);
+        });
     }
 
     const disabled = !touAgreed || !phone || phone.length < 8;
@@ -45,7 +64,7 @@ function OnboardingPhone({ setPhone }) {
             </Helmet>
             <Container maxWidth='sm'>
                 <Box sx={{ mt: 10 }}>
-                    <OnboardingStepper steps={steps} activeStep={0}></OnboardingStepper>
+                    <OnboardingStepper steps={steps} activeStep={0} error={err}></OnboardingStepper>
                 </Box>
                 <Card sx={{ p: 8, mt: 4, mb: 10, borderRadius: 0 }}>
                     <Typography sx={{ mb: 2 }} variant="h1">
@@ -62,6 +81,8 @@ function OnboardingPhone({ setPhone }) {
                             value={phone}
                             style={{ fontSize: 16, fontWeight: 500 }}
                             defaultCountry={'us'}
+                            helperText={message}
+                            error={err}
                             disableAreaCodes={true}
                             onChange={(value) => {
                                 setPhoneNumber(value);
@@ -75,10 +96,7 @@ function OnboardingPhone({ setPhone }) {
                         </Typography>
                     </div>
                     <PhoneWrapper>
-                        <Button disabled={disabled} variant='contained' color='primary' fullWidth onClick={() => {
-                            setPhone(phone);
-                            navigate('/onboarding/verification');
-                        }}>Next</Button>
+                        <Button disabled={disabled} variant='contained' color='primary' fullWidth onClick={handleNext}>Next</Button>
                     </PhoneWrapper>
                 </Card>
             </Container>

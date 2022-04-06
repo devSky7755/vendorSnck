@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { Box, styled, Card, Drawer, Grid } from '@mui/material';
+import { Box, styled, Grid } from '@mui/material';
 import { useEffect, useState } from 'react';
 import OrdersTable from './OrdersTable';
 import EditOrderDialog from './EditOrder';
@@ -56,7 +56,7 @@ function OrdersPage({ type }) {
     let filtered = [];
     switch (type) {
       case 'New':
-        filtered = temp_orders.filter(x => x.status == 'New');
+        filtered = temp_orders.filter(x => x.status === 'New');
         break;
       case 'Preparing':
         filtered = temp_orders.filter(x => x.status === 'Preparing');

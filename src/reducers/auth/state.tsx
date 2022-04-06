@@ -1,9 +1,9 @@
-import { Admin } from 'src/models/admin';
+import { AuthInfo } from 'src/models/auth_info';
 import { LOGIN, LOGOUT, SET_PHONE } from './action';
 
 interface AuthState {
     token: string;
-    data?: Admin;
+    data?: AuthInfo;
     lastLoggedIn?: Date;
 }
 

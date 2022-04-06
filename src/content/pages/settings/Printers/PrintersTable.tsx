@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import PropTypes from 'prop-types';
 import {
   Divider,
   Card,
@@ -100,14 +99,6 @@ const PrintersTable: FC<PrintersTableProps> = ({ printers, onEditingPrinter }) =
       </TableContainer>
     </Card>
   );
-};
-
-PrintersTable.propTypes = {
-  printers: PropTypes.array.isRequired
-};
-
-PrintersTable.defaultProps = {
-  printers: []
 };
 
 export default PrintersTable;

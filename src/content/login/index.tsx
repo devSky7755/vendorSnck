@@ -84,6 +84,9 @@ function LoginPage({ token, lastLoggedIn, login }) {
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('');
     const [codeErr, setCodeError] = useState(false);
+    const [codeHelperText, setCodeHelperText] = useState('Enter 4-digit code');
+    const [phoneErr, setPhoneError] = useState(false);
+    const [phoneHelperText, setPhoneHelperText] = useState('');
     const [pinCode, setPinCode] = useState('');
 
     useEffect(() => {
@@ -108,22 +111,36 @@ function LoginPage({ token, lastLoggedIn, login }) {
         const phoneString = phone.replaceAll('(', '').replaceAll(')', '').replaceAll(' ', '').replace('-', '');
         postLogin(phoneString, code).then(res => {
             if (res.success) {
-                login(res.data.token, res.data.admin);
+                login(res.data.token, res.data.admin || res.data.staff);
             } else {
-                alert.error(res.message);
+                setCodeError(true);
+                setCodeHelperText(res.message);
             }
         }).catch(ex => {
             console.log(ex.message);
         })
-
     }
+
     const handlePhoneNumber = () => {
         const phoneString = phone.replaceAll('(', '').replaceAll(')', '').replaceAll(' ', '').replace('-', '');
-        setShowVerify(true);
         postAuthentication(phoneString).then(res => {
             if (res.success) {
-                alert.success(res.message);
                 setShowVerify(true);
+            } else {
+                setPhoneError(true);
+                setPhoneHelperText(res.message);
+            }
+        }).catch(ex => {
+            console.log(ex.message);
+        });
+    }
+
+    const handleRetry = () => {
+        const phoneString = phone.replaceAll('(', '').replaceAll(')', '').replaceAll(' ', '').replace('-', '');
+
+        postAuthentication(phoneString).then(res => {
+            if (res.success) {
+                alert.success('Verification code is resent to your phone!');
             } else {
                 alert.error(res.message);
             }
@@ -228,9 +245,7 @@ function LoginPage({ token, lastLoggedIn, login }) {
                                                 label='Verification Code'
                                                 fullWidth
                                                 value={code}
-                                                helperText={
-                                                    codeErr ? 'Wrong verification code' : 'Enter 4-digit code'
-                                                }
+                                                helperText={codeHelperText}
                                                 inputProps={{ maxLength: 4 }}
                                                 error={codeErr}
                                                 style={{ fontSize: 16 }}
@@ -243,7 +258,7 @@ function LoginPage({ token, lastLoggedIn, login }) {
                                             <Button variant='contained' color='primary' disabled={!code || code.length !== 4} fullWidth onClick={handleVerification}>Verify</Button>
                                         </PhoneWrapper>
                                         <div>
-                                            Didn't receive a code? <Button size='small' style={{ textTransform: 'none' }} >Try Again</Button>
+                                            Didn't receive a code? <Button size='small' style={{ textTransform: 'none' }} onClick={handleRetry} >Try Again</Button>
                                         </div>
                                     </Card>
                                 ) : (
@@ -260,6 +275,8 @@ function LoginPage({ token, lastLoggedIn, login }) {
                                                 variant='outlined'
                                                 fullWidth
                                                 value={phone}
+                                                error={phoneErr}
+                                                helperText={phoneHelperText}
                                                 style={{ fontSize: 16, fontWeight: 500 }}
                                                 defaultCountry={'us'}
                                                 disableAreaCodes={true}
