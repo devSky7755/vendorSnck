@@ -11,11 +11,12 @@ export function setPhone(phone) {
     }
 }
 
-export function login(auth) {
+export function login(token, data) {
     return dispatch => {
         dispatch({
             type: LOGIN,
-            payload: auth
+            token: token,
+            data: data
         })
     }
 }

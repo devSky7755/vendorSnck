@@ -10,7 +10,7 @@ import BackspaceOutlinedIcon from '@mui/icons-material/BackspaceOutlined';
 import { connect } from 'react-redux';
 import { login } from 'src/reducers/auth/action';
 import { isVendorApp } from 'src/models/constant';
-import { postAuthentication } from 'src/Api/apiClient';
+import { postAuthentication, postLogin } from 'src/Api/apiClient';
 
 const OnboardingWrapper = styled(Box)(
     () => `
@@ -76,7 +76,7 @@ const keyboards = [
 ];
 
 
-function LoginPage({ token, data, lastLoggedIn, login }) {
+function LoginPage({ token, lastLoggedIn, login }) {
     const navigate = useNavigate();
     const alert = useAlert();
     const [viewMode, setViewMode] = useState(1);
@@ -104,8 +104,21 @@ function LoginPage({ token, data, lastLoggedIn, login }) {
         }
     }, [token])
 
+    const handleVerification = () => {
+        const phoneString = phone.replaceAll('(', '').replaceAll(')', '').replaceAll(' ', '').replace('-', '');
+        postLogin(phoneString, code).then(res => {
+            if (res.success) {
+                login(res.data.token, res.data.admin);
+            } else {
+                alert.error(res.message);
+            }
+        }).catch(ex => {
+            console.log(ex.message);
+        })
+
+    }
     const handlePhoneNumber = () => {
-        const phoneString = phone.replaceAll('(', '').replaceAll(')', '').replaceAll(' ', '');
+        const phoneString = phone.replaceAll('(', '').replaceAll(')', '').replaceAll(' ', '').replace('-', '');
         setShowVerify(true);
         postAuthentication(phoneString).then(res => {
             if (res.success) {
@@ -227,9 +240,7 @@ function LoginPage({ token, data, lastLoggedIn, login }) {
                                             />
                                         </PhoneWrapper>
                                         <PhoneWrapper>
-                                            <Button variant='contained' color='primary' disabled={!code || code.length !== 4} fullWidth onClick={() => {
-                                                navigate('/dashboards')
-                                            }}>Verify</Button>
+                                            <Button variant='contained' color='primary' disabled={!code || code.length !== 4} fullWidth onClick={handleVerification}>Verify</Button>
                                         </PhoneWrapper>
                                         <div>
                                             Didn't receive a code? <Button size='small' style={{ textTransform: 'none' }} >Try Again</Button>
@@ -258,9 +269,7 @@ function LoginPage({ token, data, lastLoggedIn, login }) {
                                             />
                                         </PhoneWrapper>
                                         <PhoneWrapper>
-                                            <Button disabled={!phone || phone.length < 8} variant='contained' color='primary' fullWidth onClick={() => {
-                                                handlePhoneNumber();
-                                            }}>Next</Button>
+                                            <Button disabled={!phone || phone.length < 8} variant='contained' color='primary' fullWidth onClick={handlePhoneNumber}>Next</Button>
                                         </PhoneWrapper>
                                     </Card>
                                 )

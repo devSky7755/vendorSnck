@@ -47,7 +47,6 @@ const MainContainer = styled(Box)(
 const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout }) => {
   const navigate = useNavigate();
 
-  /*
   useEffect(() => {
     if (!isVendorApp) {
       if (!token) {
@@ -55,7 +54,6 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout }) => {
       }
     }
   }, [token])
-  */
 
   return (
     <>

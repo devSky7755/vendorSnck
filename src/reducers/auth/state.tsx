@@ -18,6 +18,8 @@ export const auth = (state = authInitState, action) => {
         case LOGIN:
             return {
                 ...action.payload,
+                token: action.token,
+                data: action.data,
                 lastLoggedIn: new Date()
             }
         case LOGOUT:
