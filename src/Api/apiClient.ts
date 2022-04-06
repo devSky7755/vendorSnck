@@ -3,8 +3,8 @@ import { BASE_URL, isVendorApp } from "src/models/constant";
 import { VendorStand } from "src/models/vendor_stand";
 import { Venue } from "src/models/venue";
 
-const AuthEndPoint = isVendorApp ? 'auth/staff/login' : 'auth/admin/login';
 const VerifyEndPoint = isVendorApp ? 'auth/staff/verification-code' : 'auth/admin/verification-code';
+const AuthEndPoint = isVendorApp ? 'auth/staff/login' : 'auth/admin/login';
 const VenuesEndpoint = 'venues';
 const VendorStandEndpoint = 'vendorStands/'
 
