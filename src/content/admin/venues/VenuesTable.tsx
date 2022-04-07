@@ -115,6 +115,8 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
           <TableBody>
             {venues.map((venue, index) => {
               const isSelected = selectedVenues.includes(venue.id);
+              const imageName = venue.imageUrl?.replace(/^.*[\\\/]/, '');
+
               return (
                 <TableRow
                   hover
@@ -149,7 +151,12 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
                     }
                   </URLTableCell>
                   <TableCell>
-                    {venue.imageUrl}
+                    {
+                      venue.imageUrl &&
+                      <a href={venue.imageUrl} target='__blank'>
+                        {imageName}
+                      </a>
+                    }
                   </TableCell>
                   <TableCell>
                     <Switch checked={venue.active} />
