@@ -21,6 +21,7 @@ interface VenuesTableProps {
   venues: Venue[];
   onAction: Function;
   onSelectionChanged: Function;
+  onVenuePatch: Function;
 }
 
 const URLTableCell = styled(TableCell)(
@@ -31,7 +32,7 @@ const URLTableCell = styled(TableCell)(
 `
 );
 
-const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChanged }) => {
+const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChanged, onVenuePatch }) => {
   const [actionID, setActionID] = useState<string>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedVenues, setSelectedVenues] = useState<string[]>(
@@ -80,6 +81,9 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
     }
   };
 
+  const handleVenuePatch = (venue, key, value) => {
+    onVenuePatch(venue, key, value);
+  }
 
   const selectedSome =
     selectedVenues.length > 0 &&
@@ -159,7 +163,9 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
                     }
                   </TableCell>
                   <TableCell>
-                    <Switch checked={venue.active} />
+                    <Switch checked={venue.active} onChange={e => {
+                      handleVenuePatch(venue, 'active', e.target.checked);
+                    }} />
                   </TableCell>
                   <TableCell align="right" padding="checkbox">
                     <IconButton size='small' onClick={(event) => {

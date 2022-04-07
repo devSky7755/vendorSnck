@@ -44,6 +44,24 @@ export function getVenues(): Promise<Venue[]> {
     })
 }
 
+export function patchVenue(token: string, venue: Venue, patch): Promise<Venue> {
+    return fetch(BASE_URL + VenuesEndpoint + '/' + venue.id, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(patch)
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return res.data as Venue;
+        } else {
+            return venue;
+        }
+    })
+}
+
 export function getVendorStand(id): Promise<VendorStand> {
     return fetch(BASE_URL + VendorStandEndpoint + id).then(res => res.json()).then(res => {
         if (res.success) {

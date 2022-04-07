@@ -1,13 +1,13 @@
 import { Helmet } from 'react-helmet-async';
-import { Box, styled, TextField, InputAdornment, Tabs, Tab } from '@mui/material';
-import Footer from 'src/components/Footer';
+import { Box, styled } from '@mui/material';
 import { useEffect, useState } from 'react';
-import SearchTwoTone from '@mui/icons-material/SearchTwoTone';
 import { Venue } from 'src/models/venue';
 import VenuesTable from './VenuesTable';
 import EditVenueDialog from './EditVenue';
 import { connect } from 'react-redux';
+import { patchVenue } from 'src/reducers/venues/action';
 import BulkActions from './BulkActions';
+import { patchVenue as patchVenueAPI } from 'src/Api/apiClient';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -36,9 +36,13 @@ const FooterWrapper = styled(Box)(
 
 interface VenuesPageProps {
   venues: Venue[];
+  token: string;
+  patchVenue: Function;
 }
 
 function VenuesPage(props: VenuesPageProps) {
+  const token = props.token;
+
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [venues, setVenues] = useState<Venue[]>(props.venues || []);
@@ -67,6 +71,15 @@ function VenuesPage(props: VenuesPageProps) {
     setSelectedVenues(selected);
   }
 
+  const handleVenuePatch = (venue, key, value) => {
+    let patch = {};
+    patch[key] = value;
+
+    patchVenueAPI(token, venue, patch).then(res => {
+      props.patchVenue(venue, key, value);
+    });
+  }
+
   return (
     <>
       <Helmet>
@@ -83,7 +96,7 @@ function VenuesPage(props: VenuesPageProps) {
       <Box style={{ height: '100%' }}>
         <ContainerWrapper>
           <TableWrapper>
-            <VenuesTable venues={venues} onAction={onAction} onSelectionChanged={handleSelectionChanged} />
+            <VenuesTable venues={venues} onAction={onAction} onSelectionChanged={handleSelectionChanged} onVenuePatch={handleVenuePatch} />
           </TableWrapper>
         </ContainerWrapper>
         <FooterWrapper>
@@ -96,7 +109,8 @@ function VenuesPage(props: VenuesPageProps) {
 
 function reduxState(state) {
   return {
+    token: state.auth && state.auth.token,
     venues: state.venues && state.venues.venues
   }
 }
-export default connect(reduxState)(VenuesPage);
+export default connect(reduxState, { patchVenue })(VenuesPage);

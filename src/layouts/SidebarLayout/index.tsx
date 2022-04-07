@@ -53,6 +53,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout, setVenues }) => 
   //initialize data
   useEffect(() => {
     getVenues().then(venues => {
+      venues.sort((x, y) => x.name.localeCompare(y.name));
       setVenues(venues);
     })
   }, []);
