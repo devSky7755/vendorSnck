@@ -1,12 +1,12 @@
-import { Box, Container, Card, Typography, TextField, Button, Switch, Divider } from '@mui/material';
+import { Box, Container, Card, Typography, Button, Switch, Divider } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { styled } from '@mui/material/styles';
 import { useEffect, useState } from 'react';
 import OnboardingStepper from '../OnboardingStepper';
 import { useNavigate } from 'react-router';
 import { connect } from 'react-redux';
-import { setVendorStand } from 'src/reducers/venues/action';
 import { VendorStand } from 'src/models/vendor_stand';
+import { getVendorStand, patchVendorStand } from 'src/Api/apiClient';
 
 const OnboardingWrapper = styled(Box)(
     () => `
@@ -33,13 +33,27 @@ const StyledDivider = styled(Divider)(
 
 const steps = ['Order Type', 'Queue Setting', 'Accept Orders'];
 
-function OnboardingOrderType({ vendorStand, setVendorStand }) {
+function OnboardingOrderType({ vendorStandId, token }) {
     const navigate = useNavigate();
 
-    const [vendor, setVendor] = useState<VendorStand>(vendorStand);
+    const [vendor, setVendor] = useState<VendorStand>(null);
     useEffect(() => {
-        setVendor(vendor);
-    }, [vendorStand])
+        if (vendorStandId) {
+            getVendorStand(vendorStandId).then(res => {
+                setVendor(res);
+            })
+        }
+    }, [vendorStandId])
+
+    const handleNext = () => {
+        var patch = {
+            pickupAvailable: vendor.pickupAvailable,
+            deliveryAvailable: vendor.deliveryAvailable
+        }
+        patchVendorStand(token, vendor, patch).then(_ => {
+            navigate('/onboarding/queue');
+        });
+    }
 
     return (
         <OnboardingWrapper>
@@ -55,20 +69,28 @@ function OnboardingOrderType({ vendorStand, setVendorStand }) {
                         Login Successful!
                     </Typography>
                     <Typography component="span" variant="body1">
-                        Setup your location <b>{vendor.name}</b><br />
+                        Setup your location <b>{vendor && vendor.name}</b><br />
                         to start accepting order
                     </Typography>
                     <PhoneWrapper sx={{ mt: 3 }}>
-                        <Switch checked={vendor.pickupAvailable}></Switch><Typography component="span" variant="body1"> Accept Pickup Orders</Typography>
+                        <Switch checked={vendor && vendor.pickupAvailable} onChange={e => {
+                            setVendor({
+                                ...vendor,
+                                pickupAvailable: e.target.checked
+                            })
+                        }}></Switch><Typography component="span" variant="body1"> Accept Pickup Orders</Typography>
                     </PhoneWrapper>
                     <StyledDivider />
                     <PhoneWrapper>
-                        <Switch checked={vendor.deliveryAvailable}></Switch><Typography component="span" variant="body1"> Accept Delivery Orders</Typography>
+                        <Switch checked={vendor && vendor.deliveryAvailable} onChange={e => {
+                            setVendor({
+                                ...vendor,
+                                deliveryAvailable: e.target.checked
+                            })
+                        }}></Switch><Typography component="span" variant="body1"> Accept Delivery Orders</Typography>
                     </PhoneWrapper>
                     <PhoneWrapper>
-                        <Button variant='contained' color='primary' fullWidth onClick={() => {
-                            navigate('/onboarding/queue');
-                        }}>Next</Button>
+                        <Button variant='contained' color='primary' fullWidth onClick={handleNext}>Next</Button>
                     </PhoneWrapper>
                 </Card>
             </Container>
@@ -78,7 +100,8 @@ function OnboardingOrderType({ vendorStand, setVendorStand }) {
 
 function reduxState(state) {
     return {
-        vendorStand: state.venues && state.venues.vendorStand
+        token: state.auth && state.auth.token,
+        vendorStandId: state.auth && state.auth.data && state.auth.data.vendorStandId
     }
 }
-export default connect(reduxState, { setVendorStand })(OnboardingOrderType);
+export default connect(reduxState)(OnboardingOrderType);

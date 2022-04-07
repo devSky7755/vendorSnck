@@ -1,10 +1,13 @@
-import { Box, Container, Card, Typography, TextField, Button, Switch, Divider } from '@mui/material';
+import { Box, Container, Card, Typography, Button, Divider } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import OnboardingStepper from '../OnboardingStepper';
 import InputSlider from '../InputSlider';
 import { useNavigate } from 'react-router';
+import { connect } from 'react-redux';
+import { getVendorStand, patchVendorStand } from 'src/Api/apiClient';
+import { VendorStand } from 'src/models/vendor_stand';
 
 const OnboardingWrapper = styled(Box)(
     () => `
@@ -31,8 +34,30 @@ const StyledDivider = styled(Divider)(
 
 const steps = ['Order Type', 'Queue Setting', 'Accept Orders'];
 
-function OnboardingQueue() {
+function OnboardingQueue({ vendorStandId, token }) {
     const navigate = useNavigate();
+
+    const [vendor, setVendor] = useState<VendorStand>(null);
+
+    useEffect(() => {
+        if (vendorStandId) {
+            getVendorStand(vendorStandId).then(res => {
+                setVendor(res);
+            })
+        }
+    }, [vendorStandId])
+
+    const handleNext = () => {
+        var patch = {
+            pickupAvailable: vendor.pickupAvailable,
+            deliveryAvailable: vendor.deliveryAvailable,
+            pickupQueueCapacity: vendor.pickupQueueCapacity,
+            orderCapacity: vendor.orderCapacity
+        }
+        patchVendorStand(token, vendor, patch).then(_ => {
+            navigate('/onboarding/acceptorder');
+        });
+    }
 
     return (
         <OnboardingWrapper>
@@ -51,17 +76,34 @@ function OnboardingQueue() {
                         Setup the amount of orders you<br />
                         can accept per 10 minutes.
                     </Typography>
-                    <PhoneWrapper sx={{ mt: 3 }}>
-                        <InputSlider label='Order amount per 10 min' maxValue={30}></InputSlider>
-                    </PhoneWrapper>
+                    {
+                        vendor &&
+                        <PhoneWrapper sx={{ mt: 3 }}>
+                            <InputSlider label='Order amount per 10 min' maxValue={30} defaultValue={vendor.orderCapacity}
+                                onChange={v => {
+                                    setVendor({
+                                        ...vendor,
+                                        orderCapacity: v
+                                    });
+                                }}
+                            ></InputSlider>
+                        </PhoneWrapper>
+                    }
                     <StyledDivider />
+                    {
+                        vendor &&
+                        <PhoneWrapper>
+                            <InputSlider label='Maximum orders in pickup queue' maxValue={30} defaultValue={vendor.pickupQueueCapacity}
+                                onChange={v => {
+                                    setVendor({
+                                        ...vendor,
+                                        pickupQueueCapacity: v
+                                    });
+                                }}></InputSlider>
+                        </PhoneWrapper>
+                    }
                     <PhoneWrapper>
-                        <InputSlider label='Maximum orders in pickup queue' maxValue={30}></InputSlider>
-                    </PhoneWrapper>
-                    <PhoneWrapper>
-                        <Button variant='contained' color='primary' fullWidth onClick={() => {
-                            navigate('/onboarding/acceptorder');
-                        }}>Next</Button>
+                        <Button variant='contained' color='primary' fullWidth onClick={handleNext}>Next</Button>
                     </PhoneWrapper>
                 </Card>
             </Container>
@@ -69,4 +111,10 @@ function OnboardingQueue() {
     );
 }
 
-export default OnboardingQueue;
+function reduxState(state) {
+    return {
+        token: state.auth && state.auth.token,
+        vendorStandId: state.auth && state.auth.data && state.auth.data.vendorStandId
+    }
+}
+export default connect(reduxState)(OnboardingQueue);

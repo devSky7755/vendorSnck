@@ -1,3 +1,4 @@
+import { ClassNames } from "@emotion/react";
 import { ApiResponse } from "src/models/api_response";
 import { BASE_URL, isVendorApp } from "src/models/constant";
 import { VendorStand } from "src/models/vendor_stand";
@@ -68,6 +69,24 @@ export function getVendorStand(id): Promise<VendorStand> {
             return res.data as VendorStand;
         } else {
             return null;
+        }
+    })
+}
+
+export function patchVendorStand(token: string, vendor: VendorStand, patch): Promise<VendorStand> {
+    return fetch(BASE_URL + VendorStandEndpoint + vendor.id, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(patch)
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return res.data as VendorStand;
+        } else {
+            return vendor;
         }
     })
 }

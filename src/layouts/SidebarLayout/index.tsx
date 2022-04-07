@@ -8,14 +8,16 @@ import Header from './Header';
 import { connect } from 'react-redux';
 import { logout } from 'src/reducers/auth/action';
 import { isVendorApp } from 'src/models/constant';
-import { getVenues } from 'src/Api/apiClient';
-import { setVenues } from 'src/reducers/venues/action';
+import { getVendorStand, getVenues } from 'src/Api/apiClient';
+import { setVendorStand, setVenues } from 'src/reducers/venues/action';
 
 interface SidebarLayoutProps {
   children?: ReactNode;
   token?: string;
+  vendorStandId?: string;
   logout?: Function;
   setVenues?: Function;
+  setVendorStand: Function;
 }
 
 const MainWrapper = styled(Box)(
@@ -47,22 +49,32 @@ const MainContainer = styled(Box)(
 `
 );
 
-const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout, setVenues }) => {
+const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout, setVenues, setVendorStand, vendorStandId }) => {
   const navigate = useNavigate();
 
   //initialize data
   useEffect(() => {
-    getVenues().then(venues => {
-      venues.sort((x, y) => x.name.localeCompare(y.name));
-      setVenues(venues);
-    })
+    if (isVendorApp) {
+
+    } else {
+      getVenues().then(venues => {
+        venues.sort((x, y) => x.name.localeCompare(y.name));
+        setVenues(venues);
+      })
+    }
   }, []);
 
   useEffect(() => {
-    if (!isVendorApp) {
-      if (!token) {
-        navigate('/login');
-      }
+    if (vendorStandId) {
+      getVendorStand(vendorStandId).then(res => {
+        setVendorStand(res);
+      })
+    }
+  }, [vendorStandId])
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
     }
   }, [token]);
 
@@ -85,9 +97,10 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout, setVenues }) => 
 
 function reduxState(state) {
   return {
-    token: state.auth && state.auth.token
+    token: state.auth && state.auth.token,
+    vendorStandId: state.auth && state.auth.data && state.auth.data.vendorStandId
   }
 }
 
-export default connect(reduxState, { logout, setVenues })(SidebarLayout);
+export default connect(reduxState, { logout, setVenues, setVendorStand })(SidebarLayout);
 
