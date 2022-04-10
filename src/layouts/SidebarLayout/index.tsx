@@ -58,7 +58,7 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout, setVenues, setVe
 
     } else {
       getVenues().then(venues => {
-        venues.sort((x, y) => x.name.localeCompare(y.name));
+        venues.sort((x, y) => x.id.localeCompare(y.id));
         setVenues(venues);
       })
     }

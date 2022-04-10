@@ -27,3 +27,20 @@ export interface Venue {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export function getVenueSeatField(venue: Venue) {
+    let fields = [];
+    let index = 1;
+    if (!venue) {
+        return fields;
+    }
+    while (true) {
+        if (venue['inVenueLocationHierarchy' + index]) {
+            fields.push(venue['inVenueLocationHierarchy' + index]);
+            index++;
+        } else {
+            break;
+        }
+    }
+    return fields;
+}

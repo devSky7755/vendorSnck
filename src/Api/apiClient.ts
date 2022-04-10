@@ -63,6 +63,41 @@ export function patchVenue(token: string, venue: Venue, patch): Promise<Venue> {
     })
 }
 
+export function postVenue(token: string, venue: Venue): Promise<Venue> {
+    return fetch(BASE_URL + VenuesEndpoint, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(venue)
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return res.data as Venue;
+        } else {
+            return venue;
+        }
+    })
+}
+
+export function deleteVenue(token: string, id: string): Promise<boolean> {
+    return fetch(BASE_URL + VenuesEndpoint + '/' + id, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return true;
+        } else {
+            return false;
+        }
+    })
+}
+
 export function getVendorStand(id): Promise<VendorStand> {
     return fetch(BASE_URL + VendorStandEndpoint + id).then(res => res.json()).then(res => {
         if (res.success) {

@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import { Venue } from 'src/models/venue';
+import { getVenueSeatField, Venue } from 'src/models/venue';
 
 interface VenuesTableProps {
   className?: string;
@@ -52,6 +52,8 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
     setAnchorEl(null);
     if (action === 'Edit') {
       onAction('Edit', venue);
+    } else if (action === 'Delete') {
+      onAction('Delete', venue);
     }
   };
 
@@ -144,7 +146,7 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
                     {venue.address && venue.address}
                   </TableCell>
                   <TableCell>
-                    [{venue.seatFields && venue.seatFields.join(',')}]
+                    [{getVenueSeatField(venue).join(',')}]
                   </TableCell>
                   <URLTableCell style={{ maxWidth: 250 }}>
                     {
@@ -154,14 +156,14 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
                       </a>
                     }
                   </URLTableCell>
-                  <TableCell>
+                  <URLTableCell style={{ maxWidth: 200 }}>
                     {
                       venue.imageUrl &&
                       <a href={venue.imageUrl} target='__blank'>
                         {imageName}
                       </a>
                     }
-                  </TableCell>
+                  </URLTableCell>
                   <TableCell>
                     <Switch checked={venue.active} onChange={e => {
                       handleVenuePatch(venue, 'active', e.target.checked);

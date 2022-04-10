@@ -1119,7 +1119,9 @@ export const PureLightTheme = createTheme({
       letterSpacing: '0.18px'
     },
     h6: {
-      fontSize: 15
+      fontWeight: 500,
+      fontSize: '20px',
+      lineHeight: '28px'
     },
     body1: {
       fontSize: '16px',
