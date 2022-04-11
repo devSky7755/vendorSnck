@@ -14,5 +14,6 @@ export interface VendorStand {
     pickupQueueCapacity: number;
     createdAt: Date;
     updatedAt: Date;
+    manager?: string;
     menuItems: MenuItemV1[];
 }

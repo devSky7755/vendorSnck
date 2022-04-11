@@ -1,4 +1,4 @@
-import { VendorStand } from 'src/models/vendor_stand';
+import { VendorStand } from 'src/models/vendorStand';
 import { Venue } from 'src/models/venue';
 import { DELETE_VENUE, PATCH_VENUE, SET_VENDOR_STAND, SET_VENUES, UPDATE_VENUE } from './action';
 

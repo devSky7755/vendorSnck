@@ -1,7 +1,7 @@
 import { ClassNames } from "@emotion/react";
 import { ApiResponse } from "src/models/api_response";
 import { BASE_URL, isVendorApp } from "src/models/constant";
-import { VendorStand } from "src/models/vendor_stand";
+import { VendorStand } from "src/models/vendorStand";
 import { Venue } from "src/models/venue";
 
 const VerifyEndPoint = isVendorApp ? 'auth/staff/verification-code' : 'auth/admin/verification-code';

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import OnboardingStepper from '../OnboardingStepper';
 import { useNavigate } from 'react-router';
 import { connect } from 'react-redux';
-import { VendorStand } from 'src/models/vendor_stand';
+import { VendorStand } from 'src/models/vendorStand';
 import { getVendorStand, patchVendorStand } from 'src/Api/apiClient';
 
 const OnboardingWrapper = styled(Box)(
