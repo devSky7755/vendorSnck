@@ -206,11 +206,11 @@ const EditVenueDialog: React.FC<EditVenueInterface> = (props) => {
                                 size='small'
                                 fullWidth
                                 InputLabelProps={{ shrink: true }}
-                                value={editing.primaryContactPhone || ''}
+                                value={editing.primaryContactEmail || ''}
                                 onChange={(e) => {
                                     setEditingVenue({
                                         ...editing,
-                                        primaryContactPhone: e.target.value
+                                        primaryContactEmail: e.target.value
                                     });
                                 }}
                             >
