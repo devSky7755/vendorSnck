@@ -55,6 +55,7 @@ export function patchVenue(token: string, venue: Venue, patch): Promise<Venue> {
         },
         body: JSON.stringify(patch)
     }).then(res => res.json()).then(res => {
+        console.log('PATCH VENUE', res);
         if (res.success) {
             return res.data as Venue;
         } else {
@@ -73,6 +74,7 @@ export function postVenue(token: string, venue: Venue): Promise<Venue> {
         },
         body: JSON.stringify(venue)
     }).then(res => res.json()).then(res => {
+        console.log('POST VENUE', res);
         if (res.success) {
             return res.data as Venue;
         } else {
@@ -90,6 +92,7 @@ export function deleteVenue(token: string, id: string): Promise<boolean> {
             'Authorization': `Bearer ${token}`
         }
     }).then(res => res.json()).then(res => {
+        console.log('DELETE VENUE', res);
         if (res.success) {
             return true;
         } else {

@@ -72,10 +72,8 @@ function VenuesPage(props: VenuesPageProps) {
       setEditing(data);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      /*
-      setEditing({ active: true, deliveryEnabled: true, pickupEnabled: true });
+      setEditing({ active: false, deliveryEnabled: false, pickupEnabled: false });
       setEditOpen(true);
-      */
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);
       setEditing(null);
@@ -93,6 +91,7 @@ function VenuesPage(props: VenuesPageProps) {
     delete patch.createdAt;
     delete patch.seatFields;
     delete patch.coordinates;
+    delete patch.vendorStands;
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 
     if (venue.id) {
@@ -111,14 +110,11 @@ function VenuesPage(props: VenuesPageProps) {
   }
 
   const handleDelete = (venue) => {
-    props.deleteVenue(venue);
-    /*
     deleteVenueAPI(token, venue.id).then(success => {
       if (success) {
-        
+        props.deleteVenue(venue);
       }
     })
-    */
   }
 
   const handleSelectionChanged = (selectedIDs) => {

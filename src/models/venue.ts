@@ -1,3 +1,5 @@
+import { VendorStand } from "./vendor_stand";
+
 export interface Venue {
     id: string;
     active: boolean;
@@ -26,6 +28,7 @@ export interface Venue {
     seatFields: string[];
     createdAt: Date;
     updatedAt: Date;
+    vendorStands?: VendorStand[];
 }
 
 export function getVenueSeatField(venue: Venue) {
