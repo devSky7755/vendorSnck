@@ -281,12 +281,22 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
     setAnchorEl(event.currentTarget);
   };
 
-  const handleCloseAction = (action: string, order: Order) => {
-    setAnchorEl(null);
-    if (action === 'View') {
-      onViewOrder(order);
-    } else if (action === 'Issue') {
+  const onIssueWithOrder = (order:Order) => {
 
+  }
+  
+  const handleCloseAction = (action: string, order: Order) => {
+    switch (action) {
+      case 'View':
+        onViewOrder(order);
+        break;
+      case 'Print':
+        break;
+      case 'Issue':
+        onIssueWithOrder(order);
+        break;
+      default:
+        break;
     }
   };
 

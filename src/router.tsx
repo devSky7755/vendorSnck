@@ -16,15 +16,16 @@ import OnboardingAcceptOrder from './content/onboarding/acceptorder';
 import FAQ from './content/pages/Docs/FAQ';
 import Logout from './content/login/logout';
 import { isVendorApp } from './models/constant';
+import { OrderIssue } from './content/orders/issue';
 
-const Loader = (Component) => (props) => (
-  <Suspense fallback={<SuspenseLoader />}>
-    <Component {...props} />
-  </Suspense>
-);
+const Loader = (Component) => (props) =>
+  (
+    <Suspense fallback={<SuspenseLoader />}>
+      <Component {...props} />
+    </Suspense>
+  );
 
 // Pages
-
 
 //Admin
 const VenuesPage = Loader(lazy(() => import('src/content/admin/venues')));
@@ -35,16 +36,32 @@ const Dashboard = Loader(lazy(() => import('src/content/dashboards')));
 // Settings
 
 const UserProfile = Loader(lazy(() => import('src/content/pages/UserProfile')));
-const UserSettings = Loader(lazy(() => import('src/content/pages/settings/Users')));
-const MenuSettings = Loader(lazy(() => import('src/content/pages/settings/Menus')));
-const OrderSettings = Loader(lazy(() => import('src/content/pages/settings/Orders')));
-const PrinterSettings = Loader(lazy(() => import('src/content/pages/settings/Printers')));
+const UserSettings = Loader(
+  lazy(() => import('src/content/pages/settings/Users'))
+);
+const MenuSettings = Loader(
+  lazy(() => import('src/content/pages/settings/Menus'))
+);
+const OrderSettings = Loader(
+  lazy(() => import('src/content/pages/settings/Orders'))
+);
+const PrinterSettings = Loader(
+  lazy(() => import('src/content/pages/settings/Printers'))
+);
 
 // Status
-const Status404 = Loader(lazy(() => import('src/content/pages/Status/Status404')));
-const Status500 = Loader(lazy(() => import('src/content/pages/Status/Status500')));
-const StatusComingSoon = Loader(lazy(() => import('src/content/pages/Status/ComingSoon')));
-const StatusMaintenance = Loader(lazy(() => import('src/content/pages/Status/Maintenance')));
+const Status404 = Loader(
+  lazy(() => import('src/content/pages/Status/Status404'))
+);
+const Status500 = Loader(
+  lazy(() => import('src/content/pages/Status/Status500'))
+);
+const StatusComingSoon = Loader(
+  lazy(() => import('src/content/pages/Status/ComingSoon'))
+);
+const StatusMaintenance = Loader(
+  lazy(() => import('src/content/pages/Status/Maintenance'))
+);
 
 const LoginPage = Loader(lazy(() => import('src/content/login')));
 
@@ -58,12 +75,7 @@ const vendorRoutes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: (
-          <Navigate
-            to="login"
-            replace
-          />
-        )
+        element: <Navigate to="login" replace />
       },
       {
         path: 'login',
@@ -71,9 +83,7 @@ const vendorRoutes: RouteObject[] = [
       },
       {
         path: 'logout',
-        element: (
-          <Logout />
-        )
+        element: <Logout />
       },
       {
         path: 'terms_policy',
@@ -84,12 +94,7 @@ const vendorRoutes: RouteObject[] = [
         children: [
           {
             path: '',
-            element: (
-              <Navigate
-                to="404"
-                replace
-              />
-            )
+            element: <Navigate to="404" replace />
           },
           {
             path: '404',
@@ -106,13 +111,13 @@ const vendorRoutes: RouteObject[] = [
           {
             path: 'coming-soon',
             element: <StatusComingSoon />
-          },
+          }
         ]
       },
       {
         path: '*',
         element: <Status404 />
-      },
+      }
     ]
   },
   {
@@ -121,10 +126,7 @@ const vendorRoutes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <Navigate
-          to="phone"
-          replace
-        />
+        element: <Navigate to="phone" replace />
       },
       {
         path: 'phone',
@@ -149,28 +151,22 @@ const vendorRoutes: RouteObject[] = [
       {
         path: 'acceptorder',
         element: <OnboardingAcceptOrder />
-      },
+      }
     ]
   },
   {
     path: 'help',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: '',
-        element: (
-          <FAQ />
-        )
+        element: <FAQ />
       }
     ]
   },
   {
     path: 'dashboards',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: '',
@@ -180,9 +176,7 @@ const vendorRoutes: RouteObject[] = [
   },
   {
     path: 'profile',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: '',
@@ -192,18 +186,11 @@ const vendorRoutes: RouteObject[] = [
   },
   {
     path: 'settings',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: '',
-        element: (
-          <Navigate
-            to="/settings/users"
-            replace
-          />
-        )
+        element: <Navigate to="/settings/users" replace />
       },
       {
         path: 'users',
@@ -225,41 +212,34 @@ const vendorRoutes: RouteObject[] = [
   },
   {
     path: 'orders',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: '',
-        element: (
-          <Navigate
-            to="/orders/new"
-            replace
-          />
-        )
+        element: <Navigate to="/orders/new" replace />
       },
       {
         path: 'new',
-        element: <OrdersPage type='New' />
+        element: <OrdersPage type="New" />
       },
       {
         path: 'preparing',
-        element: <OrdersPage type='Preparing' />
+        element: <OrdersPage type="Preparing" />
       },
       {
         path: 'delivery',
-        element: <OrdersPage type='Delivery' />
+        element: <OrdersPage type="Delivery" />
       },
       {
         path: 'pickup',
-        element: <OrdersPage type='Pickup' />
+        element: <OrdersPage type="Pickup" />
       },
       {
         path: 'all',
-        element: <OrdersPage type='All' />
+        element: <OrdersPage type="All" />
       }
     ]
-  },
+  }
 ];
 
 const adminRoutes: RouteObject[] = [
@@ -269,12 +249,7 @@ const adminRoutes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: (
-          <Navigate
-            to="login"
-            replace
-          />
-        )
+        element: <Navigate to="login" replace />
       },
       {
         path: 'login',
@@ -282,9 +257,7 @@ const adminRoutes: RouteObject[] = [
       },
       {
         path: 'logout',
-        element: (
-          <Logout />
-        )
+        element: <Logout />
       },
       {
         path: 'terms_policy',
@@ -295,12 +268,7 @@ const adminRoutes: RouteObject[] = [
         children: [
           {
             path: '',
-            element: (
-              <Navigate
-                to="404"
-                replace
-              />
-            )
+            element: <Navigate to="404" replace />
           },
           {
             path: '404',
@@ -317,48 +285,38 @@ const adminRoutes: RouteObject[] = [
           {
             path: 'coming-soon',
             element: <StatusComingSoon />
-          },
+          }
         ]
       },
       {
         path: '*',
         element: <Status404 />
-      },
+      }
     ]
   },
   {
     path: 'help',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: '',
-        element: (
-          <FAQ />
-        )
+        element: <FAQ />
       }
     ]
   },
   {
     path: 'venues',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: '',
-        element: (
-          <VenuesPage />
-        )
+        element: <VenuesPage />
       }
     ]
   },
   {
     path: 'dashboards',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: '',
@@ -368,9 +326,7 @@ const adminRoutes: RouteObject[] = [
   },
   {
     path: 'profile',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: '',
@@ -380,18 +336,11 @@ const adminRoutes: RouteObject[] = [
   },
   {
     path: 'settings',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: '',
-        element: (
-          <Navigate
-            to="/settings/users"
-            replace
-          />
-        )
+        element: <Navigate to="/settings/users" replace />
       },
       {
         path: 'users',
@@ -413,41 +362,22 @@ const adminRoutes: RouteObject[] = [
   },
   {
     path: 'orders',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: '',
-        element: (
-          <Navigate
-            to="/orders/new"
-            replace
-          />
-        )
+        element: <Navigate to="/orders/items/New" replace />
       },
       {
-        path: 'new',
-        element: <OrdersPage type='New' />
+        path: 'items/:type',
+        element: <OrdersPage />
       },
       {
-        path: 'preparing',
-        element: <OrdersPage type='Preparing' />
-      },
-      {
-        path: 'delivery',
-        element: <OrdersPage type='Delivery' />
-      },
-      {
-        path: 'pickup',
-        element: <OrdersPage type='Pickup' />
-      },
-      {
-        path: 'all',
-        element: <OrdersPage type='All' />
+        path: 'issue/:id',
+        element: <OrderIssue />
       }
     ]
-  },
+  }
 ];
 
 const routes = isVendorApp ? vendorRoutes : adminRoutes;
