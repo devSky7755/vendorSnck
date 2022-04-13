@@ -57,16 +57,6 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
     }
   };
 
-  const handleSelectAll = (
-    event: ChangeEvent<HTMLInputElement>
-  ): void => {
-    setSelectedVenues(
-      event.target.checked
-        ? venues.map((order) => order.id)
-        : []
-    );
-  };
-
   const handleSelectOne = (
     event: ChangeEvent<HTMLInputElement>,
     id: string
@@ -87,12 +77,6 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
     onVenuePatch(venue, key, value);
   }
 
-  const selectedSome =
-    selectedVenues.length > 0 &&
-    selectedVenues.length < venues.length;
-  const selectedAll =
-    selectedVenues.length === venues.length;
-
   return (
     <Card>
       <TableContainer>
@@ -100,17 +84,6 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox" style={{ height: 52 }}>
-                {
-                  /*
-                  <Checkbox
-                    size='small'
-                    color="primary"
-                    checked={selectedAll}
-                    indeterminate={selectedSome}
-                    onChange={handleSelectAll}
-                  />
-                  */
-                }
               </TableCell>
               <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>

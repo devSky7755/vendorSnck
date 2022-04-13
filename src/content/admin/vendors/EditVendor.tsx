@@ -4,10 +4,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
 import { VendorStand as Vendor } from 'src/models/vendorStand';
-import { styled, Box, Button, InputAdornment, DialogActions, Grid, IconButton, Switch, TextField } from '@mui/material';
+import { styled, Box, Button, DialogActions, Grid, IconButton, Switch, TextField, MenuItem } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { Venue } from 'src/models/venue';
 
 const DialogSubtitle = styled(Typography)(
     ({ theme }) => `
@@ -16,13 +16,14 @@ const DialogSubtitle = styled(Typography)(
 );
 
 interface EditVendorInterface {
-    onAction: Function,
-    open: boolean,
-    vendor?: Vendor,
+    onAction: Function;
+    open: boolean;
+    venues: Venue[];
+    vendor?: Vendor;
 };
 
 const EditVendorDialog: React.FC<EditVendorInterface> = (props) => {
-    const { onAction, vendor, open } = props;
+    const { onAction, venues, vendor, open } = props;
     const [editing, setEditingVendor] = useState(vendor);
     const [showError, setShowError] = useState(false);
 
@@ -99,7 +100,11 @@ const EditVendorDialog: React.FC<EditVendorInterface> = (props) => {
                                     });
                                 }}
                             >
-
+                                {venues.map((venue) => (
+                                    <MenuItem key={venue.id} value={venue.id}>
+                                        {venue.name}
+                                    </MenuItem>
+                                ))}
                             </TextField>
                         </Grid>
                         <Grid item xs={12}>

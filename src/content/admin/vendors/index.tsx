@@ -5,10 +5,11 @@ import { VendorStand as Vendor } from 'src/models/vendorStand';
 import VendorsTable from './VendorsTable';
 import EditVendorDialog from './EditVendor';
 import { connect } from 'react-redux';
-//import { deleteVendor, patchVendor, updateVendor } from 'src/reducers/venues/action';
 import BulkActions from './BulkActions';
-//import { patchVendor as patchVendorAPI, postVendor, deleteVendor as deleteVendorAPI } from 'src/Api/apiClient';
+import { patchVendorStand, postVendorStand, deleteVendorStand } from 'src/Api/apiClient';
 import DeleteVendorDialog from './DeleteVendor';
+import { Venue } from 'src/models/venue';
+import { getVendorStand, getVenue, getVenues } from 'src/Api/apiClient';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -36,26 +37,35 @@ const FooterWrapper = styled(Box)(
 );
 
 interface VendorsPageProps {
-  vendors: Vendor[];
+  venues: Venue[];
   token: string;
-  patchVendor: Function;
-  updateVendor: Function;
-  deleteVendor: Function;
 }
 
 function VendorsPage(props: VendorsPageProps) {
-  const token = props.token;
+  const { token, venues } = props;
 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [vendors, setVendors] = useState<Vendor[]>(props.vendors || []);
+  const [vendors, setVendors] = useState<Vendor[]>([]);
 
   const [selectedVendors, setSelectedVendors] = useState<Vendor[]>([]);
 
   useEffect(() => {
-    setVendors(props.vendors || []);
-  }, [props.vendors]);
+    loadVendors();
+  }, [venues]);
+
+  const loadVendors = () => {
+    setVendors([]);
+    venues && venues.forEach(venue => {
+      getVenue(venue.id).then(res => {
+        if (res && res.vendorStands) {
+          setVendors(prev => [...prev, ...res.vendorStands]);
+        }
+      })
+    });
+  }
+
 
   const onAction = (action, data) => {
     if (action === 'Edit') {
@@ -63,7 +73,7 @@ function VendorsPage(props: VendorsPageProps) {
       setEditOpen(true);
     } else if (action === 'Close') {
       setEditOpen(false);
-      setEditing(false);
+      setEditing(null);
     } else if (action === 'Save') {
       setEditOpen(false);
       handleSave(data);
@@ -72,10 +82,8 @@ function VendorsPage(props: VendorsPageProps) {
       setEditing(data);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      /*
-      setEditing({ active: true, deliveryEnabled: true, pickupEnabled: true });
+      setEditing({ available: false, deliveryAvailable: false, pickupAvailable: false });
       setEditOpen(true);
-      */
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);
       setEditing(null);
@@ -86,40 +94,44 @@ function VendorsPage(props: VendorsPageProps) {
     }
   }
 
-  
+
   const handleSave = (vendor) => {
     let patch: Vendor = { ...vendor };
     delete patch.id;
     delete patch.updatedAt;
     delete patch.createdAt;
+    delete patch.deletedAt;
+    delete patch.manager;
+    delete patch.menuItems;
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 
-    /*
     if (vendor.id) {
-      patchVendorAPI(token, vendor, patch).then(res => {
-        props.updateVendor(res);
+      patchVendorStand(token, vendor, patch).then(res => {
+        let newVendors = [...vendors];
+        let index = newVendors.findIndex(x => x.id === vendor.id);
+        if (index >= 0) {
+          newVendors[index] = res
+          setVendors(newVendors);
+        }
       }).catch(ex => {
         console.log(ex.message);
       })
     } else {
-      postVendor(token, patch).then(res => {
-        props.updateVendor(res);
+      postVendorStand(token, patch).then(res => {
+        setVendors(prev => [...prev, res]);
       }).catch(ex => {
         console.log(ex.message);
       })
     }
-    */
   }
 
   const handleDelete = (vendor) => {
-    props.deleteVendor(vendor);
-    /*
-    deleteVendorAPI(token, vendor.id).then(success => {
+    deleteVendorStand(token, vendor.id).then(success => {
       if (success) {
-        
+        let filtered = vendors.filter(x => x.id !== vendor.id);
+        setVendors(filtered);
       }
     })
-    */
   }
 
   const handleSelectionChanged = (selectedIDs) => {
@@ -131,11 +143,14 @@ function VendorsPage(props: VendorsPageProps) {
     let patch = {};
     patch[key] = value;
 
-    /*
-    patchVendorAPI(token, vendor, patch).then(res => {
-      props.patchVendor(vendor, key, value);
+    patchVendorStand(token, vendor, patch).then(res => {
+      let newVendors = [...vendors];
+      let index = newVendors.findIndex(x => x.id === vendor.id);
+      if (index >= 0) {
+        newVendors[index] = res
+        setVendors(newVendors);
+      }
     });
-    */
   }
 
   return (
@@ -146,6 +161,7 @@ function VendorsPage(props: VendorsPageProps) {
       {
         editOpen && editing &&
         <EditVendorDialog
+          venues={venues}
           vendor={editing}
           open={editOpen}
           onAction={onAction}
@@ -163,7 +179,7 @@ function VendorsPage(props: VendorsPageProps) {
       <Box style={{ height: '100%' }}>
         <ContainerWrapper>
           <TableWrapper>
-            <VendorsTable vendors={vendors} onAction={onAction} onSelectionChanged={handleSelectionChanged} onVendorPatch={handleVendorPatch} />
+            <VendorsTable vendors={vendors} venues={venues} onAction={onAction} onSelectionChanged={handleSelectionChanged} onVendorPatch={handleVendorPatch} />
           </TableWrapper>
         </ContainerWrapper>
         <FooterWrapper>
@@ -177,7 +193,7 @@ function VendorsPage(props: VendorsPageProps) {
 function reduxState(state) {
   return {
     token: state.auth && state.auth.token,
-    vendors: state.vendors && state.vendors.vendors
+    venues: state.venues && state.venues.venues
   }
 }
-export default connect(reduxState, { /*patchVendor, deleteVendor, updateVendor*/ })(VendorsPage);
+export default connect(reduxState)(VendorsPage);

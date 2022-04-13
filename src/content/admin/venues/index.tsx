@@ -63,7 +63,7 @@ function VenuesPage(props: VenuesPageProps) {
       setEditOpen(true);
     } else if (action === 'Close') {
       setEditOpen(false);
-      setEditing(false);
+      setEditing(null);
     } else if (action === 'Save') {
       setEditOpen(false);
       handleSave(data);

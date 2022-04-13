@@ -1,4 +1,5 @@
 import { MenuItemV1 } from "./menu_item";
+import { Venue } from "./venue";
 
 export interface VendorStand {
     id: string;
@@ -14,6 +15,9 @@ export interface VendorStand {
     pickupQueueCapacity: number;
     createdAt: Date;
     updatedAt: Date;
+    deletedAt?: Date;
     manager?: string;
     menuItems: MenuItemV1[];
+
+    venue?: Venue;
 }

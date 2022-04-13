@@ -15,10 +15,12 @@ import {
 
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import { VendorStand as Vendor } from 'src/models/vendorStand';
+import { Venue } from 'src/models/venue';
 
 interface VendorsTableProps {
   className?: string;
   vendors: Vendor[];
+  venues: Venue[];
   onAction: Function;
   onSelectionChanged: Function;
   onVendorPatch: Function;
@@ -32,7 +34,7 @@ const URLTableCell = styled(TableCell)(
 `
 );
 
-const VendorsTable: FC<VendorsTableProps> = ({ vendors, onAction, onSelectionChanged, onVendorPatch }) => {
+const VendorsTable: FC<VendorsTableProps> = ({ vendors, venues, onAction, onSelectionChanged, onVendorPatch }) => {
   const [actionID, setActionID] = useState<string>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedVendors, setSelectedVendors] = useState<string[]>(
@@ -57,16 +59,6 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, onAction, onSelectionCha
     }
   };
 
-  const handleSelectAll = (
-    event: ChangeEvent<HTMLInputElement>
-  ): void => {
-    setSelectedVendors(
-      event.target.checked
-        ? vendors.map((order) => order.id)
-        : []
-    );
-  };
-
   const handleSelectOne = (
     event: ChangeEvent<HTMLInputElement>,
     id: string
@@ -87,12 +79,6 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, onAction, onSelectionCha
     onVendorPatch(vendor, key, value);
   }
 
-  const selectedSome =
-    selectedVendors.length > 0 &&
-    selectedVendors.length < vendors.length;
-  const selectedAll =
-    selectedVendors.length === vendors.length;
-
   return (
     <Card>
       <TableContainer>
@@ -100,17 +86,6 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, onAction, onSelectionCha
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox" style={{ height: 52 }}>
-                {
-                  /*
-                  <Checkbox
-                    size='small'
-                    color="primary"
-                    checked={selectedAll}
-                    indeterminate={selectedSome}
-                    onChange={handleSelectAll}
-                  />
-                  */
-                }
               </TableCell>
               <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
@@ -127,6 +102,7 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, onAction, onSelectionCha
             {vendors.map((vendor, index) => {
               const isSelected = selectedVendors.includes(vendor.id);
               const imageName = vendor.coverImageUrl?.replace(/^.*[\\\/]/, '');
+              const venue = venues.find(x => x.id === vendor.venueId);
 
               return (
                 <TableRow
@@ -148,7 +124,7 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, onAction, onSelectionCha
                     {vendor.name}
                   </TableCell>
                   <TableCell>
-                    {vendor.venueId}
+                    {venue && venue.name}
                   </TableCell>
                   <URLTableCell style={{ maxWidth: 250 }}>
                     {imageName}

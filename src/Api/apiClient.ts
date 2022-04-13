@@ -44,6 +44,16 @@ export function getVenues(): Promise<Venue[]> {
     })
 }
 
+export function getVenue(id: string): Promise<Venue> {
+    return fetch(BASE_URL + VenuesEndpoint + '/' + id).then(res => res.json()).then(res => {
+        if (res.success) {
+            return res.data as Venue;
+        } else {
+            return null;
+        }
+    })
+}
+
 export function patchVenue(token: string, venue: Venue, patch): Promise<Venue> {
     return fetch(BASE_URL + VenuesEndpoint + '/' + venue.id, {
         method: 'PATCH',
@@ -75,7 +85,7 @@ export function postVenue(token: string, venue: Venue): Promise<Venue> {
         if (res.success) {
             return res.data as Venue;
         } else {
-            return venue;
+            return null;
         }
     })
 }
@@ -121,6 +131,41 @@ export function patchVendorStand(token: string, vendor: VendorStand, patch): Pro
             return res.data as VendorStand;
         } else {
             return vendor;
+        }
+    })
+}
+
+export function postVendorStand(token: string, vendor: VendorStand): Promise<VendorStand> {
+    return fetch(BASE_URL + VendorStandEndpoint, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(vendor)
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return res.data as VendorStand;
+        } else {
+            return null;
+        }
+    })
+}
+
+export function deleteVendorStand(token: string, id: string): Promise<boolean> {
+    return fetch(BASE_URL + VendorStandEndpoint + '/' + id, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return true;
+        } else {
+            return false;
         }
     })
 }

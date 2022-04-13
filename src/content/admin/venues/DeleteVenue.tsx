@@ -1,6 +1,5 @@
-import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import { Box, Button, DialogActions, DialogContent, DialogContentText, Typography } from '@mui/material';
+import { Box, Button, DialogContent, Typography } from '@mui/material';
 
 
 interface DeleteVenueDialogInterface {
