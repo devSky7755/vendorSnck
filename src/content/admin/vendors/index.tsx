@@ -9,7 +9,7 @@ import BulkActions from './BulkActions';
 import { patchVendorStand, postVendorStand, deleteVendorStand } from 'src/Api/apiClient';
 import DeleteVendorDialog from './DeleteVendor';
 import { Venue } from 'src/models/venue';
-import { getVendorStand, getVenue, getVenues } from 'src/Api/apiClient';
+import { getVenue } from 'src/Api/apiClient';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `

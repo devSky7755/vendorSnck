@@ -6,7 +6,10 @@ import PauseCircleFilledOutlinedIcon from '@mui/icons-material/PauseCircleFilled
 import InputSlider from 'src/content/onboarding/InputSlider';
 import { connect } from 'react-redux';
 import { FC, useEffect, useState } from 'react';
+import { VendorStand } from 'src/models/vendorStand';
 import { pauseFor } from 'src/reducers/setting/action';
+import { patchVendorStand } from 'src/Api/apiClient';
+import { setVendorStand } from 'src/reducers/venues/action';
 
 const ColoredBox = styled(Box)(
     ({ theme }) => `
@@ -24,11 +27,15 @@ const BorderedBox = styled(Box)(
 
 interface OrdersSettingProp {
     pauseUntil: number;
-    pauseFor: Function
+    vendorStand: VendorStand;
+    pauseFor: Function;
+    token: string;
+    setVendorStand: Function;
 }
 
-const OrderSettings: FC<OrdersSettingProp> = ({ pauseUntil, pauseFor }) => {
+const OrderSettings: FC<OrdersSettingProp> = ({ token, pauseUntil, vendorStand, pauseFor, setVendorStand }) => {
     const [render, setRender] = useState(false);
+    const [vendor, setVendor] = useState(vendorStand);
 
     let current = Date.now();
     let seconds = 0;
@@ -41,6 +48,10 @@ const OrderSettings: FC<OrdersSettingProp> = ({ pauseUntil, pauseFor }) => {
     }
 
     useEffect(() => {
+        setVendor(vendorStand);
+    }, [vendorStand]);
+
+    useEffect(() => {
         const intervalId = setInterval(() => {
             setRender(x => !x);
         }, 250);
@@ -50,7 +61,19 @@ const OrderSettings: FC<OrdersSettingProp> = ({ pauseUntil, pauseFor }) => {
         }
     }, []);
 
+    const handleChange = (key, value) => {
+        if (!vendor) return;
+        if (vendor[key] === value) return;
 
+        let patch = {};
+        patch[key] = value;
+
+        patchVendorStand(token, vendor, patch).then(res => {
+            setVendorStand(res);
+        }).catch(ex => {
+            console.log(ex.message);
+        })
+    }
 
     return (
         <>
@@ -85,13 +108,25 @@ const OrderSettings: FC<OrdersSettingProp> = ({ pauseUntil, pauseFor }) => {
                             Availability
                         </Typography>
                         <BorderedBox>
-                            <Switch></Switch> <Typography component='span' variant='body1'>Available for Orders</Typography>
+                            <Switch checked={(vendor && vendor.available) || false}
+                                onChange={e => {
+                                    handleChange('available', e.target.checked);
+                                }}
+                            /> <Typography component='span' variant='body1'>Available for Orders</Typography>
                         </BorderedBox>
                         <BorderedBox>
-                            <Switch></Switch> <Typography component='span' variant='body1'>Pickup Orders</Typography>
+                            <Switch checked={(vendor && vendor.pickupAvailable) || false}
+                                onChange={e => {
+                                    handleChange('pickupAvailable', e.target.checked);
+                                }}
+                            /> <Typography component='span' variant='body1'>Pickup Orders</Typography>
                         </BorderedBox>
                         <BorderedBox>
-                            <Switch></Switch> <Typography component='span' variant='body1'>Delivery Orders</Typography>
+                            <Switch checked={(vendor && vendor.deliveryAvailable) || false}
+                                onChange={e => {
+                                    handleChange('deliveryAvailable', e.target.checked);
+                                }} />
+                            <Typography component='span' variant='body1'>Delivery Orders</Typography>
                         </BorderedBox>
                     </Grid>
                     <Grid item xs={12} sx={{ mt: 4 }}>
@@ -122,8 +157,16 @@ const OrderSettings: FC<OrdersSettingProp> = ({ pauseUntil, pauseFor }) => {
                         <Typography variant='subtitle1'>
                             Order amount per 10 min
                         </Typography>
+
                         <BorderedBox>
-                            <InputSlider maxValue={30}></InputSlider>
+                            {
+                                vendor &&
+                                <InputSlider defaultValue={(vendor && vendor.orderCapacity) || 0} maxValue={30}
+                                    onChange={v => {
+                                        handleChange('orderCapacity', v);
+                                    }}
+                                />
+                            }
                         </BorderedBox>
                     </Grid>
                     <Grid item xs={12} sx={{ mt: 0 }}>
@@ -131,7 +174,14 @@ const OrderSettings: FC<OrdersSettingProp> = ({ pauseUntil, pauseFor }) => {
                             Maximum orders in pickup queue
                         </Typography>
                         <BorderedBox>
-                            <InputSlider maxValue={30}></InputSlider>
+                            {
+                                vendor &&
+                                <InputSlider maxValue={30} defaultValue={(vendor && vendor.pickupQueueCapacity) || 0}
+                                    onChange={v => {
+                                        handleChange('pickupQueueCapacity', v);
+                                    }}
+                                />
+                            }
                         </BorderedBox>
                     </Grid>
                 </Grid>
@@ -143,9 +193,11 @@ const OrderSettings: FC<OrdersSettingProp> = ({ pauseUntil, pauseFor }) => {
 
 function reduxState(state) {
     return {
-        pauseUntil: (state.setting && state.setting.pauseUntil) || new Date()
+        token: state.auth && state.auth.token,
+        pauseUntil: (state.setting && state.setting.pauseUntil) || new Date(),
+        vendorStand: state.venues && state.venues.vendorStand
     }
 }
-export default connect(reduxState, { pauseFor })(OrderSettings);
+export default connect(reduxState, { pauseFor, setVendorStand })(OrderSettings);
 
 
