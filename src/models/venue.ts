@@ -31,6 +31,26 @@ export interface Venue {
     vendorStands?: VendorStand[];
 }
 
+export interface VenueInLocation {
+    id: string;
+    seatFields?: string[];
+    distributionArea?: VenueDistributionArea;
+    qr_code?: string;
+    active?: boolean;
+    delivery?: boolean;
+    pickup?: boolean;
+}
+
+export interface VenueDistributionArea {
+    id?: string;
+    venueId?: string;
+    name?: string;
+    qr_code?: string;
+    active?: boolean;
+    delivery?: boolean;
+    pickup?: boolean;
+}
+
 export function getVenueSeatField(venue: Venue) {
     let fields = [];
     let index = 1;
