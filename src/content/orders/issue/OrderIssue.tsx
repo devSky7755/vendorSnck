@@ -1,61 +1,80 @@
 import { Helmet } from 'react-helmet-async';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import {
   Grid,
   Container,
   Typography,
   Box,
-  Button,
-  styled,
-  Switch
+  IconButton,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+  styled
 } from '@mui/material';
 import Footer from 'src/components/Footer';
-import { FC, useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ACTIONS } from './index';
 
-const ColoredBox = styled(Box)(
+const FlexBox = styled(Box)(
   ({ theme }) => `
-    background: #FFFAEA;
-    `
-);
-
-const BorderedBox = styled(Box)(
-  ({ theme }) => `
-    border-bottom: 1px solid ${theme.general.borderColor};
-    padding-top: ${theme.spacing(1)};
-    padding-bottom: ${theme.spacing(1)};
+    display: flex;
+    flex-direction: row;
     `
 );
 
 const OrderIssue = ({}) => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [action, setAction] = useState();
+
+  const handleChangeAction = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value: any = (event.target as HTMLInputElement).value;
+    setAction(value);
+    navigate(`/orders/issue/${id}/${value}`);
+  };
+
   return (
     <>
       <Helmet>
         <title>Issue with Order</title>
       </Helmet>
       <PageTitleWrapper>
-        <Typography variant="h5" component="h5" sx={{ py: 0.5 }}>
-          Issue with Order
-        </Typography>
+        <FlexBox sx={{ alignItems: 'center' }}>
+          <IconButton disableRipple onClick={(event) => navigate(-1)}>
+            <KeyboardArrowLeftIcon />
+          </IconButton>
+          <Typography variant="h5" component="h5" sx={{ py: 0.5 }}>
+            Issue with Order
+          </Typography>
+        </FlexBox>
       </PageTitleWrapper>
       <Container maxWidth="sm">
         <Grid container spacing={2}>
           <Grid item xs={12} sx={{ mt: 4 }}>
-            <Typography variant="subtitle1">Choose action</Typography>
-            <BorderedBox>
-              <Typography component="span" variant="body1">
-                Delay order
-              </Typography>
-            </BorderedBox>
-            <BorderedBox>
-              <Typography component="span" variant="body1">
-                Re-assign to pickup
-              </Typography>
-            </BorderedBox>
-            <BorderedBox>
-              <Typography component="span" variant="body1">
-                Cancel order
-              </Typography>
-            </BorderedBox>
+            <FormControl>
+              <FormLabel id="choose-action-group">Choose action</FormLabel>
+              <RadioGroup
+                aria-labelledby="choose-action-group"
+                name="radio-actions-group"
+                value={action}
+                onChange={handleChangeAction}
+              >
+                {ACTIONS.map((actionObj, key) => {
+                  return (
+                    <FormControlLabel
+                      key={key}
+                      value={actionObj.value}
+                      control={<Radio />}
+                      label={actionObj.label}
+                    />
+                  );
+                })}
+              </RadioGroup>
+            </FormControl>
           </Grid>
         </Grid>
       </Container>

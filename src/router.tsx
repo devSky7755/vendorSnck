@@ -17,6 +17,7 @@ import FAQ from './content/pages/Docs/FAQ';
 import Logout from './content/login/logout';
 import { isVendorApp } from './models/constant';
 import { OrderIssue } from './content/orders/issue';
+import { ActionBoard } from './content/orders/issue/action';
 
 const Loader = (Component) => (props) =>
   (
@@ -374,7 +375,16 @@ const adminRoutes: RouteObject[] = [
       },
       {
         path: 'issue/:id',
-        element: <OrderIssue />
+        children: [
+          {
+            path: '',
+            element: <OrderIssue />
+          },
+          {
+            path: ':action',
+            element: <ActionBoard />
+          }
+        ]
       }
     ]
   }
