@@ -1,4 +1,4 @@
-import { VendorStand } from "./vendor_stand";
+import { VendorStand } from "./vendorStand";
 
 export interface Venue {
     id: string;

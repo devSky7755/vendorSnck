@@ -14,14 +14,16 @@ import {
 } from '@mui/material';
 
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import { getVenueSeatField, Venue } from 'src/models/venue';
+import { VendorStand as Vendor } from 'src/models/vendorStand';
+import { Venue } from 'src/models/venue';
 
-interface VenuesTableProps {
+interface VendorsTableProps {
   className?: string;
+  vendors: Vendor[];
   venues: Venue[];
   onAction: Function;
   onSelectionChanged: Function;
-  onVenuePatch: Function;
+  onVendorPatch: Function;
 }
 
 const URLTableCell = styled(TableCell)(
@@ -32,28 +34,28 @@ const URLTableCell = styled(TableCell)(
 `
 );
 
-const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChanged, onVenuePatch }) => {
+const VendorsTable: FC<VendorsTableProps> = ({ vendors, venues, onAction, onSelectionChanged, onVendorPatch }) => {
   const [actionID, setActionID] = useState<string>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedVenues, setSelectedVenues] = useState<string[]>(
+  const [selectedVendors, setSelectedVendors] = useState<string[]>(
     []
   );
 
   useEffect(() => {
-    onSelectionChanged(selectedVenues);
-  }, [selectedVenues])
+    onSelectionChanged(selectedVendors);
+  }, [selectedVendors])
 
-  const handleClickAction = (event: React.MouseEvent<HTMLButtonElement>, venueId: string) => {
-    setActionID(venueId);
+  const handleClickAction = (event: React.MouseEvent<HTMLButtonElement>, vendorId: string) => {
+    setActionID(vendorId);
     setAnchorEl(event.currentTarget);
   };
 
-  const handleCloseAction = (action: string, venue: Venue) => {
+  const handleCloseAction = (action: string, vendor: Vendor) => {
     setAnchorEl(null);
     if (action === 'Edit') {
-      onAction('Edit', venue);
+      onAction('Edit', vendor);
     } else if (action === 'Delete') {
-      onAction('Delete', venue);
+      onAction('Delete', vendor);
     }
   };
 
@@ -61,20 +63,20 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
     event: ChangeEvent<HTMLInputElement>,
     id: string
   ): void => {
-    if (!selectedVenues.includes(id)) {
-      setSelectedVenues((prevSelected) => [
+    if (!selectedVendors.includes(id)) {
+      setSelectedVendors((prevSelected) => [
         ...prevSelected,
         id
       ]);
     } else {
-      setSelectedVenues((prevSelected) =>
+      setSelectedVendors((prevSelected) =>
         prevSelected.filter((x) => x !== id)
       );
     }
   };
 
-  const handleVenuePatch = (venue, key, value) => {
-    onVenuePatch(venue, key, value);
+  const handleVendorPatch = (vendor, key, value) => {
+    onVendorPatch(vendor, key, value);
   }
 
   return (
@@ -87,23 +89,25 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
               </TableCell>
               <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
-              <TableCell>Address</TableCell>
-              <TableCell>Seat Fields</TableCell>
-              <TableCell style={{ width: 150 }}>Maps URL</TableCell>
-              <TableCell>Venue Image</TableCell>
+              <TableCell>Venue</TableCell>
+              <TableCell>Cover Image</TableCell>
               <TableCell>Active</TableCell>
+              <TableCell>Delivery</TableCell>
+              <TableCell>Pickup</TableCell>
+              <TableCell>Vendor Manager</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {venues.map((venue, index) => {
-              const isSelected = selectedVenues.includes(venue.id);
-              const imageName = venue.imageUrl?.replace(/^.*[\\\/]/, '');
+            {vendors.map((vendor, index) => {
+              const isSelected = selectedVendors.includes(vendor.id);
+              const imageName = vendor.coverImageUrl?.replace(/^.*[\\\/]/, '');
+              const venue = venues.find(x => x.id === vendor.venueId);
 
               return (
                 <TableRow
                   hover
-                  key={venue.id}
+                  key={vendor.id}
                 >
                   <TableCell padding="checkbox" style={{ height: 52 }}>
                     <Checkbox
@@ -111,59 +115,56 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
                       color="primary"
                       checked={isSelected}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                        handleSelectOne(event, venue.id)
+                        handleSelectOne(event, vendor.id)
                       }
                     />
                   </TableCell>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>
-                    {venue.name}
+                    {vendor.name}
                   </TableCell>
                   <TableCell>
-                    {venue.address && venue.address}
-                  </TableCell>
-                  <TableCell>
-                    [{getVenueSeatField(venue).join(',')}]
+                    {venue && venue.name}
                   </TableCell>
                   <URLTableCell style={{ maxWidth: 250 }}>
-                    {
-                      venue.mapsUrl &&
-                      <a href={venue.mapsUrl} target='__blank'>
-                        {venue.mapsUrl}
-                      </a>
-                    }
-                  </URLTableCell>
-                  <URLTableCell style={{ maxWidth: 200 }}>
-                    {
-                      venue.imageUrl &&
-                      <a href={venue.imageUrl} target='__blank'>
-                        {imageName}
-                      </a>
-                    }
+                    {imageName}
                   </URLTableCell>
                   <TableCell>
-                    <Switch checked={venue.active} onChange={e => {
-                      handleVenuePatch(venue, 'active', e.target.checked);
+                    <Switch checked={vendor.available} onChange={e => {
+                      handleVendorPatch(vendor, 'available', e.target.checked);
                     }} />
+                  </TableCell>
+                  <TableCell>
+                    <Switch checked={vendor.deliveryAvailable} onChange={e => {
+                      handleVendorPatch(vendor, 'deliveryAvailable', e.target.checked);
+                    }} />
+                  </TableCell>
+                  <TableCell>
+                    <Switch checked={vendor.pickupAvailable} onChange={e => {
+                      handleVendorPatch(vendor, 'pickupAvailable', e.target.checked);
+                    }} />
+                  </TableCell>
+                  <TableCell>
+                    {vendor.manager || ''}
                   </TableCell>
                   <TableCell align="right" padding="checkbox">
                     <IconButton size='small' onClick={(event) => {
-                      handleClickAction(event, venue.id);
+                      handleClickAction(event, vendor.id);
                     }}>
                       <MoreVertTwoToneIcon fontSize='small' />
                     </IconButton>
                     <Menu
                       anchorEl={anchorEl}
-                      open={anchorEl !== null && actionID === venue.id}
+                      open={anchorEl !== null && actionID === vendor.id}
                       onClose={() => {
-                        handleCloseAction('None', venue);
+                        handleCloseAction('None', vendor);
                       }}
                       MenuListProps={{
                         'aria-labelledby': 'basic-button',
                       }}
                     >
-                      <MenuItem onClick={() => handleCloseAction('Edit', venue)}>Edit</MenuItem>
-                      <MenuItem onClick={() => handleCloseAction('Delete', venue)}>Delete</MenuItem>
+                      <MenuItem onClick={() => handleCloseAction('Edit', vendor)}>Edit</MenuItem>
+                      <MenuItem onClick={() => handleCloseAction('Delete', vendor)}>Delete</MenuItem>
                     </Menu>
                   </TableCell>
                 </TableRow>
@@ -176,4 +177,4 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
   );
 };
 
-export default VenuesTable;
+export default VendorsTable;

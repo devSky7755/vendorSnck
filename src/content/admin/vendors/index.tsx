@@ -1,14 +1,15 @@
 import { Helmet } from 'react-helmet-async';
 import { Box, styled } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Venue } from 'src/models/venue';
-import VenuesTable from './VenuesTable';
-import EditVenueDialog from './EditVenue';
+import { VendorStand as Vendor } from 'src/models/vendorStand';
+import VendorsTable from './VendorsTable';
+import EditVendorDialog from './EditVendor';
 import { connect } from 'react-redux';
-import { deleteVenue, patchVenue, updateVenue } from 'src/reducers/venues/action';
 import BulkActions from './BulkActions';
-import { patchVenue as patchVenueAPI, postVenue, deleteVenue as deleteVenueAPI } from 'src/Api/apiClient';
-import DeleteVenueDialog from './DeleteVenue';
+import { patchVendorStand, postVendorStand, deleteVendorStand } from 'src/Api/apiClient';
+import DeleteVendorDialog from './DeleteVendor';
+import { Venue } from 'src/models/venue';
+import { getVendorStand, getVenue, getVenues } from 'src/Api/apiClient';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -35,27 +36,36 @@ const FooterWrapper = styled(Box)(
 `
 );
 
-interface VenuesPageProps {
+interface VendorsPageProps {
   venues: Venue[];
   token: string;
-  patchVenue: Function;
-  updateVenue: Function;
-  deleteVenue: Function;
 }
 
-function VenuesPage(props: VenuesPageProps) {
-  const token = props.token;
+function VendorsPage(props: VendorsPageProps) {
+  const { token, venues } = props;
 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [venues, setVenues] = useState<Venue[]>(props.venues || []);
+  const [vendors, setVendors] = useState<Vendor[]>([]);
 
-  const [selectedVenues, setSelectedVenues] = useState<Venue[]>([]);
+  const [selectedVendors, setSelectedVendors] = useState<Vendor[]>([]);
 
   useEffect(() => {
-    setVenues(props.venues || []);
-  }, [props.venues]);
+    loadVendors();
+  }, [venues]);
+
+  const loadVendors = () => {
+    setVendors([]);
+    venues && venues.forEach(venue => {
+      getVenue(venue.id).then(res => {
+        if (res && res.vendorStands) {
+          setVendors(prev => [...prev, ...res.vendorStands]);
+        }
+      })
+    });
+  }
+
 
   const onAction = (action, data) => {
     if (action === 'Edit') {
@@ -72,7 +82,7 @@ function VenuesPage(props: VenuesPageProps) {
       setEditing(data);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      setEditing({ active: false, deliveryEnabled: false, pickupEnabled: false });
+      setEditing({ available: false, deliveryAvailable: false, pickupAvailable: false });
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);
@@ -84,69 +94,82 @@ function VenuesPage(props: VenuesPageProps) {
     }
   }
 
-  const handleSave = (venue) => {
-    let patch: Venue = { ...venue };
+
+  const handleSave = (vendor) => {
+    let patch: Vendor = { ...vendor };
     delete patch.id;
     delete patch.updatedAt;
     delete patch.createdAt;
-    delete patch.seatFields;
-    delete patch.coordinates;
-    delete patch.vendorStands;
+    delete patch.deletedAt;
+    delete patch.manager;
+    delete patch.menuItems;
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 
-    if (venue.id) {
-      patchVenueAPI(token, venue, patch).then(res => {
-        props.updateVenue(res);
+    if (vendor.id) {
+      patchVendorStand(token, vendor, patch).then(res => {
+        let newVendors = [...vendors];
+        let index = newVendors.findIndex(x => x.id === vendor.id);
+        if (index >= 0) {
+          newVendors[index] = res
+          setVendors(newVendors);
+        }
       }).catch(ex => {
         console.log(ex.message);
       })
     } else {
-      postVenue(token, patch).then(res => {
-        props.updateVenue(res);
+      postVendorStand(token, patch).then(res => {
+        setVendors(prev => [...prev, res]);
       }).catch(ex => {
         console.log(ex.message);
       })
     }
   }
 
-  const handleDelete = (venue) => {
-    deleteVenueAPI(token, venue.id).then(success => {
+  const handleDelete = (vendor) => {
+    deleteVendorStand(token, vendor.id).then(success => {
       if (success) {
-        props.deleteVenue(venue);
+        let filtered = vendors.filter(x => x.id !== vendor.id);
+        setVendors(filtered);
       }
     })
   }
 
   const handleSelectionChanged = (selectedIDs) => {
-    const selected = venues.filter(x => selectedIDs.includes(x.id));
-    setSelectedVenues(selected);
+    const selected = vendors.filter(x => selectedIDs.includes(x.id));
+    setSelectedVendors(selected);
   }
 
-  const handleVenuePatch = (venue, key, value) => {
+  const handleVendorPatch = (vendor, key, value) => {
     let patch = {};
     patch[key] = value;
 
-    patchVenueAPI(token, venue, patch).then(res => {
-      props.patchVenue(venue, key, value);
+    patchVendorStand(token, vendor, patch).then(res => {
+      let newVendors = [...vendors];
+      let index = newVendors.findIndex(x => x.id === vendor.id);
+      if (index >= 0) {
+        newVendors[index] = res
+        setVendors(newVendors);
+      }
     });
   }
 
   return (
     <>
       <Helmet>
-        <title>Venues</title>
+        <title>Vendors</title>
       </Helmet>
       {
         editOpen && editing &&
-        <EditVenueDialog
-          venue={editing}
+        <EditVendorDialog
+          venues={venues}
+          vendor={editing}
           open={editOpen}
           onAction={onAction}
         />
       }
       {
         deleteOpen && editing &&
-        <DeleteVenueDialog
+        <DeleteVendorDialog
           success='Remove'
           cancel='Cancel Remove'
           open={deleteOpen}
@@ -156,11 +179,11 @@ function VenuesPage(props: VenuesPageProps) {
       <Box style={{ height: '100%' }}>
         <ContainerWrapper>
           <TableWrapper>
-            <VenuesTable venues={venues} onAction={onAction} onSelectionChanged={handleSelectionChanged} onVenuePatch={handleVenuePatch} />
+            <VendorsTable vendors={vendors} venues={venues} onAction={onAction} onSelectionChanged={handleSelectionChanged} onVendorPatch={handleVendorPatch} />
           </TableWrapper>
         </ContainerWrapper>
         <FooterWrapper>
-          <BulkActions selected={selectedVenues} onAction={onAction} />
+          <BulkActions selected={selectedVendors} onAction={onAction} />
         </FooterWrapper>
       </Box>
     </>
@@ -173,4 +196,4 @@ function reduxState(state) {
     venues: state.venues && state.venues.venues
   }
 }
-export default connect(reduxState, { patchVenue, deleteVenue, updateVenue })(VenuesPage);
+export default connect(reduxState)(VendorsPage);

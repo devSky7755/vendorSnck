@@ -7,7 +7,7 @@ import InputSlider from '../InputSlider';
 import { useNavigate } from 'react-router';
 import { connect } from 'react-redux';
 import { getVendorStand, patchVendorStand } from 'src/Api/apiClient';
-import { VendorStand } from 'src/models/vendor_stand';
+import { VendorStand } from 'src/models/vendorStand';
 
 const OnboardingWrapper = styled(Box)(
     () => `

@@ -28,6 +28,7 @@ const Loader = (Component) => (props) => (
 
 //Admin
 const VenuesPage = Loader(lazy(() => import('src/content/admin/venues')));
+const VendorsPage = Loader(lazy(() => import('src/content/admin/vendors')));
 
 // Dashboards
 const Dashboard = Loader(lazy(() => import('src/content/dashboards')));
@@ -350,6 +351,20 @@ const adminRoutes: RouteObject[] = [
         path: '',
         element: (
           <VenuesPage />
+        )
+      }
+    ]
+  },
+  {
+    path: 'vendorStands',
+    element: (
+      <SidebarLayout />
+    ),
+    children: [
+      {
+        path: '',
+        element: (
+          <VendorsPage />
         )
       }
     ]

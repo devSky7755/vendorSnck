@@ -2,14 +2,14 @@ import Dialog from '@mui/material/Dialog';
 import { Box, Button, DialogContent, Typography } from '@mui/material';
 
 
-interface DeleteVenueDialogInterface {
+interface DeleteVendorDialogInterface {
     onAction: Function;
     open: boolean;
     success: string;
     cancel: string;
 };
 
-const DeleteVenueDialog: React.FC<DeleteVenueDialogInterface> = (props) => {
+const DeleteVendorDialog: React.FC<DeleteVendorDialogInterface> = (props) => {
     const { open, success, cancel, onAction } = props;
 
     const handleClose = () => {
@@ -30,7 +30,7 @@ const DeleteVenueDialog: React.FC<DeleteVenueDialogInterface> = (props) => {
                 <Box sx={{ pb: 4 }}>
                     <Typography textAlign='center' variant='h6'>
                         Are you sure you want to
-                        delete this venue?
+                        delete this vendor?
                     </Typography>
                 </Box>
                 <Box sx={{ pb: 4 }}>
@@ -47,4 +47,4 @@ const DeleteVenueDialog: React.FC<DeleteVenueDialogInterface> = (props) => {
     )
 }
 
-export default DeleteVenueDialog;
+export default DeleteVendorDialog;
