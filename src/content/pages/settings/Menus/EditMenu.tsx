@@ -3,7 +3,7 @@ import { useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
-import { MenuItem as MenuItemModel } from 'src/models/menu_item';
+import { MenuItemV1 as MenuItemModel } from 'src/models/menu_item';
 import { Box, Button, Checkbox, DialogActions, Grid, IconButton, MenuItem, Switch, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckboxMultiSelect from 'src/components/MultiSelect/CheckboxSelect';

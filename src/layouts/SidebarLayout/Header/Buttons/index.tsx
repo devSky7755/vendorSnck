@@ -16,6 +16,8 @@ function GetPageTitle(pathname) {
       return 'Summary';
     case '/venues':
       return 'Venues';
+    case '/vendorstands':
+      return 'Vendors';
     default:
       return ''
   }

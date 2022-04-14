@@ -150,14 +150,18 @@ const EditVendorDialog: React.FC<EditVendorInterface> = (props) => {
                             }}></Switch>
                             Delivery
                         </Grid>
-                        <Grid item xs={6} md={3}>
-                            <Button color='primary' size='small' onClick={e => {
-                            }}>Manage Staff</Button>
-                        </Grid>
-                        <Grid item xs={6} md={9}>
-                            <Button color='primary' size='small' onClick={e => {
-                            }}>Manage menu items</Button>
-                        </Grid>
+                    </Grid>
+                </Box>
+                <Box sx={{ px: 2, py: 2 }} className='border-bottom'>
+                    <Grid item xs={6} md={3}>
+                        <Button color='primary' size='small' onClick={e => {
+                            onAction('Manage Staff', editing);
+                        }}>Manage Staff</Button>
+                    </Grid>
+                    <Grid item xs={6} md={9}>
+                        <Button color='primary' size='small' onClick={e => {
+                            onAction('Manage Menu', editing);
+                        }}>Manage Menu Items</Button>
                     </Grid>
                 </Box>
             </Box>

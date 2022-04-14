@@ -5,7 +5,7 @@ import { Box, styled, TextField, InputAdornment, Card } from '@mui/material';
 import Footer from 'src/components/Footer';
 import { useState } from 'react';
 import SearchTwoTone from '@mui/icons-material/SearchTwoTone';
-import { MenuItem, tempMenus } from 'src/models/menu_item';
+import { MenuItemV1 as MenuItem, tempMenus } from 'src/models/menu_item';
 import MenusTable from './MenusTable';
 import EditMenuDialog from './EditMenu';
 
@@ -29,7 +29,7 @@ function MenuSettings() {
   const [showSearch, setShowSearch] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [menus, setMenus] = useState(tempMenus);
+  const [menus, setMenus] = useState<MenuItem[]>(tempMenus);
   const [searchStr, setSearchString] = useState(null);
 
   const onToggleSearch = () => {

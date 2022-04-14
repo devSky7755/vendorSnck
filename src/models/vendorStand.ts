@@ -1,4 +1,4 @@
-import { MenuItemV1 } from "./menu_item";
+import { MenuItem } from "./menu_item";
 import { Venue } from "./venue";
 
 export interface VendorStand {
@@ -17,7 +17,7 @@ export interface VendorStand {
     updatedAt: Date;
     deletedAt?: Date;
     manager?: string;
-    menuItems: MenuItemV1[];
+    menuItems: MenuItem[];
 
     venue?: Venue;
 }

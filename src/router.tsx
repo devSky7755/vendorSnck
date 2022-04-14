@@ -29,6 +29,7 @@ const Loader = (Component) => (props) => (
 //Admin
 const VenuesPage = Loader(lazy(() => import('src/content/admin/venues')));
 const VendorsPage = Loader(lazy(() => import('src/content/admin/vendors')));
+const MenuItemsPage = Loader(lazy(() => import('src/content/admin/menuitems')));
 
 // Dashboards
 const Dashboard = Loader(lazy(() => import('src/content/dashboards')));
@@ -356,7 +357,7 @@ const adminRoutes: RouteObject[] = [
     ]
   },
   {
-    path: 'vendorStands',
+    path: 'vendorstands',
     element: (
       <SidebarLayout />
     ),
@@ -370,6 +371,22 @@ const adminRoutes: RouteObject[] = [
     ]
   },
   {
+    path: 'menuitems',
+    element: (
+      <SidebarLayout />
+    ),
+    children: [
+      {
+        path: ':vendorId',
+        element: <MenuItemsPage />
+      },
+      {
+        path: '',
+        element: <MenuItemsPage />
+      }
+    ]
+  },
+  {
     path: 'dashboards',
     element: (
       <SidebarLayout />
@@ -378,88 +395,6 @@ const adminRoutes: RouteObject[] = [
       {
         path: '',
         element: <Dashboard />
-      }
-    ]
-  },
-  {
-    path: 'profile',
-    element: (
-      <SidebarLayout />
-    ),
-    children: [
-      {
-        path: '',
-        element: <UserProfile />
-      }
-    ]
-  },
-  {
-    path: 'settings',
-    element: (
-      <SidebarLayout />
-    ),
-    children: [
-      {
-        path: '',
-        element: (
-          <Navigate
-            to="/settings/users"
-            replace
-          />
-        )
-      },
-      {
-        path: 'users',
-        element: <UserSettings />
-      },
-      {
-        path: 'menus',
-        element: <MenuSettings />
-      },
-      {
-        path: 'orders',
-        element: <OrderSettings />
-      },
-      {
-        path: 'printers',
-        element: <PrinterSettings />
-      }
-    ]
-  },
-  {
-    path: 'orders',
-    element: (
-      <SidebarLayout />
-    ),
-    children: [
-      {
-        path: '',
-        element: (
-          <Navigate
-            to="/orders/new"
-            replace
-          />
-        )
-      },
-      {
-        path: 'new',
-        element: <OrdersPage type='New' />
-      },
-      {
-        path: 'preparing',
-        element: <OrdersPage type='Preparing' />
-      },
-      {
-        path: 'delivery',
-        element: <OrdersPage type='Delivery' />
-      },
-      {
-        path: 'pickup',
-        element: <OrdersPage type='Pickup' />
-      },
-      {
-        path: 'all',
-        element: <OrdersPage type='All' />
       }
     ]
   },

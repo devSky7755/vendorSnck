@@ -18,13 +18,12 @@ import {
   Select,
   MenuItem,
   Typography,
-  useTheme,
   CardHeader,
   Menu
 } from '@mui/material';
 
 import Label from 'src/components/Label';
-import { MenuItem as MenuItemModel, MenuItemStatus } from 'src/models/menu_item';
+import { MenuItemV1 as MenuItemModel, MenuItemStatus } from 'src/models/menu_item';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';

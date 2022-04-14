@@ -2,15 +2,19 @@ import Dialog from '@mui/material/Dialog';
 import { Box, Button, DialogContent, Typography } from '@mui/material';
 
 
-interface DeleteVenueDialogInterface {
+interface ConfirmDialogInterface {
     onAction: Function;
+    successLabel: string;
+    cancelLabel: string;
+    header: string;
+    text: string;
     open: boolean;
     success: string;
     cancel: string;
 };
 
-const DeleteVenueDialog: React.FC<DeleteVenueDialogInterface> = (props) => {
-    const { open, success, cancel, onAction } = props;
+const ConfirmDialog: React.FC<ConfirmDialogInterface> = (props) => {
+    const { open, success, cancel, onAction, header, text, successLabel, cancelLabel } = props;
 
     const handleClose = () => {
         onAction(cancel);
@@ -29,22 +33,21 @@ const DeleteVenueDialog: React.FC<DeleteVenueDialogInterface> = (props) => {
             <DialogContent sx={{ m: 3 }}>
                 <Box sx={{ pb: 4 }}>
                     <Typography textAlign='center' variant='h6'>
-                        Are you sure you want to
-                        delete this venue?
+                        {header}
                     </Typography>
                 </Box>
                 <Box sx={{ pb: 4 }}>
                     <Typography textAlign='center' variant='body2'>
-                        It cannot be recovered
+                        {text}
                     </Typography>
                 </Box>
                 <Box>
-                    <Button sx={{ mb: 1 }} fullWidth variant='contained' color='primary' onClick={handleSuccess}>DELETE</Button>
-                    <Button fullWidth color='primary' onClick={handleClose}>RETURN</Button>
+                    <Button sx={{ mb: 1 }} fullWidth variant='contained' color='primary' onClick={handleSuccess}>{successLabel}</Button>
+                    <Button fullWidth color='primary' onClick={handleClose}>{cancelLabel}</Button>
                 </Box>
             </DialogContent>
         </Dialog>
     )
 }
 
-export default DeleteVenueDialog;
+export default ConfirmDialog;
