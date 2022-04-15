@@ -1,14 +1,4 @@
-import { Helmet } from 'react-helmet-async';
-import PageTitleWrapper from 'src/components/PageTitleWrapper';
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import {
-  Grid,
-  Container,
-  Typography,
-  Box,
-  Button,
-  Switch,
-  IconButton,
   Radio,
   RadioGroup,
   FormControlLabel,
@@ -16,17 +6,17 @@ import {
   FormLabel,
   styled
 } from '@mui/material';
-import Footer from 'src/components/Footer';
-import { FC, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DELAYS } from '../contants';
 
 const DelayOrder = ({}) => {
   const navigate = useNavigate();
-  const [delay, setDelay] = useState();
+  const [delay, setDelay] = useState('');
 
   const handleChangeDelay = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value: any = (event.target as HTMLInputElement).value;
+    console.log(value);
     setDelay(value);
   };
 

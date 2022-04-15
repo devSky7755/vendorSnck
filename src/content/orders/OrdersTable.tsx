@@ -89,7 +89,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
     let grouped: GroupedOrder[] = [];
     let group_names = [];
 
-    if (type === 'New' || type === 'Preparing' || type === 'All') {
+    if (type === 'new' || type === 'preparing' || type === 'all') {
       let last_duetime = 0;
       if (orders.length > 0) {
         last_duetime = orders[orders.length - 1].duetime;
@@ -102,7 +102,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
         let filtered = orders.filter(
           (x) => x.duetime >= starttime && x.duetime < endtime
         );
-        if (type === 'New' && showPreOrders) {
+        if (type === 'new' && showPreOrders) {
           filtered = filtered.filter((x) => x.status === 'Preparing');
         }
         if (filtered.length > 0) {
@@ -118,7 +118,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
               warning + `${late_prepare.length} order(s) are late to prepare`;
           }
           let no_item_count = 0;
-          if (type !== 'New') {
+          if (type !== 'new') {
             filtered.forEach((order) => {
               let is_no_item = order.items.find(
                 (x) => x.currentAvailable === 0
@@ -148,7 +148,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
         starttime = endtime;
         endtime += 10 * 60 * 1000;
       }
-    } else if (type === 'Delivery') {
+    } else if (type === 'delivery') {
       group_names.push('Ready for delivery');
       const ready_orders = orders.filter(
         (x) => x.status === 'Ready' && x.order_type === 'Delivery'
@@ -201,7 +201,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
         warning: delivery_warning,
         orders: delivering
       });
-    } else if (type === 'Pickup') {
+    } else if (type === 'pickup') {
       group_names.push('Pickup Queue');
       const ready_orders = orders.filter(
         (x) => x.status === 'Ready' && x.order_type === 'Pickup'
@@ -358,17 +358,17 @@ const OrdersTable: FC<OrdersTableProps> = ({
             </TableCell>
             <TableCell>Order</TableCell>
             <TableCell>Items</TableCell>
-            {type === 'Delivery' && <TableCell>Delivery Person</TableCell>}
-            {type === 'Pickup' && <TableCell>User Notified</TableCell>}
-            {type !== 'Delivery' && type !== 'Pickup' && (
+            {type === 'delivery' && <TableCell>Delivery Person</TableCell>}
+            {type === 'pickup' && <TableCell>User Notified</TableCell>}
+            {type !== 'delivery' && type !== 'pickup' && (
               <TableCell> Order Type</TableCell>
             )}
             <TableCell>
-              {type === 'Delivery' || type === 'Pickup' ? 'Due In' : 'Waiting'}
+              {type === 'delivery' || type === 'pickup' ? 'Due In' : 'Waiting'}
             </TableCell>
             <TableCell>Customer</TableCell>
             <TableCell align="right">
-              {type === 'New' && (
+              {type === 'new' && (
                 <Fragment>
                   <Switch onChange={handlePreOrders}></Switch> Pre-orders
                 </Fragment>
@@ -422,7 +422,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
                     <Typography variant="subtitle2" component="span">
                       {group.orders.length}{' '}
                     </Typography>
-                    {(type === 'New' || type === 'Preparing') && (
+                    {(type === 'new' || type === 'preparing') && (
                       <Typography
                         variant="subtitle2"
                         component="span"
@@ -502,15 +502,15 @@ const OrdersTable: FC<OrdersTableProps> = ({
                       (x) => x.currentAvailable === 0
                     );
 
-                    if (type === 'Delivery' && order.status === 'Ready') {
+                    if (type === 'delivery' && order.status === 'Ready') {
                       waiting = order.duetime - current_time;
                     } else if (
-                      type === 'Delivery' &&
+                      type === 'delivery' &&
                       order.status === 'Delivering'
                     ) {
                       waiting =
                         10 * 60 * 1000 - current_time + order.dispatch_time;
-                    } else if (type === 'Pickup') {
+                    } else if (type === 'pickup') {
                       waiting = order.duetime - current_time;
                     }
 
@@ -567,7 +567,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
                             </Typography>
                           )}
                         </TableCell>
-                        {type === 'Delivery' && (
+                        {type === 'delivery' && (
                           <TableCell>
                             <Typography variant="body2" component="span">
                               {order.delivery_person &&
@@ -577,7 +577,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
                             </Typography>
                           </TableCell>
                         )}
-                        {type === 'Pickup' && (
+                        {type === 'pickup' && (
                           <TableCell>
                             <Typography variant="body2" component="span">
                               {order.user_notified &&
@@ -587,7 +587,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
                             </Typography>
                           </TableCell>
                         )}
-                        {type !== 'Delivery' && type !== 'Pickup' && (
+                        {type !== 'delivery' && type !== 'pickup' && (
                           <TableCell>
                             <div className="d-inline-flex">
                               <Typography variant="body2" component="span">

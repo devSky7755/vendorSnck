@@ -31,3 +31,40 @@ export const DELAYS = [
     label: '+20 min'
   }
 ];
+
+export const REASONS = [
+  {
+    value: 'item-unavailable',
+    label: 'item unavailable'
+  },
+  {
+    value: 'other',
+    label: 'Other'
+  }
+];
+
+export const UV_ITEMS = [
+  {
+    value: 1,
+    label: 'Coca Cola'
+  },
+  {
+    value: 2,
+    label: "Lay's Chips"
+  },
+  {
+    value: 3,
+    label: 'Budweiser Beer'
+  }
+];
+
+export const UV_SEL_ITEMS_CHOOSE_ACTION = [
+  {
+    value: 'mark_item_as_uv',
+    label: 'Mark item as unavailable in menu'
+  },
+  {
+    value: 'cance_all_orders_with_sel_items',
+    label: 'Cancel all orders with selected items'
+  }
+];

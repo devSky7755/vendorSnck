@@ -47,7 +47,7 @@ const ContainerWrapper = styled(Box)(
 
 function OrdersPage() {
   const { type } = useParams();
-
+  
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [orders, setOrders] = useState([]);
@@ -57,21 +57,21 @@ function OrdersPage() {
 
   useEffect(() => {
     let filtered = [];
-    switch (type) {
-      case 'New':
+    switch (type.toLowerCase()) {
+      case 'new':
         filtered = temp_orders.filter((x) => x.status === 'New');
         break;
-      case 'Preparing':
+      case 'preparing':
         filtered = temp_orders.filter((x) => x.status === 'Preparing');
         break;
-      case 'Delivery':
+      case 'delivery':
         filtered = temp_orders.filter(
           (x) =>
             (x.status === 'Ready' && x.order_type === 'Delivery') ||
             x.status === 'Delivering'
         );
         break;
-      case 'Pickup':
+      case 'pickup':
         filtered = temp_orders.filter(
           (x) =>
             (x.status === 'Ready' && x.order_type === 'Pickup') ||

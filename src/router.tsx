@@ -217,27 +217,24 @@ const vendorRoutes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <Navigate to="/orders/new" replace />
+        element: <Navigate to="/orders/items/new" replace />
       },
       {
-        path: 'new',
-        element: <OrdersPage type="New" />
+        path: 'items/:type',
+        element: <OrdersPage />
       },
       {
-        path: 'preparing',
-        element: <OrdersPage type="Preparing" />
-      },
-      {
-        path: 'delivery',
-        element: <OrdersPage type="Delivery" />
-      },
-      {
-        path: 'pickup',
-        element: <OrdersPage type="Pickup" />
-      },
-      {
-        path: 'all',
-        element: <OrdersPage type="All" />
+        path: 'issue/:id',
+        children: [
+          {
+            path: '',
+            element: <OrderIssue />
+          },
+          {
+            path: ':action',
+            element: <ActionBoard />
+          }
+        ]
       }
     ]
   }

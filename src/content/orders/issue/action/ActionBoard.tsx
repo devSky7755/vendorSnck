@@ -6,21 +6,14 @@ import {
   Container,
   Typography,
   Box,
-  Button,
-  Switch,
   IconButton,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
   styled
 } from '@mui/material';
 import Footer from 'src/components/Footer';
-import { FC, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ACTIONS } from '../contants';
 import DelayOrder from './DelayOrder';
+import { CancelOrder } from './cancel';
 
 const FlexBox = styled(Box)(
   ({ theme }) => `
@@ -56,6 +49,7 @@ const ActionBoard = ({}) => {
           <Grid container spacing={2}>
             <Grid item xs={12} sx={{ mt: 4 }}>
               {actionObj.value === ACTIONS[0].value && <DelayOrder />}
+              {actionObj.value === ACTIONS[2].value && <CancelOrder />}
             </Grid>
           </Grid>
         </Container>
