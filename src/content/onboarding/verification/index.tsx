@@ -109,7 +109,7 @@ function OnboardingVerification({ phone, login, setVendorStand }) {
                         <TextField
                             inputProps={{ maxLength: 4, inputMode: 'numeric', pattern: '[0-9]*' }}
                             variant='outlined'
-                            label='Verification Code'
+                            label='Verification code'
                             fullWidth
                             value={code}
                             helperText={message}
