@@ -30,7 +30,7 @@ export interface MenuItemV1 {
   description?: string;
   addons?: string[],
   tags?: string[],
-  isAlchol?: boolean,
+  isAlcohol?: boolean,
   count?: number
 }
 
@@ -59,7 +59,7 @@ export const tempMenus: MenuItemV1[] = [
     price: 3,
     currentAvailable: 100,
     addons: ['Napkins', 'Ketchup'],
-    isAlchol: true
+    isAlcohol: true
   },
   {
     id: 3,

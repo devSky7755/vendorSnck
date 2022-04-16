@@ -324,7 +324,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
             }
             {
               (type !== 'Delivery' && type !== 'Pickup') &&
-              < TableCell > Order Type</TableCell>
+              < TableCell > Service Settings</TableCell>
             }
             <TableCell>
               {
@@ -433,7 +433,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                   isExpanded && group.orders.map(order => {
                     let waiting = current_time - order.created;
                     const isOrderSelected = selectedOrders.includes(order.id);
-                    const hasAlchol = order.items && order.items.find(x => x.isAlchol);
+                    const hasAlcohol = order.items && order.items.find(x => x.isAlcohol);
                     const prepare_delayed = order.status === 'Preparing' && order.duetime < Date.now();
                     const delivery_delayed = order.status === 'Ready' && order.order_type === 'Delivery' && order.duetime < Date.now();
                     const deliverying_delayed = order.status === 'Delivering' && order.order_type === 'Delivery' && order.dispatch_time < Date.now() - 10 * 60 * 1000;
@@ -470,15 +470,15 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                         <TableCell>
                           {order.item_count}
                           {
-                            hasAlchol &&
-                            <Typography variant='caption' className='border-warning alchol-label' color='#FF864E' sx={{ ml: 2, px: 1 }} gutterBottom
+                            hasAlcohol &&
+                            <Typography variant='caption' className='border-warning alcohol-label' color='#FF864E' sx={{ ml: 2, px: 1 }} gutterBottom
                               noWrap>
-                              ALCHOL
+                              ALCOHOL
                             </Typography>
                           }
                           {
                             no_item &&
-                            <Typography variant='caption' className='border-error alchol-label' color='#B00020' sx={{ ml: 2, px: 1 }} gutterBottom
+                            <Typography variant='caption' className='border-error alcohol-label' color='#B00020' sx={{ ml: 2, px: 1 }} gutterBottom
                               noWrap>
                               NO ITEM
                             </Typography>

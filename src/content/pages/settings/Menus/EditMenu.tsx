@@ -156,7 +156,7 @@ const EditMenuDialog: React.FC<EditMenuInterface> = (props) => {
                 <Box sx={{ px: 1, py: 1 }} className='border-bottom'>
                     <Grid container>
                         <Grid item xs={12}>
-                            <Checkbox size='small' checked={editing.isAlchol}></Checkbox>Alchol
+                            <Checkbox size='small' checked={editing.isAlcohol}></Checkbox>Alcohol
                         </Grid>
                     </Grid>
                 </Box>

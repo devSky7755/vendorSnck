@@ -193,10 +193,10 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
                                                     {menu.name}
                                                 </Typography>
                                                 {
-                                                    menu.isAlchol &&
-                                                    <Typography variant='caption' className='float-right border-warning alchol-label' color='#FF864E' sx={{ px: 1 }} gutterBottom
+                                                    menu.isAlcohol &&
+                                                    <Typography variant='caption' className='float-right border-warning alcohol-label' color='#FF864E' sx={{ px: 1 }} gutterBottom
                                                         noWrap>
-                                                        ALCHOL
+                                                        ALCOHOL
                                                     </Typography>
                                                 }
                                                 {

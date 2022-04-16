@@ -155,7 +155,7 @@ const OrderSettings: FC<OrdersSettingProp> = ({ token, pauseUntil, vendorStand, 
                     </Grid>
                     <Grid item xs={12} sx={{ mt: 4 }}>
                         <Typography variant='subtitle1'>
-                            Order amount per 10 min
+                          Set the total number of orders you can fulfil every 10 minutes. Don’t worry - this can be changed later!
                         </Typography>
 
                         <BorderedBox>
@@ -171,7 +171,7 @@ const OrderSettings: FC<OrdersSettingProp> = ({ token, pauseUntil, vendorStand, 
                     </Grid>
                     <Grid item xs={12} sx={{ mt: 0 }}>
                         <Typography variant='subtitle1'>
-                            Maximum orders in pickup queue
+                          Set the total number of customers you want to notify to pick up their orders at any one time.
                         </Typography>
                         <BorderedBox>
                             {

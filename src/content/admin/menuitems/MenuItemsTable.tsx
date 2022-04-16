@@ -93,7 +93,7 @@ const MenuItemsTable: FC<MenuItemsTableProps> = ({ menuItems, onAction, onSelect
               <TableCell>Category</TableCell>
               <TableCell>Tags</TableCell>
               <TableCell>Active</TableCell>
-              <TableCell>Alchol</TableCell>
+              <TableCell>Alcohol</TableCell>
               <TableCell>Featured</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
