@@ -4,22 +4,14 @@ import {
   FormControlLabel,
   FormControl,
   FormLabel,
+  ButtonGroup,
   Button,
   styled
 } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { UV_ITEMS, UV_SEL_ITEMS_CHOOSE_ACTION } from '../../contants';
+import { UV_SEL_ITEMS_CHOOSE_ACTION } from '../../contants';
 
-const NexButtonWrapper = styled(Box)(
-  ({ theme }) => `
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: 10px;
-    `
-);
-
+/*-----Step 3-----*/
 const CancelUvChooseAction = ({ setStep, selectedItems }) => {
   const [uvActionObjs, setUvActionObjs] = useState(
     UV_SEL_ITEMS_CHOOSE_ACTION.map((uva) => {
@@ -55,10 +47,20 @@ const CancelUvChooseAction = ({ setStep, selectedItems }) => {
     );
   }, [uvActionObjs]);
 
+  const prev = () => {
+    setStep({
+      value: 2,
+      payload: {
+        selectedItems
+      }
+    });
+  };
+
   const submit = () => {
     setStep({
       value: 5,
       payload: {
+        isOther: false,
         selectedItems,
         selectedActions
       }
@@ -84,16 +86,19 @@ const CancelUvChooseAction = ({ setStep, selectedItems }) => {
           );
         })}
       </FormControl>
-      <NexButtonWrapper>
+      <ButtonGroup
+        variant="contained"
+        aria-label="contained button group"
+        fullWidth
+      >
+        <Button onClick={prev}>Prev</Button>
         <Button
-          fullWidth
-          variant="contained"
           onClick={submit}
           disabled={selectedItems.length === 0 || selectedActions.length === 0}
         >
           Submit
         </Button>
-      </NexButtonWrapper>
+      </ButtonGroup>
     </>
   );
 };

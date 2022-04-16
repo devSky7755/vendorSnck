@@ -1,15 +1,77 @@
 export const ACTIONS = [
   {
-    value: 'delay-order',
-    label: 'Delay order'
+    label: 'Choose action',
+    actions: [
+      {
+        value: 'delay-order',
+        label: 'Delay order'
+      },
+      {
+        value: 're-assign',
+        label: 'Re-assign to pickup'
+      },
+      {
+        value: 'cancel-order',
+        label: 'Cancel order'
+      }
+    ]
+  }
+];
+
+export const DELIVERYING_ACTIONS = [
+  {
+    label: 'Choose action',
+    actions: [
+      {
+        value: 're-assign',
+        label: 'Re-assign to pickup'
+      }
+    ]
   },
   {
-    value: 're-assign',
-    label: 'Re-assign to pickup'
-  },
+    label: 'Cancel order',
+    actions: [
+      {
+        value: 'customer-did-not-arrive',
+        label: 'Customer did not arrive'
+      },
+      {
+        value: 'responsible-service-of-alchol-issue',
+        label: 'Responsible service of alcohol issue'
+      },
+      {
+        value: 'food-damage-or-safety-issue',
+        label: 'Food damage or safety issue'
+      },
+      {
+        value: 'other-reason-to-cancel',
+        label: 'Other reason to cancel'
+      }
+    ]
+  }
+];
+
+export const PICKUP_ACTIONS = [
   {
-    value: 'cancel-order',
-    label: 'Cancel order'
+    label: 'Cancel order',
+    actions: [
+      {
+        value: 'customer-did-not-arrive',
+        label: 'Customer did not arrive'
+      },
+      {
+        value: 'responsible-service-of-alchol-issue',
+        label: 'Responsible service of alcohol issue'
+      },
+      {
+        value: 'food-damage-or-safety-issue',
+        label: 'Food damage or safety issue'
+      },
+      {
+        value: 'other-reason-to-cancel',
+        label: 'Other reason to cancel'
+      }
+    ]
   }
 ];
 

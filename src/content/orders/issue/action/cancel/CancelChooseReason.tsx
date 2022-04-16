@@ -8,18 +8,15 @@ import {
 import { useState } from 'react';
 import { REASONS } from '../../contants';
 
+/*-----Step 1-----*/
 const CancelChooseReason = ({ setStep }) => {
   const [reason, setReason] = useState('');
 
   const handleChangeReason = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value: any = (event.target as HTMLInputElement).value;
     setReason(value);
-    let stepVal = 2;
-    if (value === REASONS[1].value) {
-      stepVal = 4;
-    }
     setStep({
-      value: stepVal,
+      value: value === REASONS[0].value ? 2 : 4,
       payload: {}
     });
   };

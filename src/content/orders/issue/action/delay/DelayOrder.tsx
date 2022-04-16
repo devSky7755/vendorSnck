@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { DELAYS } from '../contants';
+import { DELAYS } from '../../contants';
 
 const DelayOrder = ({}) => {
   const navigate = useNavigate();

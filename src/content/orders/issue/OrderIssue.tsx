@@ -17,7 +17,15 @@ import {
 import Footer from 'src/components/Footer';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Order, temp_orders } from 'src/models/order';
 import { ACTIONS } from './index';
+import { DELIVERYING_ACTIONS, PICKUP_ACTIONS } from './contants';
+
+const ContentWrapper = styled(Container)(
+  ({ theme }) => `
+    min-height: calc(100% - 72px);
+  `
+);
 
 const FlexBox = styled(Box)(
   ({ theme }) => `
@@ -30,6 +38,23 @@ const OrderIssue = ({}) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [action, setAction] = useState();
+  const order = temp_orders.find((order: Order) => order.id === parseInt(id));
+  const getActions = () => {
+    if (order.status === 'New') return ACTIONS;
+    if (order.status === 'Preparing') return ACTIONS;
+    if (
+      (order.status === 'Ready' && order.order_type === 'Delivery') ||
+      order.status === 'Delivering'
+    ) {
+      return DELIVERYING_ACTIONS;
+    }
+    if (
+      (order.status === 'Ready' && order.order_type === 'Pickup') ||
+      order.status === 'Waitlist'
+    ) {
+      return PICKUP_ACTIONS;
+    }
+  };
 
   const handleChangeAction = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value: any = (event.target as HTMLInputElement).value;
@@ -52,18 +77,21 @@ const OrderIssue = ({}) => {
           </Typography>
         </FlexBox>
       </PageTitleWrapper>
-      <Container maxWidth="sm">
-        <Grid container spacing={2}>
-          <Grid item xs={12} sx={{ mt: 4 }}>
+      <ContentWrapper
+        maxWidth="sm"
+        sx={{ pt: 4, display: 'flex', flexDirection: 'column' }}
+      >
+        {getActions().map((actType, key) => {
+          return (
             <FormControl>
-              <FormLabel id="choose-action-group">Choose action</FormLabel>
+              <FormLabel id="choose-action-group">{actType.label}</FormLabel>
               <RadioGroup
                 aria-labelledby="choose-action-group"
                 name="radio-actions-group"
                 value={action}
                 onChange={handleChangeAction}
               >
-                {ACTIONS.map((actionObj, key) => {
+                {actType?.actions.map((actionObj, key) => {
                   return (
                     <FormControlLabel
                       key={key}
@@ -74,10 +102,11 @@ const OrderIssue = ({}) => {
                   );
                 })}
               </RadioGroup>
+              <hr />
             </FormControl>
-          </Grid>
-        </Grid>
-      </Container>
+          );
+        })}
+      </ContentWrapper>
       <Footer />
     </>
   );

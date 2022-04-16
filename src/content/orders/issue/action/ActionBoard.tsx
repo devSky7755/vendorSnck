@@ -11,9 +11,16 @@ import {
 } from '@mui/material';
 import Footer from 'src/components/Footer';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ACTIONS } from '../contants';
-import DelayOrder from './DelayOrder';
-import { CancelOrder } from './cancel';
+import { ACTIONS, DELIVERYING_ACTIONS, PICKUP_ACTIONS } from '../contants';
+import { DelayOrder } from './delay';
+import { CancelOrderBoard } from './cancel';
+import { Order, temp_orders } from 'src/models/order';
+
+const ContentWrapper = styled(Container)(
+  ({ theme }) => `
+    min-height: calc(100% - 72px);
+  `
+);
 
 const FlexBox = styled(Box)(
   ({ theme }) => `
@@ -21,19 +28,53 @@ const FlexBox = styled(Box)(
     flex-direction: row;
     `
 );
+const getPathAction = (type, actionsWrapper, action) => {
+  let res = null;
+  actionsWrapper.forEach((aw) => {
+    aw.actions.forEach((act) => {
+      if (act.value === action)
+        res = {
+          type,
+          action: act
+        };
+    });
+  });
+  return res;
+};
 
 const ActionBoard = ({}) => {
-  const { action } = useParams();
-  const actionObj = ACTIONS.find((actionIt) => {
-    return actionIt.value === action;
-  });
+  const { id, action } = useParams();
+
+  const order = temp_orders.find((order: Order) => order.id === parseInt(id));
+  const getActionObj = () => {
+    if (order.status === 'New') {
+      return getPathAction('New', ACTIONS, action);
+    }
+    if (order.status === 'Preparing') {
+      return getPathAction('Preparing', ACTIONS, action);
+    }
+    if (
+      (order.status === 'Ready' && order.order_type === 'Delivery') ||
+      order.status === 'Delivering'
+    ) {
+      return getPathAction('Delivering', DELIVERYING_ACTIONS, action);
+    }
+    if (
+      (order.status === 'Ready' && order.order_type === 'Pickup') ||
+      order.status === 'Waitlist'
+    ) {
+      return getPathAction('Pickup', PICKUP_ACTIONS, action);
+    }
+  };
+
+  console.log(getActionObj());
   const navigate = useNavigate();
 
   return (
-    actionObj && (
+    getActionObj() && (
       <>
         <Helmet>
-          <title>{actionObj.label}</title>
+          <title>{getActionObj()?.action?.label}</title>
         </Helmet>
         <PageTitleWrapper>
           <FlexBox sx={{ alignItems: 'center' }}>
@@ -41,18 +82,19 @@ const ActionBoard = ({}) => {
               <KeyboardArrowLeftIcon />
             </IconButton>
             <Typography variant="h5" component="h5" sx={{ py: 0.5 }}>
-              {actionObj.label}
+              {getActionObj()?.action?.label}
             </Typography>
           </FlexBox>
         </PageTitleWrapper>
-        <Container maxWidth="sm">
-          <Grid container spacing={2}>
-            <Grid item xs={12} sx={{ mt: 4 }}>
-              {actionObj.value === ACTIONS[0].value && <DelayOrder />}
-              {actionObj.value === ACTIONS[2].value && <CancelOrder />}
-            </Grid>
-          </Grid>
-        </Container>
+        <ContentWrapper
+          maxWidth="sm"
+          sx={{ pt: 4, display: 'flex', flexDirection: 'column' }}
+        >
+          {getActionObj()?.action?.value === 'delay-order' && <DelayOrder />}
+          {getActionObj()?.action?.value === 'cancel-order' && (
+            <CancelOrderBoard />
+          )}
+        </ContentWrapper>
         <Footer />
       </>
     )

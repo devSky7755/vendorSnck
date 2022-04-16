@@ -4,6 +4,7 @@ import {
   FormControlLabel,
   FormControl,
   FormLabel,
+  ButtonGroup,
   Button,
   styled
 } from '@mui/material';
@@ -20,9 +21,20 @@ const NexButtonWrapper = styled(Box)(
     `
 );
 
-const CancelUvSelItems = ({ setStep }) => {
+/*-----Step 2-----*/
+const CancelUvSelItems = ({ setStep, selectedItems }) => {
   const [uvObjs, setUvObjs] = useState(
     UV_ITEMS.map((uv) => {
+      if (
+        selectedItems.find((si) => {
+          return si.value === uv.value;
+        })
+      ) {
+        return {
+          checked: true,
+          ...uv
+        };
+      }
       return {
         checked: false,
         ...uv
@@ -30,7 +42,7 @@ const CancelUvSelItems = ({ setStep }) => {
     })
   );
 
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selItems, setSelItems] = useState([]);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -49,18 +61,25 @@ const CancelUvSelItems = ({ setStep }) => {
   };
 
   useEffect(() => {
-    setSelectedItems(
+    setSelItems(
       uvObjs.filter((obj) => {
         return obj.checked;
       })
     );
   }, [uvObjs]);
 
+  const goPrevStep = () => {
+    setStep({
+      value: 1,
+      payload: {}
+    });
+  };
+
   const goNextStep = () => {
     setStep({
       value: 3,
       payload: {
-        selectedItems
+        selectedItems: selItems
       }
     });
   };
@@ -84,16 +103,16 @@ const CancelUvSelItems = ({ setStep }) => {
           );
         })}
       </FormControl>
-      <NexButtonWrapper>
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={goNextStep}
-          disabled={selectedItems.length === 0}
-        >
+      <ButtonGroup
+        variant="contained"
+        aria-label="contained button group"
+        fullWidth
+      >
+        <Button onClick={goPrevStep}>Prev</Button>
+        <Button onClick={goNextStep} disabled={selItems.length === 0}>
           Next
         </Button>
-      </NexButtonWrapper>
+      </ButtonGroup>
     </>
   );
 };
