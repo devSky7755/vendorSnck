@@ -1,15 +1,13 @@
 import { Helmet } from 'react-helmet-async';
 import { Box, styled } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { VenueDistributionArea as VenueArea } from 'src/models/venue';
 import VenueAreasTable from './VenueAreaTable';
 import EditVenueAreaDialog from './EditVenueArea';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
-//import { patchVenueAreaStand, postVenueAreaStand, deleteVenueAreaStand } from 'src/Api/apiClient';
-import DeleteVenueAreaDialog from './DeleteVenueArea';
 import { Venue } from 'src/models/venue';
-import { getVenue } from 'src/Api/apiClient';
+import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -101,9 +99,13 @@ function VenueAreasPage(props: VenueAreasPageProps) {
       }
       {
         deleteOpen && editing &&
-        <DeleteVenueAreaDialog
+        <ConfirmDialog
           success='Remove'
           cancel='Cancel Remove'
+          successLabel='REMOVE'
+          cancelLabel='RETURN'
+          text='It cannot be recovered'
+          header='Are you sure you want to delete this distribution area?'
           open={deleteOpen}
           onAction={onAction}
         />
