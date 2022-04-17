@@ -62,7 +62,7 @@ function OnboardingQueue({ vendorStandId, token }) {
     return (
         <OnboardingWrapper>
             <Helmet>
-                <title>Queue Setting</title>
+                <title>Queue settings</title>
             </Helmet>
             <Container maxWidth='sm'>
                 <Box sx={{ mt: 10 }}>
@@ -70,16 +70,12 @@ function OnboardingQueue({ vendorStandId, token }) {
                 </Box>
                 <Card sx={{ p: 8, pb: 4, mt: 4, mb: 4, borderRadius: 0 }}>
                     <Typography sx={{ mb: 2 }} variant="h1">
-                        Queue Setting
-                    </Typography>
-                    <Typography component="span" variant="body1">
-                        Setup the amount of orders you<br />
-                        can accept per 10 minutes.
+                        Queue settings
                     </Typography>
                     {
                         vendor &&
                         <PhoneWrapper sx={{ mt: 3 }}>
-                            <InputSlider label='Order amount per 10 min' maxValue={30} defaultValue={vendor.orderCapacity}
+                            <InputSlider label='Set the total number of orders you can fulfil every 10 minutes. Don’t worry - this can be changed later!' maxValue={30} defaultValue={vendor.orderCapacity}
                                 onChange={v => {
                                     setVendor({
                                         ...vendor,
@@ -93,7 +89,7 @@ function OnboardingQueue({ vendorStandId, token }) {
                     {
                         vendor &&
                         <PhoneWrapper>
-                            <InputSlider label='Maximum orders in pickup queue' maxValue={30} defaultValue={vendor.pickupQueueCapacity}
+                            <InputSlider label='Set the total number of customers you want to notify to pick up their orders at any one time.' maxValue={30} defaultValue={vendor.pickupQueueCapacity}
                                 onChange={v => {
                                     setVendor({
                                         ...vendor,

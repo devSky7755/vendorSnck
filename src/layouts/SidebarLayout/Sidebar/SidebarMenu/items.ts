@@ -88,7 +88,11 @@ const adminMenuItems: MenuItems[] = [
       },
       {
         name: 'Vendor Stands',
-        link: '/vendorStands',
+        link: '/vendorstands',
+      },
+      {
+        name: 'Menu Items',
+        link: '/menuitems',
       },
       {
         name: 'Staff',

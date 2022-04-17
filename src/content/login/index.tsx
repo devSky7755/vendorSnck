@@ -233,7 +233,7 @@ function LoginPage({ token, lastLoggedIn, login }) {
                                 showVerify ? (
                                     <Card sx={{ p: 8, mt: 4, mb: 10, borderRadius: 0 }}>
                                         <Typography sx={{ mb: 2 }} variant="h1">
-                                            2-Step Verification
+                                            2-step verification
                                         </Typography>
                                         <Typography sx={{ mb: 2 }} variant="body1">
                                             A text message with a verificiation code<br />
@@ -242,7 +242,7 @@ function LoginPage({ token, lastLoggedIn, login }) {
                                         <PhoneWrapper>
                                             <TextField
                                                 variant='outlined'
-                                                label='Verification Code'
+                                                label='Verification code'
                                                 fullWidth
                                                 value={code}
                                                 helperText={codeHelperText}
@@ -268,7 +268,7 @@ function LoginPage({ token, lastLoggedIn, login }) {
                                         </Typography>
                                         <Typography sx={{ mb: 2 }} variant="body1">
                                             Let’s make sure it’s really you.<br />
-                                            Your phone number will be used for 2-Step Verification.
+                                            Your phone number will be used for 2-step verification.
                                         </Typography>
                                         <PhoneWrapper>
                                             <MuiPhoneNumber

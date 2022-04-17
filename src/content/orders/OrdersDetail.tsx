@@ -13,7 +13,7 @@ import {
 
 import { Order } from 'src/models/order';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import { MenuItem } from 'src/models/menu_item';
+import { MenuItemV1 as MenuItem } from 'src/models/menu_item';
 import CloseIcon from '@mui/icons-material/Close';
 
 interface OrdersDetailProps {

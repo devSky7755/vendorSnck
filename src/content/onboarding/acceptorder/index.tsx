@@ -27,7 +27,7 @@ const StyledDivider = styled(Divider)(
     `
 );
 
-const steps = ['Order Type', 'Queue Setting', 'Accept Orders'];
+const steps = ['Service Settings', 'Queue Setting', 'Accept Orders'];
 
 function OnboardingAcceptOrder() {
     const navigate = useNavigate();
@@ -45,19 +45,20 @@ function OnboardingAcceptOrder() {
                         Hot Dog Stand is set up!
                     </Typography>
                     <Typography component="span" variant="body1">
-                        Your venue is available for online orders.<br />
-                        Next we recommend to:
+                        Your vendor is now available for online orders.<br />
+                        Complete your set up by adding team members or reviewing your menu.<br />
+                        Otherwise, start accepting orders now!
                     </Typography>
                     <PhoneWrapper sx={{ pt: 3 }}>
                         <Button color='primary' style={{ textTransform: 'none' }} onClick={() => {
                             navigate('/settings/users');
-                        }}><Typography component="span" variant="subtitle1">Add your team member</Typography></Button>
+                        }}><Typography component="span" variant="subtitle1">Add team members</Typography></Button>
                     </PhoneWrapper>
                     <StyledDivider />
                     <PhoneWrapper>
                         <Button style={{ textTransform: 'none' }} onClick={() => {
                             navigate('/settings/menus');
-                        }} color='primary'><Typography component="span" variant="subtitle1">Review your menu</Typography></Button>
+                        }} color='primary'><Typography component="span" variant="subtitle1">Review menu</Typography></Button>
                     </PhoneWrapper>
                     <PhoneWrapper sx={{ pt: 3 }}>
                         <Button variant='contained' color='primary' fullWidth

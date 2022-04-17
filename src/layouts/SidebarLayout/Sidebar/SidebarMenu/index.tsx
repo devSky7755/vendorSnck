@@ -57,7 +57,7 @@ const SubMenuWrapper = styled(List)(
           position: relative;
           border-radius: 0;
 
-          .MuiBadge-root {
+          .BaseBadge-root {
             position: absolute;
             right: ${theme.spacing(4)};
             

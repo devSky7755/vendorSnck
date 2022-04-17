@@ -1,5 +1,5 @@
 import { Customer } from "./customer";
-import { MenuItem, tempMenus } from "./menu_item";
+import { MenuItemV1, tempMenus } from "./menu_item";
 import { TeamUser, tempUsers } from "./team_user";
 
 export type OrderType = 'Delivery' | 'Pickup';
@@ -9,7 +9,7 @@ export interface Order {
     id: number;
     order_type: OrderType;
     item_count: number;
-    items: MenuItem[];
+    items: MenuItemV1[];
     status: OrderStatus;
     created: number;
     duetime: number;

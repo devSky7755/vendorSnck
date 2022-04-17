@@ -8,7 +8,7 @@ import {
     Typography,
 } from '@mui/material';
 
-import { MenuItem as MenuItemModel } from 'src/models/menu_item';
+import { MenuItemV1 as MenuItemModel } from 'src/models/menu_item';
 
 import CloseIcon from '@mui/icons-material/Close';
 

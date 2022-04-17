@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { deleteVenue, patchVenue, updateVenue } from 'src/reducers/venues/action';
 import BulkActions from './BulkActions';
 import { patchVenue as patchVenueAPI, postVenue, deleteVenue as deleteVenueAPI } from 'src/Api/apiClient';
-import DeleteVenueDialog from './DeleteVenue';
+import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -146,7 +146,11 @@ function VenuesPage(props: VenuesPageProps) {
       }
       {
         deleteOpen && editing &&
-        <DeleteVenueDialog
+        <ConfirmDialog
+          successLabel='DELETE'
+          cancelLabel='RETURN'
+          text='It cannot be recovered'
+          header='Are you sure you want to delete this venue?'
           success='Remove'
           cancel='Cancel Remove'
           open={deleteOpen}

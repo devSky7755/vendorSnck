@@ -1,6 +1,6 @@
 export type MenuItemStatus = 'Available' | 'Not Available';
 
-export interface MenuItemV1 {
+export interface MenuItem {
   id: string;
   name: string;
   description: string;
@@ -15,10 +15,12 @@ export interface MenuItemV1 {
   suggestedMenuItemIds: any[];
   createdAt: Date;
   updatedAt: Date;
+  deletedAt?: Date;
+  tags?: string[];
   menuItemCategoryId?: any;
 }
 
-export interface MenuItem {
+export interface MenuItemV1 {
   id: number;
   name: string;
   price: number;
@@ -28,11 +30,11 @@ export interface MenuItem {
   description?: string;
   addons?: string[],
   tags?: string[],
-  isAlchol?: boolean,
+  isAlcohol?: boolean,
   count?: number
 }
 
-export const tempMenus: MenuItem[] = [
+export const tempMenus: MenuItemV1[] = [
   {
     id: 0,
     name: 'Soda',
@@ -57,7 +59,7 @@ export const tempMenus: MenuItem[] = [
     price: 3,
     currentAvailable: 100,
     addons: ['Napkins', 'Ketchup'],
-    isAlchol: true
+    isAlcohol: true
   },
   {
     id: 3,

@@ -7,9 +7,10 @@ import EditVendorDialog from './EditVendor';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
 import { patchVendorStand, postVendorStand, deleteVendorStand } from 'src/Api/apiClient';
-import DeleteVendorDialog from './DeleteVendor';
 import { Venue } from 'src/models/venue';
 import { getVenue } from 'src/Api/apiClient';
+import { useNavigate } from 'react-router';
+import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -43,7 +44,6 @@ interface VendorsPageProps {
 
 function VendorsPage(props: VendorsPageProps) {
   const { token, venues } = props;
-
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -51,21 +51,26 @@ function VendorsPage(props: VendorsPageProps) {
 
   const [selectedVendors, setSelectedVendors] = useState<Vendor[]>([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     loadVendors();
   }, [venues]);
 
   const loadVendors = () => {
     setVendors([]);
+    let promises = [];
     venues && venues.forEach(venue => {
-      getVenue(venue.id).then(res => {
-        if (res && res.vendorStands) {
-          setVendors(prev => [...prev, ...res.vendorStands]);
-        }
+      promises.push(getVenue(venue.id));
+    });
+    Promise.all(promises).then(res => {
+      let all_vendors = [];
+      res.forEach(x => {
+        if (x.vendorStands) all_vendors = [...all_vendors, ...x.vendorStands];
       })
+      setVendors(all_vendors);
     });
   }
-
 
   const onAction = (action, data) => {
     if (action === 'Edit') {
@@ -91,6 +96,9 @@ function VendorsPage(props: VendorsPageProps) {
       setDeleteOpen(false);
       handleDelete(editing);
       setEditing(null);
+    } else if (action === 'Manage Staff') {
+    } else if (action === 'Manage Menu') {
+      navigate('/menuitems/' + data.id);
     }
   }
 
@@ -169,9 +177,13 @@ function VendorsPage(props: VendorsPageProps) {
       }
       {
         deleteOpen && editing &&
-        <DeleteVendorDialog
+        <ConfirmDialog
           success='Remove'
+          successLabel='DELETE'
+          cancelLabel='RETURN'
           cancel='Cancel Remove'
+          header='Are you sure you want to delete this vendor?'
+          text='It cannot be recovered'
           open={deleteOpen}
           onAction={onAction}
         />

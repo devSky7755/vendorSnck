@@ -3,7 +3,7 @@ import { useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
-import { MenuItem as MenuItemModel } from 'src/models/menu_item';
+import { MenuItemV1 as MenuItemModel } from 'src/models/menu_item';
 import { Box, Button, Checkbox, DialogActions, Grid, IconButton, MenuItem, Switch, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckboxMultiSelect from 'src/components/MultiSelect/CheckboxSelect';
@@ -156,7 +156,7 @@ const EditMenuDialog: React.FC<EditMenuInterface> = (props) => {
                 <Box sx={{ px: 1, py: 1 }} className='border-bottom'>
                     <Grid container>
                         <Grid item xs={12}>
-                            <Checkbox size='small' checked={editing.isAlchol}></Checkbox>Alchol
+                            <Checkbox size='small' checked={editing.isAlcohol}></Checkbox>Alcohol
                         </Grid>
                     </Grid>
                 </Box>

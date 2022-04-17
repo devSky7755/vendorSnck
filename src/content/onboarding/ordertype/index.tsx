@@ -31,7 +31,7 @@ const StyledDivider = styled(Divider)(
     `
 );
 
-const steps = ['Order Type', 'Queue Setting', 'Accept Orders'];
+const steps = ['Service Settings', 'Queue Setting', 'Accept Orders'];
 
 function OnboardingOrderType({ vendorStandId, token }) {
     const navigate = useNavigate();
@@ -58,7 +58,7 @@ function OnboardingOrderType({ vendorStandId, token }) {
     return (
         <OnboardingWrapper>
             <Helmet>
-                <title>Order Types</title>
+                <title>Service Settings</title>
             </Helmet>
             <Container maxWidth='sm'>
                 <Box sx={{ mt: 10 }}>
@@ -66,11 +66,11 @@ function OnboardingOrderType({ vendorStandId, token }) {
                 </Box>
                 <Card sx={{ p: 8, mt: 4, mb: 10, borderRadius: 0 }}>
                     <Typography sx={{ mb: 2 }} variant="h1">
-                        Login Successful!
+                        Login successful!
                     </Typography>
                     <Typography component="span" variant="body1">
-                        Setup your location <b>{vendor && vendor.name}</b><br />
-                        to start accepting order
+                        Set up your vendor stand <b>{vendor && vendor.name}</b><br />
+                        to start accepting orders
                     </Typography>
                     <PhoneWrapper sx={{ mt: 3 }}>
                         <Switch checked={vendor && vendor.pickupAvailable} onChange={e => {
@@ -78,7 +78,7 @@ function OnboardingOrderType({ vendorStandId, token }) {
                                 ...vendor,
                                 pickupAvailable: e.target.checked
                             })
-                        }}></Switch><Typography component="span" variant="body1"> Accept Pickup Orders</Typography>
+                        }}></Switch><Typography component="span" variant="body1"> Accept pickup orders</Typography>
                     </PhoneWrapper>
                     <StyledDivider />
                     <PhoneWrapper>
@@ -87,7 +87,7 @@ function OnboardingOrderType({ vendorStandId, token }) {
                                 ...vendor,
                                 deliveryAvailable: e.target.checked
                             })
-                        }}></Switch><Typography component="span" variant="body1"> Accept Delivery Orders</Typography>
+                        }}></Switch><Typography component="span" variant="body1"> Accept delivery orders</Typography>
                     </PhoneWrapper>
                     <PhoneWrapper>
                         <Button variant='contained' color='primary' fullWidth onClick={handleNext}>Next</Button>

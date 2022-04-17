@@ -7,7 +7,7 @@ import Footer from 'src/components/Footer';
 import OrderStatuses from './OrderStatuses';
 import EventSelector from './EventSelector';
 import TotalSales from './TotalSales';
-import { MenuItem } from 'src/models/menu_item';
+import { MenuItemV1 } from 'src/models/menu_item';
 import TopItemsTable from './TopItemsTable';
 import { Link } from 'react-router-dom';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -16,7 +16,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { TeamUser } from 'src/models/team_user';
 import TopRunnersTable from './TopRunnersTable';
 
-const temp_top_items: MenuItem[] = [
+const temp_top_items: MenuItemV1[] = [
   {
     id: 0,
     name: 'Soda',
