@@ -8,6 +8,8 @@ const AuthEndPoint = isVendorApp ? 'auth/staff/login' : 'auth/admin/login';
 const VenuesEndpoint = 'venues';
 const VendorStandEndpoint = 'vendorStands/'
 
+
+///Authentication
 export function postAuthentication(phone: string): Promise<ApiResponse> {
     return fetch(BASE_URL + VerifyEndPoint, {
         method: 'POST',
@@ -34,6 +36,7 @@ export function postLogin(phone: string, code: string): Promise<ApiResponse> {
     })
 }
 
+///Venues
 export function getVenues(): Promise<Venue[]> {
     return fetch(BASE_URL + VenuesEndpoint).then(res => res.json()).then(res => {
         if (res.success) {
@@ -107,6 +110,8 @@ export function deleteVenue(token: string, id: string): Promise<boolean> {
     })
 }
 
+
+///Vendor Stand
 export function getVendorStand(id): Promise<VendorStand> {
     return fetch(BASE_URL + VendorStandEndpoint + id).then(res => res.json()).then(res => {
         if (res.success) {

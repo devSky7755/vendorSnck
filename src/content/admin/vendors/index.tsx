@@ -9,8 +9,8 @@ import BulkActions from './BulkActions';
 import { patchVendorStand, postVendorStand, deleteVendorStand } from 'src/Api/apiClient';
 import { Venue } from 'src/models/venue';
 import { getVenue } from 'src/Api/apiClient';
-import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 import { useNavigate } from 'react-router';
+import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
