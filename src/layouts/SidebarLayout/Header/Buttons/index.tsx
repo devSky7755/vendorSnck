@@ -18,8 +18,12 @@ function GetPageTitle(pathname) {
       return 'Venues';
     case '/vendorstands':
       return 'Vendors';
+    case '/menuitems':
+      return 'Menu Items';
+      case '/staffs':
+      return 'Staff';
     default:
-      return ''
+      return '';
   }
 }
 
