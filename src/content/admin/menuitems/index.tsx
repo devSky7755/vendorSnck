@@ -71,7 +71,7 @@ function MenuItemsPage(props: MenuItemsPageProps) {
     } else {
 
     }
-  });
+  }, []);
 
   const onAction = (action, data) => {
     if (action === 'Edit') {
