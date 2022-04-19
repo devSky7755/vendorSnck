@@ -25,14 +25,14 @@ import {
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Label from 'src/components/Label';
-import { TeamUser, UserRole, TeamUserStatus } from 'src/models/team_user';
+import { Staff, UserRole, TeamUserStatus } from 'src/models/staff';
 
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
 interface UsersTableProps {
   className?: string;
-  users: TeamUser[];
+  users: Staff[];
   onEditingUser: Function;
   user_role?: UserRole;
   search?: string;
@@ -50,9 +50,9 @@ const getStatusLabel = (userStatus: TeamUserStatus): JSX.Element => {
 };
 
 const applyFilters = (
-  users: TeamUser[],
+  users: Staff[],
   filters: Filters
-): TeamUser[] => {
+): Staff[] => {
   return users.filter((user) => {
     let matches = true;
 
@@ -137,7 +137,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
     setAnchorEl(event.currentTarget);
   };
 
-  const handleCloseAction = (action: string, user: TeamUser) => {
+  const handleCloseAction = (action: string, user: Staff) => {
     setAnchorEl(null);
     if (action === 'Edit') {
       onEditingUser(user);
@@ -196,7 +196,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
 
   const handleSelectOneGroup = (
     event: ChangeEvent<HTMLInputElement>,
-    filtered: TeamUser[]
+    filtered: Staff[]
   ): void => {
     if (event.target.checked) {
       const user_ids = filtered.map(x => x.id);
@@ -218,7 +218,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
   const selectedAllUsers =
     selectedUsers.length === users.length;
 
-  const renderUsers = (fusers: TeamUser[], role: UserRole) => {
+  const renderUsers = (fusers: Staff[], role: UserRole) => {
     const filtered = fusers.filter(x => x.role === role);
     if (filtered.length === 0) {
       return (<></>);

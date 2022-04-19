@@ -3,7 +3,7 @@ import { useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
-import { TeamUser } from 'src/models/team_user';
+import { Staff } from 'src/models/staff';
 import { Box, Button, Checkbox, DialogActions, Grid, IconButton, MenuItem, Switch, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import MuiPhoneNumber from 'material-ui-phone-number';
@@ -12,7 +12,7 @@ import MuiPhoneNumber from 'material-ui-phone-number';
 interface EditUserInterface {
     onClose: Function,
     open: boolean,
-    user?: TeamUser,
+    user?: Staff,
 };
 
 const UserRoles = [

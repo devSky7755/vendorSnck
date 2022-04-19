@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { TeamUser } from 'src/models/team_user';
+import { Staff } from 'src/models/staff';
 import TopRunnersTable from './TopRunnersTable';
 
 const temp_top_items: MenuItemV1[] = [
@@ -67,7 +67,7 @@ const temp_top_items: MenuItemV1[] = [
   }
 ];
 
-const temp_runners: TeamUser[] = [
+const temp_runners: Staff[] = [
   {
     id: 52,
     role: 'Runner',

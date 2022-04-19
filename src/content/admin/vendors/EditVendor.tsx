@@ -46,7 +46,7 @@ const EditVendorDialog: React.FC<EditVendorInterface> = (props) => {
     return (
         <Dialog onClose={() => {
             onAction('Close');
-        }} open={open} PaperProps={{ style: { width: 1280, maxWidth: 1280 } }}>
+        }} open={open} PaperProps={{ style: { width: 1280, maxWidth: 640 } }}>
             <DialogTitle className='border-bottom d-flex' sx={{ px: 2, py: 1 }}>
                 <Typography component='span' variant='h6'>Edit Vendor</Typography>
                 <IconButton className='float-right' sx={{ p: 0 }} size='small' onClick={() => {
@@ -152,18 +152,21 @@ const EditVendorDialog: React.FC<EditVendorInterface> = (props) => {
                         </Grid>
                     </Grid>
                 </Box>
-                <Box sx={{ px: 2, py: 2 }} className='border-bottom'>
-                    <Grid item xs={6} md={3}>
-                        <Button color='primary' size='small' onClick={e => {
-                            onAction('Manage Staff', editing);
-                        }}>Manage Staff</Button>
-                    </Grid>
-                    <Grid item xs={6} md={9}>
-                        <Button color='primary' size='small' onClick={e => {
-                            onAction('Manage Menu', editing);
-                        }}>Manage Menu Items</Button>
-                    </Grid>
-                </Box>
+                {
+                    editing.id &&
+                    <Box sx={{ px: 2, py: 2 }} className='border-bottom'>
+                        <Grid item xs={6} md={3}>
+                            <Button color='primary' size='small' onClick={e => {
+                                onAction('Manage Staff', editing);
+                            }}>Manage Staff</Button>
+                        </Grid>
+                        <Grid item xs={6} md={9}>
+                            <Button color='primary' size='small' onClick={e => {
+                                onAction('Manage Menu', editing);
+                            }}>Manage Menu Items</Button>
+                        </Grid>
+                    </Box>
+                }
             </Box>
             <DialogActions sx={{ py: 2 }}>
                 {

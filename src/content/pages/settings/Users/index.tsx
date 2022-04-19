@@ -5,7 +5,7 @@ import { Box, styled, TextField, InputAdornment, Card } from '@mui/material';
 import Footer from 'src/components/Footer';
 import { useEffect, useState } from 'react';
 import SearchTwoTone from '@mui/icons-material/SearchTwoTone';
-import { TeamUser, tempUsers } from 'src/models/team_user';
+import { Staff, tempUsers } from 'src/models/staff';
 import UsersTable from './UsersTable';
 import EditUserDialog from './EditUser';
 import { useLocation } from 'react-router';
@@ -37,7 +37,7 @@ function UsersSetting() {
   const [searchStr, setSearchString] = useState(null);
   const [editOpen, setEditOpen] = useState<boolean>(false);
   const [editing, setEditing] = useState(null);
-  const [users, setUsers] = useState<TeamUser[]>(tempUsers);
+  const [users, setUsers] = useState<Staff[]>(tempUsers);
   const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import MenuItemsTable from './MenuItemsTable';
 import EditMenuItemDialog from './EditMenuItem';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
-//import { patchMenuItem, postMenuItem, deleteMenuItem } from 'src/Api/apiClient';
+import { patchMenuItem, postMenuItem, deleteMenuItem } from 'src/Api/apiClient';
 import { getVendorStand } from 'src/Api/apiClient';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 import { useNavigate, useParams } from 'react-router';
@@ -88,7 +88,7 @@ function MenuItemsPage(props: MenuItemsPageProps) {
       setEditing(data);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      setEditing({ available: false, deliveryAvailable: false, pickupAvailable: false });
+      setEditing({ available: false });
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);
@@ -108,12 +108,11 @@ function MenuItemsPage(props: MenuItemsPageProps) {
     delete patch.createdAt;
     delete patch.deletedAt;
     delete patch.vendorStandId;
-    delete patch.suggestedMenuItemIds;
+    delete patch.tags;
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 
     if (menuItem.id) {
-      /*
-      patchMenuItem(token, menuItem, patch).then(res => {
+      patchMenuItem(token, vendorId, menuItem, patch).then(res => {
         let newMenuItems = [...menuItems];
         let index = newMenuItems.findIndex(x => x.id === menuItem.id);
         if (index >= 0) {
@@ -123,27 +122,22 @@ function MenuItemsPage(props: MenuItemsPageProps) {
       }).catch(ex => {
         console.log(ex.message);
       })
-      */
     } else {
-      /*
-      postMenuItem(token, patch).then(res => {
+      postMenuItem(token, vendorId, patch).then(res => {
         setMenuItems(prev => [...prev, res]);
       }).catch(ex => {
         console.log(ex.message);
       })
-      */
     }
   }
 
   const handleDelete = (menuItem) => {
-    /*
-    deleteMenuItem(token, menuItem.id).then(success => {
+    deleteMenuItem(token, menuItem).then(success => {
       if (success) {
         let filtered = menuItems.filter(x => x.id !== menuItem.id);
         setMenuItems(filtered);
       }
     })
-    */
   }
 
   const handleSelectionChanged = (selectedIDs) => {

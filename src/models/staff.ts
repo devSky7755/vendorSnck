@@ -1,7 +1,7 @@
 export type TeamUserStatus = 'Active' | 'Not Active';
 export type UserRole = 'Admin' | 'Runner' | 'Packer';
 
-export interface TeamUser {
+export interface Staff {
   id: number;
   role: UserRole;
   email?: string;
@@ -18,7 +18,7 @@ export interface TeamUser {
 }
 
 
-export const tempUsers: TeamUser[] = [
+export const tempUsers: Staff[] = [
   {
     id: 52,
     role: 'Runner',

@@ -56,7 +56,7 @@ const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
             </DialogTitle>
             <Box>
                 <Box sx={{ p: 1 }} style={{ background: '#0000000A' }}>
-                    <Switch checked={editing.available} onChange={e => {
+                    <Switch checked={editing.available || false} onChange={e => {
                         setEditingMenuItem({
                             ...editing,
                             available: e.target.checked
@@ -182,7 +182,7 @@ const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
                     </Box>
                     <Grid container spacing={2}>
                         <Grid item xs={6} md={3}>
-                            <Switch checked={editing.containsAlcohol} onChange={e => {
+                            <Switch checked={editing.containsAlcohol || false} onChange={e => {
                                 setEditingMenuItem({
                                     ...editing,
                                     containsAlcohol: e.target.checked
@@ -190,7 +190,7 @@ const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
                             }}></Switch>Alcohol
                         </Grid>
                         <Grid item xs={6} md={9}>
-                            <Switch checked={editing.mostPopular} onChange={e => {
+                            <Switch checked={editing.mostPopular || false} onChange={e => {
                                 setEditingMenuItem({
                                     ...editing,
                                     mostPopular: e.target.checked

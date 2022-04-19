@@ -11,11 +11,11 @@ import {
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CloseIcon from '@mui/icons-material/Close';
-import { TeamUser } from 'src/models/team_user';
+import { Staff } from 'src/models/staff';
 
 interface TopRunnersTableProps {
     className?: string;
-    runners: TeamUser[];
+    runners: Staff[];
 }
 
 const TopRunnersTable: FC<TopRunnersTableProps> = ({ runners }) => {

@@ -1,6 +1,6 @@
 import { Customer } from "./customer";
 import { MenuItemV1, tempMenus } from "./menu_item";
-import { TeamUser, tempUsers } from "./team_user";
+import { Staff, tempUsers } from "./staff";
 
 export type OrderType = 'Delivery' | 'Pickup';
 export type OrderStatus = 'New' | 'Preparing' | 'Ready' | 'Delivering' | 'Waitlist' | 'Completed' | 'Issued'
@@ -16,7 +16,7 @@ export interface Order {
     user_notified?: number;
     dispatch_time?: number;
     customer: Customer;
-    delivery_person?: TeamUser;
+    delivery_person?: Staff;
 }
 
 export const temp_orders: Order[] = [
