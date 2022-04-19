@@ -7,6 +7,7 @@ import BulkActions from './BulkActions';
 import { temp_orders } from 'src/models/order';
 import OrdersDetail from './OrdersDetail';
 import { useParams } from 'react-router-dom';
+import { NotificationBoard } from './notification';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -47,13 +48,14 @@ const ContainerWrapper = styled(Box)(
 
 function OrdersPage() {
   const { type } = useParams();
-  
+
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [orders, setOrders] = useState([]);
   const [sideVisible, setSideVisible] = useState(false);
   const [selected, setSelectedOrders] = useState([]);
   const [showOrderDetail, setShowOrderDetail] = useState(false);
+  const [openNotificatoin, setOpenNotification] = useState(true);
 
   useEffect(() => {
     let filtered = [];
@@ -169,6 +171,10 @@ function OrdersPage() {
         <FooterWrapper>
           <BulkActions selected={selected} type={type} onAction={onAction} />
         </FooterWrapper>
+        <NotificationBoard
+          open={openNotificatoin}
+          setOpen={setOpenNotification}
+        />
       </Box>
     </>
   );
