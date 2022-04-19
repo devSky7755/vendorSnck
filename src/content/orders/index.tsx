@@ -6,6 +6,7 @@ import EditOrderDialog from './EditOrder';
 import BulkActions from './BulkActions';
 import { temp_orders } from 'src/models/order';
 import OrdersDetail from './OrdersDetail';
+import { useParams } from 'react-router-dom';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -44,7 +45,9 @@ const ContainerWrapper = styled(Box)(
   `
 );
 
-function OrdersPage({ type }) {
+function OrdersPage() {
+  const { type } = useParams();
+  
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [orders, setOrders] = useState([]);
@@ -54,21 +57,29 @@ function OrdersPage({ type }) {
 
   useEffect(() => {
     let filtered = [];
-    switch (type) {
-      case 'New':
-        filtered = temp_orders.filter(x => x.status === 'New');
+    switch (type.toLowerCase()) {
+      case 'new':
+        filtered = temp_orders.filter((x) => x.status === 'New');
         break;
-      case 'Preparing':
-        filtered = temp_orders.filter(x => x.status === 'Preparing');
+      case 'preparing':
+        filtered = temp_orders.filter((x) => x.status === 'Preparing');
         break;
-      case 'Delivery':
-        filtered = temp_orders.filter(x => (x.status === 'Ready' && x.order_type === 'Delivery') || x.status === 'Delivering');
+      case 'delivery':
+        filtered = temp_orders.filter(
+          (x) =>
+            (x.status === 'Ready' && x.order_type === 'Delivery') ||
+            x.status === 'Delivering'
+        );
         break;
-      case 'Pickup':
-        filtered = temp_orders.filter(x => (x.status === 'Ready' && x.order_type === 'Pickup') || x.status === 'Waitlist');
+      case 'pickup':
+        filtered = temp_orders.filter(
+          (x) =>
+            (x.status === 'Ready' && x.order_type === 'Pickup') ||
+            x.status === 'Waitlist'
+        );
         break;
       default:
-        filtered = temp_orders.filter(x => x.status === 'New');
+        filtered = temp_orders.filter((x) => x.status === 'New');
         break;
     }
     setOrders(filtered);
@@ -76,15 +87,15 @@ function OrdersPage({ type }) {
     setShowOrderDetail(false);
     setEditOpen(false);
     setEditing(null);
-  }, [type])
+  }, [type]);
 
   const onEdited = (order) => {
     setEditOpen(false);
-  }
+  };
 
   const onSelectionChanged = (selected) => {
     setSelectedOrders(selected);
-  }
+  };
 
   const onAction = (action) => {
     if (action === 'View') {
@@ -96,62 +107,63 @@ function OrdersPage({ type }) {
     } else if (action === 'Issue') {
       onIssue();
     }
-  }
+  };
 
   const onView = () => {
     setSideVisible(true);
-  }
+  };
 
   const onHideSidebar = () => {
     setSideVisible(false);
-  }
+  };
 
   const onReset = () => {
     setSelectedOrders(null);
-  }
-  const onPrint = () => {
-
-  }
-  const onIssue = () => {
-
-  }
+  };
+  const onPrint = () => {};
+  const onIssue = () => {};
 
   const onViewOrder = (order) => {
     setEditing(order);
     setEditOpen(true);
-  }
+  };
+
+  const ordersTblProps = {
+    orders,
+    selected,
+    type,
+    onSelectionChanged,
+    onViewOrder
+  };
 
   return (
     <>
       <Helmet>
         <title>New Orders</title>
       </Helmet>
-      {
-        editOpen && editing &&
-        <EditOrderDialog
-          order={editing}
-          open={editOpen}
-          onClose={onEdited}
-        />
-      }
+      {editOpen && editing && (
+        <EditOrderDialog order={editing} open={editOpen} onClose={onEdited} />
+      )}
       <Box style={{ height: '100%' }}>
         <ContainerWrapper>
-          <Grid container alignItems='stretch'>
+          <Grid container alignItems="stretch">
             <Grid item style={{ flex: 1 }}>
               <TableWrapper>
-                <OrdersTable orders={orders} selected={selected} type={type} onSelectionChanged={onSelectionChanged}
-                  onViewOrder={onViewOrder}
-                />
+                <OrdersTable {...ordersTblProps} />
               </TableWrapper>
             </Grid>
-            {
-              sideVisible &&
+            {sideVisible && (
               <Grid item style={{ width: 240 }}>
                 <RightSidebarWrapper>
-                  <OrdersDetail orders={orders} selected={selected} type={type} onHide={onHideSidebar} />
+                  <OrdersDetail
+                    orders={orders}
+                    selected={selected}
+                    type={type}
+                    onHide={onHideSidebar}
+                  />
                 </RightSidebarWrapper>
               </Grid>
-            }
+            )}
           </Grid>
         </ContainerWrapper>
         <FooterWrapper>
