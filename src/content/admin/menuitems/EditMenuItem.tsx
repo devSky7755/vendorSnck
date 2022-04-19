@@ -25,7 +25,7 @@ const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
     const [editing, setEditingMenuItem] = useState(menuItem);
     const [showError, setShowError] = useState(false);
 
-    const isNew = !menuItem.name
+    const isNew = !menuItem.id
 
     const validateInput = () => {
         if (!editing.name || editing.name.trim().length === 0) return false;

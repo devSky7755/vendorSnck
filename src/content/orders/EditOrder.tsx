@@ -151,7 +151,7 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
                                 editing.delivery_person &&
                                 <Grid item xs={12}>
                                     <Typography variant='subtitle1'>
-                                        {editing.delivery_person.name} {editing.delivery_person.surname}
+                                        {editing.delivery_person.firstName} {editing.delivery_person.lastName}
                                     </Typography>
                                     <Typography variant='body1'>
                                         #{editing.delivery_person.id}

@@ -89,11 +89,11 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                                 label="Name"
                                 size='small'
                                 fullWidth
-                                value={editing.name}
+                                value={editing.firstName}
                                 onChange={(e) => {
                                     setEditingUser({
                                         ...editing,
-                                        name: e.target.value
+                                        firstName: e.target.value
                                     });
                                 }}
                             >
@@ -104,11 +104,11 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                                 label="Surname"
                                 size='small'
                                 fullWidth
-                                value={editing.surname}
+                                value={editing.lastName}
                                 onChange={(e) => {
                                     setEditingUser({
                                         ...editing,
-                                        surname: e.target.value
+                                        lastName: e.target.value
                                     });
                                 }}
                             >
@@ -136,14 +136,14 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                                 fullWidth
                                 label='Phone'
                                 size='small'
-                                value={editing.phone}
+                                value={editing.mobileNo}
                                 style={{ fontSize: 18 }}
                                 defaultCountry={'us'}
                                 disableAreaCodes={true}
                                 onChange={(value) => {
                                     setEditingUser({
                                         ...editing,
-                                        phone: value
+                                        mobileNo: value
                                     });
                                 }}
                             />

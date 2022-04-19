@@ -488,7 +488,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
                           type === 'Delivery' &&
                           <TableCell>
                             <Typography variant='body2' component='span'>
-                              {order.delivery_person && (order.delivery_person.name + ' ' + order.delivery_person.surname)}
+                              {order.delivery_person && (order.delivery_person.firstName + ' ' + order.delivery_person.lastName)}
                             </Typography>
                           </TableCell>
                         }

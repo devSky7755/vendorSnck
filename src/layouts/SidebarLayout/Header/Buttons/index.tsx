@@ -20,7 +20,7 @@ function GetPageTitle(pathname) {
       return 'Vendors';
     case '/menuitems':
       return 'Menu Items';
-      case '/staffs':
+    case '/staff':
       return 'Staff';
     default:
       return '';

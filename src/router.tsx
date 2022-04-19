@@ -30,6 +30,7 @@ const Loader = (Component) => (props) => (
 const VenuesPage = Loader(lazy(() => import('src/content/admin/venues')));
 const VendorsPage = Loader(lazy(() => import('src/content/admin/vendors')));
 const MenuItemsPage = Loader(lazy(() => import('src/content/admin/menuitems')));
+const StaffsPage = Loader(lazy(() => import('src/content/admin/staff')));
 
 // Dashboards
 const Dashboard = Loader(lazy(() => import('src/content/dashboards')));
@@ -383,6 +384,22 @@ const adminRoutes: RouteObject[] = [
       {
         path: '',
         element: <MenuItemsPage />
+      }
+    ]
+  },
+  {
+    path: 'staff',
+    element: (
+      <SidebarLayout />
+    ),
+    children: [
+      {
+        path: ':vendorId',
+        element: <StaffsPage />
+      },
+      {
+        path: '',
+        element: <StaffsPage />
       }
     ]
   },

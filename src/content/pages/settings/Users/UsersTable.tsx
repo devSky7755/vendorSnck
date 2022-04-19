@@ -25,7 +25,7 @@ import {
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Label from 'src/components/Label';
-import { Staff, UserRole, TeamUserStatus } from 'src/models/staff';
+import { Staff, UserRole } from 'src/models/staff';
 
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -39,14 +39,13 @@ interface UsersTableProps {
 }
 
 interface Filters {
-  status?: TeamUserStatus;
   role?: UserRole;
   search?: string;
 }
 
-const getStatusLabel = (userStatus: TeamUserStatus): JSX.Element => {
-  const color = userStatus === 'Active' ? 'success' : 'warning';
-  return <Label color={color}>{userStatus}</Label>;
+const getStatusLabel = (userStatus: boolean): JSX.Element => {
+  const color = userStatus ? 'success' : 'warning';
+  return <Label color={color}>{userStatus ? 'Active' : 'Not Active'}</Label>;
 };
 
 const applyFilters = (
@@ -56,15 +55,12 @@ const applyFilters = (
   return users.filter((user) => {
     let matches = true;
 
-    if (filters.status && user.status !== filters.status) {
-      matches = false;
-    }
     if (filters.role && user.role !== filters.role) {
       matches = false;
     }
     if (matches && filters.search && filters.search.length > 0) {
-      if ((user.name && user.name.includes(filters.search)) || (user.surname && user.surname.includes(filters.search)) ||
-        (user.email && user.email.includes(filters.search)) || (user.phone && user.phone.includes(filters.search))) {
+      if ((user.firstName && user.firstName.includes(filters.search)) || (user.lastName && user.lastName.includes(filters.search)) ||
+        (user.email && user.email.includes(filters.search)) || (user.mobileNo && user.mobileNo.includes(filters.search))) {
         matches = true;
       } else {
         matches = false;
@@ -77,13 +73,12 @@ const applyFilters = (
 
 const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, search }) => {
   const [showFilter, setShowFilter] = useState<boolean>(false);
-  const [actionID, setActionID] = useState<number>(-1);
-  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
+  const [actionID, setActionID] = useState<string>('');
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [expanded, setExpanded] = useState<string[]>(['Runner', 'Packer']);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const [filters, setFilters] = useState<Filters>({
-    status: null,
     role: user_role,
     search: search
   });
@@ -102,21 +97,6 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
     }));
   }, [user_role])
 
-  const statusOptions = [
-    {
-      id: 'all',
-      name: 'All'
-    },
-    {
-      id: 'Active',
-      name: 'Active'
-    },
-    {
-      id: 'Not Active',
-      name: 'Not Active'
-    }
-  ];
-
   const roleOptions = [
     {
       id: 'all',
@@ -132,7 +112,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
     }
   ];
 
-  const handleClickAction = (event: React.MouseEvent<HTMLButtonElement>, userid: number) => {
+  const handleClickAction = (event: React.MouseEvent<HTMLButtonElement>, userid: string) => {
     setActionID(userid);
     setAnchorEl(event.currentTarget);
   };
@@ -142,19 +122,6 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
     if (action === 'Edit') {
       onEditingUser(user);
     }
-  };
-
-  const handleStatusChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    let value = null;
-
-    if (e.target.value !== 'all') {
-      value = e.target.value;
-    }
-
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      status: value
-    }));
   };
 
   const handleRoleChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -180,7 +147,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
 
   const handleSelectOneUser = (
     event: ChangeEvent<HTMLInputElement>,
-    userId: number
+    userId: string
   ): void => {
     if (!selectedUsers.includes(userId)) {
       setSelectedUsers((prevSelected) => [
@@ -302,7 +269,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
                 {user.id}
               </TableCell>
               <TableCell>
-                {user.name} {user.surname}
+                {user.firstName} {user.lastName}
               </TableCell>
               <TableCell>
                 <Typography
@@ -312,7 +279,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
                   gutterBottom
                   noWrap
                 >
-                  {getStatusLabel(user.status)}
+                  {getStatusLabel(user.active)}
                 </Typography>
               </TableCell>
               <TableCell>
@@ -339,9 +306,6 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
                 >
                   <MenuItem onClick={() => handleCloseAction('Edit', user)}>Edit</MenuItem>
                   <MenuItem onClick={() => handleCloseAction('Delete', user)}>Delete</MenuItem>
-                  <MenuItem onClick={() => {
-                    handleCloseAction(user.status === 'Active' ? 'Not Active' : 'Active', user);
-                  }}>{user.status === 'Active' ? 'Not Active' : 'Active'}</MenuItem>
                 </Menu>
               </TableCell>
             </TableRow>
@@ -356,7 +320,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
       {showFilter && (
         <CardHeader
           action={
-            <Box width={320}>
+            <Box width={160}>
               <FormControl style={{ width: 150 }} variant="outlined">
                 <InputLabel>Role</InputLabel>
                 <Select
@@ -369,23 +333,6 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
                   {roleOptions.map((roleOption) => (
                     <MenuItem key={roleOption.id} value={roleOption.id}>
                       {roleOption.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl style={{ width: 150, marginLeft: 15 }} variant="outlined">
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={filters.status || 'all'}
-                  onChange={handleStatusChange}
-                  size='small'
-                  label="Status"
-                  autoWidth
-                >
-                  {statusOptions.map((statusOption) => (
-                    <MenuItem key={statusOption.id} value={statusOption.id}>
-                      {statusOption.name}
                     </MenuItem>
                   ))}
                 </Select>

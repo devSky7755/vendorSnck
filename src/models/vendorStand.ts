@@ -1,4 +1,5 @@
 import { MenuItem } from "./menu_item";
+import { Staff } from "./staff";
 import { Venue } from "./venue";
 
 export interface VendorStand {
@@ -18,6 +19,7 @@ export interface VendorStand {
     deletedAt?: Date;
     manager?: string;
     menuItems: MenuItem[];
+    staffs: Staff[];
 
     venue?: Venue;
 }

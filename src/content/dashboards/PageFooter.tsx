@@ -1,5 +1,4 @@
-import { Typography, Grid, Button, Pagination, PaginationItem, Divider } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Typography, Grid, Button, Pagination, PaginationItem } from '@mui/material';
 import { useState } from 'react';
 
 function PageFooter() {
@@ -13,7 +12,7 @@ function PageFooter() {
             setIndex(value);
           }}
             renderItem={(item) => {
-              if (item.type == 'page') {
+              if (item.type === 'page') {
                 return (<></>);
               } else {
                 return (

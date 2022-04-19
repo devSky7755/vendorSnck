@@ -38,7 +38,7 @@ const TopRunnersTable: FC<TopRunnersTableProps> = ({ runners }) => {
                                         color="text.primary"
                                         noWrap
                                     >
-                                        {runner.name[0]}. {runner.surname}
+                                        {runner.firstName[0]}. {runner.lastName}
                                     </Typography>
                                 </TableCell>
                                 <TableCell sx={{ p: 1 }}>

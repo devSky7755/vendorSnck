@@ -13,7 +13,7 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
         <Typography variant="h5" gutterBottom>
-          Menu Items - {vendor.name}
+          Staffs - {vendor.name}
         </Typography>
       </Grid>
       <Grid item>

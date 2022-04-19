@@ -97,6 +97,7 @@ function VendorsPage(props: VendorsPageProps) {
       handleDelete(editing);
       setEditing(null);
     } else if (action === 'Manage Staff') {
+      navigate('/staff/' + data.id);
     } else if (action === 'Manage Menu') {
       navigate('/menuitems/' + data.id);
     }

@@ -69,11 +69,11 @@ const temp_top_items: MenuItemV1[] = [
 
 const temp_runners: Staff[] = [
   {
-    id: 52,
+    id: '52',
     role: 'Runner',
-    name: 'Jack',
-    surname: 'Jackson',
-    status: 'Active',
+    firstName: 'Jack',
+    lastName: 'Jackson',
+    active: true,
     lastSeen: '15 min ago',
     lastSeenTimeStamp: 0,
     average: 105,
@@ -81,11 +81,11 @@ const temp_runners: Staff[] = [
     daily_count: 45
   },
   {
-    id: 51,
+    id: '51',
     role: 'Runner',
-    name: 'Dave',
-    surname: 'Davidson',
-    status: 'Not Active',
+    firstName: 'Dave',
+    lastName: 'Davidson',
+    active: true,
     lastSeen: '5 days ago',
     lastSeenTimeStamp: 0,
     average: 135,
@@ -93,11 +93,11 @@ const temp_runners: Staff[] = [
     daily_count: 43
   },
   {
-    id: 31,
+    id: '31',
     role: 'Runner',
-    name: 'Frank',
-    surname: 'Frankson',
-    status: 'Active',
+    firstName: 'Frank',
+    lastName: 'Frankson',
+    active: true,
     lastSeen: '5 min ago',
     lastSeenTimeStamp: 0,
     average: 175,
@@ -105,11 +105,11 @@ const temp_runners: Staff[] = [
     daily_count: 34
   },
   {
-    id: 20,
+    id: '20',
     role: 'Runner',
-    name: 'Kris',
-    surname: 'Krison',
-    status: 'Active',
+    firstName: 'Kris',
+    lastName: 'Krison',
+    active: true,
     lastSeen: '5 min ago',
     lastSeenTimeStamp: 0,
     average: 95,
