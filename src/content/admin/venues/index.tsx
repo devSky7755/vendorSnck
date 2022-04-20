@@ -89,12 +89,18 @@ function VenuesPage(props: VenuesPageProps) {
     delete patch.id;
     delete patch.updatedAt;
     delete patch.createdAt;
+    delete patch.deletedAt;
     delete patch.seatFields;
     delete patch.coordinates;
     delete patch.vendorStands;
+
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 
     if (venue.id) {
+      if (!patch.inVenueLocationHierarchy1) patch.inVenueLocationHierarchy1 = null;
+      if (!patch.inVenueLocationHierarchy2) patch.inVenueLocationHierarchy2 = null;
+      if (!patch.inVenueLocationHierarchy3) patch.inVenueLocationHierarchy3 = null;
+
       patchVenueAPI(token, venue, patch).then(res => {
         props.updateVenue(res);
       }).catch(ex => {

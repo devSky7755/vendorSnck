@@ -31,6 +31,7 @@ const EditVendorDialog: React.FC<EditVendorInterface> = (props) => {
 
     const validateInput = () => {
         if (!editing.name || editing.name.trim().length === 0) return false;
+        if (!editing.venueId || editing.venueId.trim().length === 0) return false;
         return true;
     }
 
@@ -92,6 +93,7 @@ const EditVendorDialog: React.FC<EditVendorInterface> = (props) => {
                                 size='small'
                                 InputLabelProps={{ shrink: true }}
                                 fullWidth
+                                error={showError && (!editing.venueId || editing.venueId.trim().length === 0)}
                                 value={editing.venueId || ''}
                                 onChange={(e) => {
                                     setEditingVendor({

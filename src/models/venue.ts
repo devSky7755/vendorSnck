@@ -28,6 +28,7 @@ export interface Venue {
     seatFields: string[];
     createdAt: Date;
     updatedAt: Date;
+    deletedAt?: Date;
     vendorStands?: VendorStand[];
 }
 

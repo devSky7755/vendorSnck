@@ -126,17 +126,17 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venues, onAction, onSele
                     {imageName}
                   </URLTableCell>
                   <TableCell>
-                    <Switch checked={vendor.available} onChange={e => {
+                    <Switch checked={vendor.available || false} onChange={e => {
                       handleVendorPatch(vendor, 'available', e.target.checked);
                     }} />
                   </TableCell>
                   <TableCell>
-                    <Switch checked={vendor.deliveryAvailable} onChange={e => {
+                    <Switch checked={vendor.deliveryAvailable || false} onChange={e => {
                       handleVendorPatch(vendor, 'deliveryAvailable', e.target.checked);
                     }} />
                   </TableCell>
                   <TableCell>
-                    <Switch checked={vendor.pickupAvailable} onChange={e => {
+                    <Switch checked={vendor.pickupAvailable || false} onChange={e => {
                       handleVendorPatch(vendor, 'pickupAvailable', e.target.checked);
                     }} />
                   </TableCell>

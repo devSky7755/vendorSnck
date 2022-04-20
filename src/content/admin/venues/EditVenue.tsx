@@ -279,7 +279,7 @@ const EditVenueDialog: React.FC<EditVenueInterface> = (props) => {
                             })
                         }
                         <Grid item xs={12}>
-                            <Button color='primary' size='small' onClick={e => {
+                            <Button disabled={fields.length >= 3} color='primary' size='small' onClick={e => {
                                 setFields([...fields, ''])
                             }}>+ Add Heirarchy</Button>
                         </Grid>

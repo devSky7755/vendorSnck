@@ -146,17 +146,17 @@ const MenuItemsTable: FC<MenuItemsTableProps> = ({ menuItems, onAction, onSelect
                     */
                   }
                   <TableCell>
-                    <Switch checked={menuItem.available} onChange={e => {
+                    <Switch checked={menuItem.available || false} onChange={e => {
                       handleMenuItemPatch(menuItem, 'available', e.target.checked);
                     }} />
                   </TableCell>
                   <TableCell>
-                    <Switch checked={menuItem.containsAlcohol} onChange={e => {
+                    <Switch checked={menuItem.containsAlcohol || false} onChange={e => {
                       handleMenuItemPatch(menuItem, 'containsAlcohol', e.target.checked);
                     }} />
                   </TableCell>
                   <TableCell>
-                    <Switch checked={menuItem.mostPopular} onChange={e => {
+                    <Switch checked={menuItem.mostPopular || false} onChange={e => {
                       handleMenuItemPatch(menuItem, 'mostPopular', e.target.checked);
                     }} />
                   </TableCell>

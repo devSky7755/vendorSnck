@@ -148,9 +148,9 @@ function MenuItemsPage(props: MenuItemsPageProps) {
   const handleMenuItemPatch = (menuItem, key, value) => {
     let patch = {};
     patch[key] = value;
+    patch['name'] = menuItem.name;
 
-    /*
-    patchMenuItem(token, menuItem, patch).then(res => {
+    patchMenuItem(token, vendorId, menuItem, patch).then(res => {
       let newMenuItems = [...menuItems];
       let index = newMenuItems.findIndex(x => x.id === menuItem.id);
       if (index >= 0) {
@@ -158,7 +158,6 @@ function MenuItemsPage(props: MenuItemsPageProps) {
         setMenuItems(newMenuItems);
       }
     });
-    */
   }
 
   if (notFound) {

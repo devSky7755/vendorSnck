@@ -142,7 +142,7 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
                     }
                   </URLTableCell>
                   <TableCell>
-                    <Switch checked={venue.active} onChange={e => {
+                    <Switch checked={venue.active || false} onChange={e => {
                       handleVenuePatch(venue, 'active', e.target.checked);
                     }} />
                   </TableCell>
