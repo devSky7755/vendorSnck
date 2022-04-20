@@ -91,7 +91,11 @@ const MenuItemsTable: FC<MenuItemsTableProps> = ({ menuItems, onAction, onSelect
               <TableCell>Image URL</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Category</TableCell>
-              <TableCell>Tags</TableCell>
+              {
+                /*
+                <TableCell>Tags</TableCell>
+                */
+              }
               <TableCell>Active</TableCell>
               <TableCell>Alcohol</TableCell>
               <TableCell>Featured</TableCell>
@@ -134,9 +138,13 @@ const MenuItemsTable: FC<MenuItemsTableProps> = ({ menuItems, onAction, onSelect
                   <TableCell>
                     { }
                   </TableCell>
-                  <TableCell>
-                    {menuItem.tags && menuItem.tags.join(',')}
-                  </TableCell>
+                  {
+                    /*
+                    <TableCell>
+                      {menuItem.tags && menuItem.tags.join(',')}
+                    </TableCell>
+                    */
+                  }
                   <TableCell>
                     <Switch checked={menuItem.available} onChange={e => {
                       handleMenuItemPatch(menuItem, 'available', e.target.checked);

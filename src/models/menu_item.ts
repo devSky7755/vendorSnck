@@ -16,7 +16,6 @@ export interface MenuItem {
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
-  tags?: string[];
   menuItemCategoryId?: any;
 }
 

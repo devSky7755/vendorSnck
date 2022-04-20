@@ -108,7 +108,7 @@ function MenuItemsPage(props: MenuItemsPageProps) {
     delete patch.createdAt;
     delete patch.deletedAt;
     delete patch.vendorStandId;
-    delete patch.tags;
+    //delete patch.tags;
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 
     if (menuItem.id) {

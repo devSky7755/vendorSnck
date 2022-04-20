@@ -40,7 +40,7 @@ const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
         }
     }
 
-    const tags = editing.tags || [];
+    //const tags = editing.tags || [];
 
     return (
         <Dialog onClose={() => {
@@ -121,61 +121,65 @@ const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
                         </Grid>
                     </Grid>
                 </Box>
-                <Box sx={{ px: 2, py: 2 }} className='border-bottom'>
-                    <Box>
-                        <DialogSubtitle variant='subtitle1' sx={{ pb: 2 }}>Menu Tags</DialogSubtitle>
-                    </Box>
-                    <Grid container spacing={2}>
-                        {
-                            tags.map((tag, index) => {
-                                return (
-                                    <Grid item xs={12} md={3} key={index}>
-                                        <TextField
-                                            label={"Menu Tag " + (index + 1)}
-                                            size='small'
-                                            fullWidth
-                                            InputLabelProps={{ shrink: true }}
-                                            InputProps={
-                                                index === tags.length - 1 ? (
-                                                    {
-                                                        endAdornment: <IconButton onClick={e => {
-                                                            let newTags = [...tags];
-                                                            newTags.pop();
-                                                            setEditingMenuItem({
-                                                                ...editing,
-                                                                tags: newTags
-                                                            });
-                                                        }} size='small' style={{ whiteSpace: 'nowrap' }}>
-                                                            <DeleteForeverOutlinedIcon fontSize='small' htmlColor='black' />
-                                                        </IconButton>,
-                                                    }
-                                                ) : ({})
-                                            }
-                                            value={tag}
-                                            onChange={(e) => {
-                                                let newTags = [...tags];
-                                                newTags[index] = e.target.value;
-                                                setEditingMenuItem({
-                                                    ...editing,
-                                                    tags: newTags
-                                                });
-                                            }}
-                                        >
-                                        </TextField>
-                                    </Grid>
-                                )
-                            })
-                        }
-                        <Grid item xs={12}>
-                            <Button color='primary' size='small' onClick={e => {
-                                setEditingMenuItem({
-                                    ...editing,
-                                    tags: [...tags, '']
-                                });
-                            }}>+ Add Tag</Button>
+                {
+                    /*
+                    <Box sx={{ px: 2, py: 2 }} className='border-bottom'>
+                        <Box>
+                            <DialogSubtitle variant='subtitle1' sx={{ pb: 2 }}>Menu Tags</DialogSubtitle>
+                        </Box>
+                        <Grid container spacing={2}>
+                            {
+                                tags.map((tag, index) => {
+                                    return (
+                                        <Grid item xs={12} md={3} key={index}>
+                                            <TextField
+                                                label={"Menu Tag " + (index + 1)}
+                                                size='small'
+                                                fullWidth
+                                                InputLabelProps={{ shrink: true }}
+                                                InputProps={
+                                                    index === tags.length - 1 ? (
+                                                        {
+                                                            endAdornment: <IconButton onClick={e => {
+                                                                let newTags = [...tags];
+                                                                newTags.pop();
+                                                                setEditingMenuItem({
+                                                                    ...editing,
+                                                                    tags: newTags
+                                                                });
+                                                            }} size='small' style={{ whiteSpace: 'nowrap' }}>
+                                                                <DeleteForeverOutlinedIcon fontSize='small' htmlColor='black' />
+                                                            </IconButton>,
+                                                        }
+                                                    ) : ({})
+                                                }
+                                                value={tag}
+                                                onChange={(e) => {
+                                                    let newTags = [...tags];
+                                                    newTags[index] = e.target.value;
+                                                    setEditingMenuItem({
+                                                        ...editing,
+                                                        tags: newTags
+                                                    });
+                                                }}
+                                            >
+                                            </TextField>
+                                        </Grid>
+                                    )
+                                })
+                            }
+                            <Grid item xs={12}>
+                                <Button color='primary' size='small' onClick={e => {
+                                    setEditingMenuItem({
+                                        ...editing,
+                                        tags: [...tags, '']
+                                    });
+                                }}>+ Add Tag</Button>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Box>
+                    </Box>
+                    */
+                }
                 <Box sx={{ px: 2, py: 2 }} className='border-bottom'>
                     <Box>
                         <DialogSubtitle variant='subtitle1' sx={{ pb: 2 }}>Other Settings</DialogSubtitle>
