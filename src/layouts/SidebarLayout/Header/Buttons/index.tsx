@@ -22,6 +22,8 @@ function GetPageTitle(pathname) {
       return 'Menu Items';
     case '/staff':
       return 'Staff';
+    case '/promos':
+      return 'Promo';
     default:
       return '';
   }

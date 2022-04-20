@@ -126,14 +126,6 @@ const EditVenueAreaDialog: React.FC<EditVenueAreaInterface> = (props) => {
                             }}></Switch>
                             Delivery
                         </Grid>
-                        <Grid item xs={6} md={3}>
-                            <Button color='primary' size='small' onClick={e => {
-                            }}>Manage Staff</Button>
-                        </Grid>
-                        <Grid item xs={6} md={9}>
-                            <Button color='primary' size='small' onClick={e => {
-                            }}>Manage menu items</Button>
-                        </Grid>
                     </Grid>
                 </Box>
             </Box>

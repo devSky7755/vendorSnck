@@ -20,11 +20,11 @@ import { OrderIssue } from './content/orders/issue';
 import { ActionBoard } from './content/orders/issue/action';
 
 const Loader = (Component) => (props) =>
-  (
-    <Suspense fallback={<SuspenseLoader />}>
-      <Component {...props} />
-    </Suspense>
-  );
+(
+  <Suspense fallback={<SuspenseLoader />}>
+    <Component {...props} />
+  </Suspense>
+);
 
 // Pages
 
@@ -33,6 +33,7 @@ const VenuesPage = Loader(lazy(() => import('src/content/admin/venues')));
 const VendorsPage = Loader(lazy(() => import('src/content/admin/vendors')));
 const MenuItemsPage = Loader(lazy(() => import('src/content/admin/menuitems')));
 const StaffsPage = Loader(lazy(() => import('src/content/admin/staff')));
+const PromosPage = Loader(lazy(() => import('src/content/admin/promos')));
 
 // Dashboards
 const Dashboard = Loader(lazy(() => import('src/content/dashboards')));
@@ -325,6 +326,20 @@ const adminRoutes: RouteObject[] = [
         path: '',
         element: (
           <VendorsPage />
+        )
+      }
+    ]
+  },
+  {
+    path: 'promos',
+    element: (
+      <SidebarLayout />
+    ),
+    children: [
+      {
+        path: '',
+        element: (
+          <PromosPage />
         )
       }
     ]

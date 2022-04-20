@@ -88,7 +88,7 @@ function StaffsPage(props: StaffsPageProps) {
       setEditing(data);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      setEditing({ available: false });
+      setEditing({ active: false });
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);
