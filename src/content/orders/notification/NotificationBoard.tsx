@@ -3,47 +3,100 @@ import {
   Card,
   CardHeader,
   CardContent,
-  CardMedia,
-  CardActionArea,
+  Box,
+  Grid,
   CardActions,
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   IconButton,
-  Typography,
-  ButtonGroup,
   Button,
+  Badge,
   styled
 } from '@mui/material';
 import { DialogProps } from '@mui/material/Dialog';
 import CloseIcon from '@mui/icons-material/Close';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import { NOTIFICATIONS } from './contants';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialog-paper': {
-    background: theme.palette.success.dark,
-    paddingBottom: 42
+    // background: theme.palette.success.dark,
+    // paddingBottom: 42
   },
   '& .MuiDialogContent-root': {
-    padding: theme.spacing(2)
+    display: 'flex',
+    flexDirection: 'column',
+    padding: theme.spacing(0)
   },
   '& .MuiDialogActions-root': {
-    padding: theme.spacing(1)
+    padding: theme.spacing(0)
+  },
+  '& .MuiDialogTitle-root': {
+    position: 'absolute',
+    right: 0,
+    padding: 0,
+    top: 0,
+    margin: 0
   }
 }));
 
 const BootstrapDialogCard = styled(Card)(({ theme }) => ({
   marginTop: '12px',
-  maxWidth: 345,
+  maxWidth: 380,
+  minWidth: 350,
   minHeight: 420,
-  maxHeight: 450,
+  maxHeight: 500,
   background: 'white',
   borderRadius: '3px',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between'
+}));
+
+const BootstrapDialogCardHeader = styled(CardHeader)(({ theme }) => ({
+  '& .MuiCardHeader-title': {
+    fontSize: 40,
+    fontWeight: 400,
+    lineHeight: '50px',
+    color: 'rgb(0 0 0 / 80%)',
+    fontFamily: 'Roboto',
+    textAlign: 'center'
+  }
+}));
+
+const BootstrapBox = styled(Box)(({ theme }) => ({
+  '&.MuiBox-root': {
+    display: 'flex',
+    justifyContent: 'center',
+    paddingTop: '50px',
+    paddingBottom: '50px',
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  '&.MuiBox-success': {
+    background: theme.palette.success.main
+  },
+  '&.MuiBox-warning': {
+    background: theme.palette.warning.main
+  }
+}));
+
+const BootstrapBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    fontSize: 150,
+    height: 250,
+    width: 250,
+    borderRadius: 250
+  },
+  '& .MuiBadge-colorSuccess': {
+    border: '25px solid rgb(197 221 187)'
+  },
+  '& .MuiBadge-colorWarning': {
+    border: '25px solid rgb(225 211 191)'
+  }
 }));
 
 export interface DialogTitleProps {
@@ -89,12 +142,14 @@ export interface NotificationBoardProps {
 const NotificationBoard = (props: NotificationBoardProps) => {
   const { open, setOpen, ...other } = props;
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-  const [maxWidth, setMaxWidth] = useState<DialogProps['maxWidth']>('sm');
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const [maxWidth] = useState<DialogProps['maxWidth']>('md');
 
   const handleClose = () => {
     setOpen(false);
   };
+
+  const notifications = NOTIFICATIONS;
 
   return (
     <BootstrapDialog
@@ -109,32 +164,48 @@ const NotificationBoard = (props: NotificationBoardProps) => {
         id="notification-dialog-title"
         onClose={handleClose}
       ></BootstrapDialogTitle>
-      <DialogContent sx={{ display: 'flex', justifyContent: 'center' }}>
-        <BootstrapDialogCard>
-          <CardHeader title="New Order" sx={{}} />
-          <CardContent sx={{ borderBottom: '1px solid #34343412', flex: 1 }}>
-            <Typography variant="body2" color="text.secondary">
-              This impressive paella is a perfect party dish and a fun meal to
-              cook together with your guests. Add 1 cup of frozen peas along
-              with the mussels, if you like.
-            </Typography>
-          </CardContent>
-          <CardActions
-            disableSpacing
-            sx={{ display: 'flex', justifyContent: 'space-around' }}
-          >
-            <Button variant="outlined">Print Order</Button>
-            <Button variant="contained">View Order</Button>
-          </CardActions>
-          {/* <ButtonGroup
-            variant="contained"
-            aria-label="contained button group"
-            fullWidth
-          >
-            <Button variant="outlined">Print Order</Button>
-            <Button>View Order</Button>
-          </ButtonGroup> */}
-        </BootstrapDialogCard>
+      <DialogContent>
+        <Grid container spacing={0} sx={{ flex: 1 }}>
+          {notifications.map((notification, key) => (
+            <Grid
+              item
+              md={notifications.length > 1 ? 6 : 12}
+              sm={12}
+              xs={12}
+              key={key}
+              sx={{ display: 'flex', flexDirection: 'column' }}
+            >
+              <BootstrapBox className={`MuiBox-${notification.class}`}>
+                <BootstrapDialogCard>
+                  <BootstrapDialogCardHeader title={notification.title} />
+                  <CardContent
+                    sx={{
+                      borderBottom: '1px solid #34343412',
+                      flex: 1,
+                      whiteSpace: 'normal',
+                      wordBreak: 'break-word',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    <BootstrapBadge
+                      badgeContent={notification.count}
+                      color={notification.class as any}
+                    ></BootstrapBadge>
+                  </CardContent>
+                  <CardActions
+                    disableSpacing
+                    sx={{ display: 'flex', justifyContent: 'space-around' }}
+                  >
+                    <Button variant="outlined">Print Order</Button>
+                    <Button variant="contained">View Order</Button>
+                  </CardActions>
+                </BootstrapDialogCard>
+              </BootstrapBox>
+            </Grid>
+          ))}
+        </Grid>
       </DialogContent>
     </BootstrapDialog>
   );
