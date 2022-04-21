@@ -8,6 +8,7 @@ import { temp_orders } from 'src/models/order';
 import OrdersDetail from './OrdersDetail';
 import { useParams } from 'react-router-dom';
 import { NotificationBoard } from './notification';
+import { OrderIssue } from './issue';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -51,6 +52,8 @@ function OrdersPage() {
 
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [issueWithOpen, setIssueWithOpen] = useState(false);
+  const [issueWith, setIssueWith] = useState(null);
   const [orders, setOrders] = useState([]);
   const [sideVisible, setSideVisible] = useState(false);
   const [selected, setSelectedOrders] = useState([]);
@@ -130,12 +133,18 @@ function OrdersPage() {
     setEditOpen(true);
   };
 
+  const onIssueWithOrder = (order) => {
+    setIssueWith(order);
+    setIssueWithOpen(true);
+  };
+
   const ordersTblProps = {
     orders,
     selected,
     type,
     onSelectionChanged,
-    onViewOrder
+    onViewOrder,
+    onIssueWithOrder
   };
 
   return (
@@ -145,6 +154,13 @@ function OrdersPage() {
       </Helmet>
       {editOpen && editing && (
         <EditOrderDialog order={editing} open={editOpen} onClose={onEdited} />
+      )}
+      {issueWithOpen && issueWith && (
+        <OrderIssue
+          order={issueWith}
+          open={issueWithOpen}
+          setOpen={setIssueWithOpen}
+        />
       )}
       <Box style={{ height: '100%' }}>
         <ContainerWrapper>

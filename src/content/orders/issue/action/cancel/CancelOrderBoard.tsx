@@ -1,6 +1,5 @@
 import { Box } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   CancelChooseReason,
   CancelUvSeltems,
@@ -12,8 +11,7 @@ interface IStep {
   payload: any;
 }
 
-const CancelOrderBoard = ({}) => {
-  const navigate = useNavigate();
+const CancelOrderBoard = ({ handleClose }) => {
   const [step, setStep] = useState<IStep>({ value: 1, payload: {} });
 
   useEffect(() => {
@@ -22,7 +20,10 @@ const CancelOrderBoard = ({}) => {
       if (step.payload?.isOther) {
       } else {
       }
-      navigate(-2);
+      handleClose({
+        action: 'cancel',
+        payload: step.payload
+      });
     }
   }, [step]);
   return (
