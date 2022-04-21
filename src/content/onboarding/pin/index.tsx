@@ -2,7 +2,7 @@ import { Box, Container, Card, Typography, Button } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { styled } from '@mui/material/styles';
 import OnboardingStepper from '../OnboardingStepper';
-import PinInput from 'react-pin-input';
+//import PinInput from 'react-pin-input';
 import { useNavigate } from 'react-router';
 
 const OnboardingWrapper = styled(Box)(
@@ -43,20 +43,24 @@ function OnboardingPin() {
                         areas of your Snackr account.
                     </Typography>
                     <PhoneWrapper>
-                        <PinInput
-                            length={4}
-                            initialValue=""
-                            //secret
-                            onChange={(value, index) => { }}
-                            type="numeric"
-                            inputMode="number"
-                            style={{ padding: '10px' }}
-                            inputStyle={{ fontSize: '28px', fontWeight: 500 }}
-                            inputFocusStyle={{ borderColor: 'blue' }}
-                            onComplete={(value, index) => { }}
-                            autoSelect={true}
-                            regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
-                        />
+                        {
+                            /*
+                            <PinInput
+                                length={4}
+                                initialValue=""
+                                //secret
+                                onChange={(value, index) => { }}
+                                type="numeric"
+                                inputMode="number"
+                                style={{ padding: '10px' }}
+                                inputStyle={{ fontSize: '28px', fontWeight: 500 }}
+                                inputFocusStyle={{ borderColor: 'blue' }}
+                                onComplete={(value, index) => { }}
+                                autoSelect={true}
+                                regexCriteria={/^[ A-Za-z0-9_@./#&+-]*$/}
+                            />
+                            */
+                        }
                     </PhoneWrapper>
                     <PhoneWrapper>
                         <Button variant='contained' color='primary' fullWidth onClick={() => {
