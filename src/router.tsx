@@ -228,20 +228,20 @@ const vendorRoutes: RouteObject[] = [
       {
         path: 'items/:type',
         element: <OrdersPage />
-      },
-      {
-        path: 'issue/:id',
-        children: [
-          {
-            path: '',
-            element: <OrderIssue />
-          },
-          {
-            path: ':action',
-            element: <ActionBoard />
-          }
-        ]
       }
+      // {
+      //   path: 'issue/:id',
+      //   children: [
+      //     {
+      //       path: '',
+      //       element: <OrderIssue />
+      //     },
+      //     {
+      //       path: ':action',
+      //       element: <ActionBoard />
+      //     }
+      //   ]
+      // }
     ]
   }
 ];
@@ -320,15 +320,11 @@ const adminRoutes: RouteObject[] = [
   },
   {
     path: 'vendorstands',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: '',
-        element: (
-          <VendorsPage />
-        )
+        element: <VendorsPage />
       }
     ]
   },
@@ -348,9 +344,7 @@ const adminRoutes: RouteObject[] = [
   },
   {
     path: 'menuitems',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: ':vendorId',
@@ -364,9 +358,7 @@ const adminRoutes: RouteObject[] = [
   },
   {
     path: 'staff',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: ':vendorId',
@@ -415,7 +407,7 @@ const adminRoutes: RouteObject[] = [
         element: <Dashboard />
       }
     ]
-  },
+  }
 ];
 
 const routes = isVendorApp ? vendorRoutes : adminRoutes;

@@ -10,14 +10,19 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DELAYS } from '../../contants';
 
-const DelayOrder = ({}) => {
+const DelayOrder = ({ handleClose }) => {
   const navigate = useNavigate();
   const [delay, setDelay] = useState('');
 
   const handleChangeDelay = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value: any = (event.target as HTMLInputElement).value;
-    console.log(value);
     setDelay(value);
+    handleClose({
+      action: 'delay',
+      payload: {
+        time: value
+      }
+    });
   };
 
   return (

@@ -30,6 +30,7 @@ interface OrdersTableProps {
   selected: number[];
   onSelectionChanged: Function;
   onViewOrder: Function;
+  onIssueWithOrder: Function;
 }
 
 interface OrderFilter {
@@ -68,7 +69,8 @@ const OrdersTable: FC<OrdersTableProps> = ({
   orders,
   selected,
   onSelectionChanged,
-  onViewOrder
+  onViewOrder,
+  onIssueWithOrder
 }) => {
   const [groupedOrders, setGroupedOrders] = useState<GroupedOrder[]>([]);
   const [selectedOrders, setSelectedOrders] = useState<number[]>([]);
@@ -317,18 +319,23 @@ const OrdersTable: FC<OrdersTableProps> = ({
     setAnchorEl(event.currentTarget);
   };
 
-  const onIssueWithOrder = (order: Order) => {
-    navigate(`/orders/issue/${order.id}`);
-  };
+  // const onIssueWithOrder = (order: Order) => {
+  //   navigate(`/orders/issue/${order.id}`);
+  // };
 
   const handleCloseAction = (action: string, order: Order) => {
     switch (action) {
+      case 'None':
+        setActionID(-1);
+        setAnchorEl(null);
+        break;
       case 'View':
         onViewOrder(order);
         break;
       case 'Print':
         break;
       case 'Issue':
+        // onIssueWithOrder(order);
         onIssueWithOrder(order);
         break;
       default:
