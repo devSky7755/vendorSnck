@@ -65,7 +65,7 @@ const EditVenueAreaDialog: React.FC<EditVenueAreaInterface> = (props) => {
                 <Box sx={{ px: 2, py: 2 }} className='border-bottom'>
                     <DialogSubtitle variant='subtitle1' sx={{ pb: 2 }}>VenueArea Details</DialogSubtitle>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12}>
                             <TextField
                                 InputLabelProps={{ shrink: true }}
                                 label="Distribution Area Name"
@@ -78,25 +78,6 @@ const EditVenueAreaDialog: React.FC<EditVenueAreaInterface> = (props) => {
                                     setEditingVenueArea({
                                         ...editing,
                                         name: e.target.value
-                                    });
-                                }}
-                            >
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="QR Code"
-                                size='small'
-                                InputLabelProps={{ shrink: true }}
-                                fullWidth
-                                InputProps={{
-                                    endAdornment: <Button size='small' style={{ whiteSpace: 'nowrap' }}>UPDATE QR</Button>,
-                                }}
-                                value={editing.qr_code || ''}
-                                onChange={(e) => {
-                                    setEditingVenueArea({
-                                        ...editing,
-                                        qr_code: e.target.value
                                     });
                                 }}
                             >

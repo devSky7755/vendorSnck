@@ -87,9 +87,7 @@ const VenueAreasTable: FC<VenueAreasTableProps> = ({ venueAreas, venues, onActio
             <TableRow>
               <TableCell padding="checkbox" style={{ height: 52 }}>
               </TableCell>
-              <TableCell>ID</TableCell>
               <TableCell>Distribution Area</TableCell>
-              <TableCell>QR Code</TableCell>
               <TableCell>Active</TableCell>
               <TableCell>Delivery</TableCell>
               <TableCell>Pickup</TableCell>
@@ -116,13 +114,9 @@ const VenueAreasTable: FC<VenueAreasTableProps> = ({ venueAreas, venues, onActio
                       }
                     />
                   </TableCell>
-                  <TableCell>{index + 1}</TableCell>
                   <TableCell>
                     {venueArea.name}
                   </TableCell>
-                  <URLTableCell style={{ maxWidth: 250 }}>
-                    {venueArea.qr_code}
-                  </URLTableCell>
                   <TableCell>
                     <Switch checked={venueArea.active} onChange={e => {
                       handleVenueAreaPatch(venueArea, 'active', e.target.checked);

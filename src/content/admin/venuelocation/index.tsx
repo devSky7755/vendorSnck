@@ -1,13 +1,16 @@
 import { Helmet } from 'react-helmet-async';
 import { Box, styled } from '@mui/material';
-import { useState } from 'react';
-import { VenueInLocation as VenueLocation} from 'src/models/venue';
+import { useEffect, useState } from 'react';
+import { VenueInLocation as VenueLocation } from 'src/models/venue';
 import VenueLocationsTable from './VenueLocationTable';
 import EditVenueLocationDialog from './EditVenueLocation';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
 import { Venue } from 'src/models/venue';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
+import { useParams } from 'react-router';
+import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import PageHeader from './PageHeader';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -41,13 +44,23 @@ interface VenueLocationsPageProps {
 
 function VenueLocationsPage(props: VenueLocationsPageProps) {
   const { token, venues } = props;
+  const { venueId } = useParams();
 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [venueLocations, setVenueLocations] = useState<VenueLocation[]>([]);
+  const [venue, setVenue] = useState<Venue>(null);
 
   const [selectedVenueLocations, setSelectedVenueLocations] = useState<VenueLocation[]>([]);
+
+  useEffect(() => {
+    if (!venueId || !venues) setVenue(null);
+    else {
+      const v = venues.find(x => x.id === venueId);
+      setVenue(v);
+    }
+  }, [venueId, venues])
 
   const onAction = (action, data) => {
     if (action === 'Edit') {
@@ -63,7 +76,7 @@ function VenueLocationsPage(props: VenueLocationsPageProps) {
       setEditing(data);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      setEditing({ active: false, pickup: false, delivery: false });
+      setEditing({ active: false, pickup: false, delivery: false, seatFields: ['', '', ''] });
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);
@@ -87,13 +100,14 @@ function VenueLocationsPage(props: VenueLocationsPageProps) {
   return (
     <>
       <Helmet>
-        <title>VenueLocations</title>
+        <title>In Venue Locations</title>
       </Helmet>
       {
         editOpen && editing &&
         <EditVenueLocationDialog
           venueLocation={editing}
           open={editOpen}
+          venue={venue}
           onAction={onAction}
         />
       }
@@ -110,10 +124,16 @@ function VenueLocationsPage(props: VenueLocationsPageProps) {
           onAction={onAction}
         />
       }
-      <Box style={{ height: '100%' }}>
+      {
+        venue &&
+        <PageTitleWrapper>
+          <PageHeader venue={venue} />
+        </PageTitleWrapper>
+      }
+      <Box style={{ height: venue ? 'calc(100% - 56px)' : '100%' }}>
         <ContainerWrapper>
           <TableWrapper>
-            <VenueLocationsTable venueLocations={venueLocations} venues={venues} onAction={onAction} onSelectionChanged={handleSelectionChanged} onVenueLocationPatch={handleVenueLocationPatch} />
+            <VenueLocationsTable venueLocations={venueLocations} venue={venue} onAction={onAction} onSelectionChanged={handleSelectionChanged} onVenueLocationPatch={handleVenueLocationPatch} />
           </TableWrapper>
         </ContainerWrapper>
         <FooterWrapper>

@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { Box, styled } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { VenueDistributionArea as VenueArea } from 'src/models/venue';
 import VenueAreasTable from './VenueAreaTable';
 import EditVenueAreaDialog from './EditVenueArea';
@@ -8,6 +8,9 @@ import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
 import { Venue } from 'src/models/venue';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
+import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import PageHeader from './PageHeader';
+import { useParams } from 'react-router';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -41,13 +44,23 @@ interface VenueAreasPageProps {
 
 function VenueAreasPage(props: VenueAreasPageProps) {
   const { token, venues } = props;
+  const { venueId } = useParams();
 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [venueAreas, setVenueAreas] = useState<VenueArea[]>([]);
+  const [venue, setVenue] = useState<Venue>(null);
 
   const [selectedVenueAreas, setSelectedVenueAreas] = useState<VenueArea[]>([]);
+
+  useEffect(() => {
+    if (!venueId || !venues) setVenue(null);
+    else {
+      const v = venues.find(x => x.id === venueId);
+      setVenue(v);
+    }
+  }, [venueId, venues])
 
   const onAction = (action, data) => {
     if (action === 'Edit') {
@@ -58,6 +71,7 @@ function VenueAreasPage(props: VenueAreasPageProps) {
       setEditing(null);
     } else if (action === 'Save') {
       setEditOpen(false);
+      handleSave(data);
     } else if (action === 'Delete') {
       setEditOpen(false);
       setEditing(data);
@@ -70,8 +84,28 @@ function VenueAreasPage(props: VenueAreasPageProps) {
       setEditing(null);
     } else if (action === 'Remove') {
       setDeleteOpen(false);
+      handleDelete(editing);
       setEditing(null);
     }
+  }
+
+  const handleSave = (item) => {
+    if (!item.id) {
+      item.id = Date.now().toString();
+      setVenueAreas(prev => [...prev, item]);
+    } else {
+      let newAreas = [...venueAreas];
+      let index = newAreas.findIndex(x => x.id === item.id);
+      if (index >= 0) {
+        newAreas[index] = item;
+        setVenueAreas(newAreas);
+      }
+    }
+  }
+
+  const handleDelete = (item) => {
+    let filtered = venueAreas.filter(x => x.id !== item.id);
+    setVenueAreas(filtered);
   }
 
   const handleSelectionChanged = (selectedIDs) => {
@@ -80,14 +114,18 @@ function VenueAreasPage(props: VenueAreasPageProps) {
   }
 
   const handleVenueAreaPatch = (venueArea, key, value) => {
-    let patch = {};
-    patch[key] = value;
+    let newAreas = [...venueAreas];
+    let index = newAreas.findIndex(x => x.id === venueArea.id);
+    if (index >= 0) {
+      newAreas[index][key] = value
+      setVenueAreas(newAreas);
+    }
   }
 
   return (
     <>
       <Helmet>
-        <title>VenueAreas</title>
+        <title>Venue Distribution Areas</title>
       </Helmet>
       {
         editOpen && editing &&
@@ -110,7 +148,13 @@ function VenueAreasPage(props: VenueAreasPageProps) {
           onAction={onAction}
         />
       }
-      <Box style={{ height: '100%' }}>
+      {
+        venue &&
+        <PageTitleWrapper>
+          <PageHeader venue={venue} />
+        </PageTitleWrapper>
+      }
+      <Box style={{ height: venue ? 'calc(100% - 56px)' : '100%' }}>
         <ContainerWrapper>
           <TableWrapper>
             <VenueAreasTable venueAreas={venueAreas} venues={venues} onAction={onAction} onSelectionChanged={handleSelectionChanged} onVenueAreaPatch={handleVenueAreaPatch} />

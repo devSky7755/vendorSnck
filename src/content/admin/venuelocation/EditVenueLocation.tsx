@@ -3,7 +3,7 @@ import { useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
-import { VenueInLocation as VenueLocation } from 'src/models/venue';
+import { Venue, VenueInLocation as VenueLocation } from 'src/models/venue';
 import { styled, Box, Button, DialogActions, Grid, IconButton, Switch, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
@@ -17,11 +17,12 @@ const DialogSubtitle = styled(Typography)(
 interface EditVenueLocationInterface {
     onAction: Function;
     open: boolean;
+    venue: Venue;
     venueLocation?: VenueLocation;
 };
 
 const EditVenueLocationDialog: React.FC<EditVenueLocationInterface> = (props) => {
-    const { onAction, venueLocation, open } = props;
+    const { onAction, venue, venueLocation, open } = props;
     const [editing, setEditingVenueLocation] = useState(venueLocation);
     const [showError, setShowError] = useState(false);
 
@@ -38,7 +39,6 @@ const EditVenueLocationDialog: React.FC<EditVenueLocationInterface> = (props) =>
             setShowError(true);
         }
     }
-
 
     return (
         <Dialog onClose={() => {
@@ -64,6 +64,69 @@ const EditVenueLocationDialog: React.FC<EditVenueLocationInterface> = (props) =>
                 <Box sx={{ px: 2, py: 2 }} className='border-bottom'>
                     <DialogSubtitle variant='subtitle1' sx={{ pb: 2 }}>VenueLocation Details</DialogSubtitle>
                     <Grid container spacing={3}>
+                        {
+                            venue && venue.inVenueLocationHierarchy1 &&
+                            <Grid item xs={12}>
+                                <TextField
+                                    label={venue.inVenueLocationHierarchy1}
+                                    size='small'
+                                    InputLabelProps={{ shrink: true }}
+                                    fullWidth
+                                    value={(editing.seatFields && editing.seatFields[0]) || ''}
+                                    onChange={(e) => {
+                                        let newfields = [...editing.seatFields];
+                                        newfields[0] = e.target.value;
+                                        setEditingVenueLocation({
+                                            ...editing,
+                                            seatFields: newfields
+                                        });
+                                    }}
+                                >
+                                </TextField>
+                            </Grid>
+                        }
+                        {
+                            venue && venue.inVenueLocationHierarchy2 &&
+                            <Grid item xs={12}>
+                                <TextField
+                                    label={venue.inVenueLocationHierarchy2}
+                                    size='small'
+                                    InputLabelProps={{ shrink: true }}
+                                    fullWidth
+                                    value={(editing.seatFields && editing.seatFields[1]) || ''}
+                                    onChange={(e) => {
+                                        let newfields = [...editing.seatFields];
+                                        newfields[1] = e.target.value;
+                                        setEditingVenueLocation({
+                                            ...editing,
+                                            seatFields: newfields
+                                        });
+                                    }}
+                                >
+                                </TextField>
+                            </Grid>
+                        }
+                        {
+                            venue && venue.inVenueLocationHierarchy3 &&
+                            <Grid item xs={12}>
+                                <TextField
+                                    label={venue.inVenueLocationHierarchy3}
+                                    size='small'
+                                    InputLabelProps={{ shrink: true }}
+                                    fullWidth
+                                    value={(editing.seatFields && editing.seatFields[2]) || ''}
+                                    onChange={(e) => {
+                                        let newfields = [...editing.seatFields];
+                                        newfields[2] = e.target.value;
+                                        setEditingVenueLocation({
+                                            ...editing,
+                                            seatFields: newfields
+                                        });
+                                    }}
+                                >
+                                </TextField>
+                            </Grid>
+                        }
                         <Grid item xs={12}>
                             <TextField
                                 label="QR Code"

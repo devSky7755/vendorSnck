@@ -14,13 +14,13 @@ import {
 } from '@mui/material';
 
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import { VenueDistributionArea as VenueLocation } from 'src/models/venue';
+import { VenueInLocation as VenueLocation } from 'src/models/venue';
 import { Venue } from 'src/models/venue';
 
 interface VenueLocationsTableProps {
   className?: string;
   venueLocations: VenueLocation[];
-  venues: Venue[];
+  venue: Venue;
   onAction: Function;
   onSelectionChanged: Function;
   onVenueLocationPatch: Function;
@@ -34,7 +34,7 @@ const URLTableCell = styled(TableCell)(
 `
 );
 
-const VenueLocationsTable: FC<VenueLocationsTableProps> = ({ venueLocations, venues, onAction, onSelectionChanged, onVenueLocationPatch }) => {
+const VenueLocationsTable: FC<VenueLocationsTableProps> = ({ venueLocations, venue, onAction, onSelectionChanged, onVenueLocationPatch }) => {
   const [actionID, setActionID] = useState<string>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedVenueLocations, setSelectedVenueLocations] = useState<string[]>(
@@ -87,19 +87,29 @@ const VenueLocationsTable: FC<VenueLocationsTableProps> = ({ venueLocations, ven
             <TableRow>
               <TableCell padding="checkbox" style={{ height: 52 }}>
               </TableCell>
-              <TableCell>ID</TableCell>
-              <TableCell>Section</TableCell>
-              <TableCell>QR Code</TableCell>
+              {
+                venue && venue.inVenueLocationHierarchy1 && venue.inVenueLocationHierarchy1.length > 0 &&
+                <TableCell>{venue.inVenueLocationHierarchy1}</TableCell>
+              }
+              {
+                venue && venue.inVenueLocationHierarchy2 && venue.inVenueLocationHierarchy2.length > 0 &&
+                <TableCell>{venue.inVenueLocationHierarchy2}</TableCell>
+              }
+              {
+                venue && venue.inVenueLocationHierarchy3 && venue.inVenueLocationHierarchy3.length > 0 &&
+                <TableCell>{venue.inVenueLocationHierarchy3}</TableCell>
+              }
+              <TableCell>Distribution Area</TableCell>
               <TableCell>Active</TableCell>
               <TableCell>Delivery</TableCell>
               <TableCell>Pickup</TableCell>
+              <TableCell>QR Code</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {venueLocations.map((venueLocation, index) => {
               const isSelected = selectedVenueLocations.includes(venueLocation.id);
-              const venue = venues.find(x => x.id === venueLocation.venueId);
 
               return (
                 <TableRow
@@ -116,13 +126,20 @@ const VenueLocationsTable: FC<VenueLocationsTableProps> = ({ venueLocations, ven
                       }
                     />
                   </TableCell>
-                  <TableCell>{index + 1}</TableCell>
+                  {
+                    venue && venue.inVenueLocationHierarchy1 && venue.inVenueLocationHierarchy1.length > 0 &&
+                    <TableCell>{venueLocation.seatFields && venueLocation.seatFields[0]}</TableCell>
+                  }
+                  {
+                    venue && venue.inVenueLocationHierarchy2 && venue.inVenueLocationHierarchy2.length > 0 &&
+                    <TableCell>{venueLocation.seatFields && venueLocation.seatFields[1]}</TableCell>
+                  }
+                  {
+                    venue && venue.inVenueLocationHierarchy3 && venue.inVenueLocationHierarchy3.length > 0 &&
+                    <TableCell>{venueLocation.seatFields && venueLocation.seatFields[2]}</TableCell>
+                  }
                   <TableCell>
-                    {venueLocation.name}
                   </TableCell>
-                  <URLTableCell style={{ maxWidth: 250 }}>
-                    {venueLocation.qr_code}
-                  </URLTableCell>
                   <TableCell>
                     <Switch checked={venueLocation.active} onChange={e => {
                       handleVenueLocationPatch(venueLocation, 'active', e.target.checked);
@@ -138,6 +155,9 @@ const VenueLocationsTable: FC<VenueLocationsTableProps> = ({ venueLocations, ven
                       handleVenueLocationPatch(venueLocation, 'pickup', e.target.checked);
                     }} />
                   </TableCell>
+                  <URLTableCell style={{ maxWidth: 250 }}>
+                    {venueLocation.qr_code}
+                  </URLTableCell>
                   <TableCell align="right" padding="checkbox">
                     <IconButton size='small' onClick={(event) => {
                       handleClickAction(event, venueLocation.id);

@@ -95,7 +95,7 @@ function StaffsPage(props: StaffsPageProps) {
     Promise.all(promises).then(res => {
       let all_vendors = [];
       res.forEach(x => {
-        if (x.vendorStands) all_vendors = [...all_vendors, ...x.vendorStands];
+        if (x && x.vendorStands) all_vendors = [...all_vendors, ...x.vendorStands];
       })
       setVendors(all_vendors);
     });
@@ -159,13 +159,15 @@ function StaffsPage(props: StaffsPageProps) {
       })
     } else {
       postStaff(token, patch).then(res => {
-        const staff_vendor = vendors.find(x => x.id === staff.vendorStandId);
-        res.vendor_stand = {
-          id: staff_vendor.id,
-          name: staff_vendor.name
-        }
-        if (!vendorId || (vendorId && res.vendorStandId === vendorId)) {
-          setStaffs(prev => [...prev, res]);
+        if (res) {
+          const staff_vendor = vendors.find(x => x.id === staff.vendorStandId);
+          res.vendor_stand = {
+            id: staff_vendor.id,
+            name: staff_vendor.name
+          }
+          if (!vendorId || (vendorId && res.vendorStandId === vendorId)) {
+            setStaffs(prev => [...prev, res]);
+          }
         }
       }).catch(ex => {
         console.log(ex.message);

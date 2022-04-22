@@ -66,7 +66,7 @@ function VendorsPage(props: VendorsPageProps) {
     Promise.all(promises).then(res => {
       let all_vendors = [];
       res.forEach(x => {
-        if (x.vendorStands) all_vendors = [...all_vendors, ...x.vendorStands];
+        if (x && x.vendorStands) all_vendors = [...all_vendors, ...x.vendorStands];
       })
       setVendors(all_vendors);
     });
@@ -127,7 +127,9 @@ function VendorsPage(props: VendorsPageProps) {
       })
     } else {
       postVendorStand(token, patch).then(res => {
-        setVendors(prev => [...prev, res]);
+        if (res) {
+          setVendors(prev => [...prev, res]);
+        }
       }).catch(ex => {
         console.log(ex.message);
       })

@@ -9,6 +9,7 @@ import { deleteVenue, patchVenue, updateVenue } from 'src/reducers/venues/action
 import BulkActions from './BulkActions';
 import { patchVenue as patchVenueAPI, postVenue, deleteVenue as deleteVenueAPI } from 'src/Api/apiClient';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
+import { useNavigate } from 'react-router';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -53,6 +54,8 @@ function VenuesPage(props: VenuesPageProps) {
 
   const [selectedVenues, setSelectedVenues] = useState<Venue[]>([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     setVenues(props.venues || []);
   }, [props.venues]);
@@ -81,6 +84,10 @@ function VenuesPage(props: VenuesPageProps) {
       setDeleteOpen(false);
       handleDelete(editing);
       setEditing(null);
+    } else if (action === 'Distribution Area') {
+      navigate('/venueareas/' + data.id);
+    } else if (action === 'In Location') {
+      navigate('/venuelocations/' + data.id);
     }
   }
 
@@ -108,7 +115,9 @@ function VenuesPage(props: VenuesPageProps) {
       })
     } else {
       postVenue(token, patch).then(res => {
-        props.updateVenue(res);
+        if (res) {
+          props.updateVenue(res);
+        }
       }).catch(ex => {
         console.log(ex.message);
       })

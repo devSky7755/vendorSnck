@@ -46,7 +46,6 @@ export interface VenueDistributionArea {
     id?: string;
     venueId?: string;
     name?: string;
-    qr_code?: string;
     active?: boolean;
     delivery?: boolean;
     pickup?: boolean;

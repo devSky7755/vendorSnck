@@ -124,7 +124,9 @@ function MenuItemsPage(props: MenuItemsPageProps) {
       })
     } else {
       postMenuItem(token, vendorId, patch).then(res => {
-        setMenuItems(prev => [...prev, res]);
+        if (res) {
+          setMenuItems(prev => [...prev, res]);
+        }
       }).catch(ex => {
         console.log(ex.message);
       })

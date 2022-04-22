@@ -7,8 +7,6 @@ import EditPromoDialog from './EditPromo';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
 //import { patchPromo, postPromo, deletePromo } from 'src/Api/apiClient';
-import { Venue } from 'src/models/venue';
-import { getVenue } from 'src/Api/apiClient';
 import { useNavigate } from 'react-router';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 

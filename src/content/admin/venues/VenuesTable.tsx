@@ -50,11 +50,7 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
 
   const handleCloseAction = (action: string, venue: Venue) => {
     setAnchorEl(null);
-    if (action === 'Edit') {
-      onAction('Edit', venue);
-    } else if (action === 'Delete') {
-      onAction('Delete', venue);
-    }
+    onAction(action, venue);
   };
 
   const handleSelectOne = (
@@ -164,6 +160,8 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
                     >
                       <MenuItem onClick={() => handleCloseAction('Edit', venue)}>Edit</MenuItem>
                       <MenuItem onClick={() => handleCloseAction('Delete', venue)}>Delete</MenuItem>
+                      <MenuItem onClick={() => handleCloseAction('Distribution Area', venue)}>Edit &nbsp;<b>Distribution areas</b></MenuItem>
+                      <MenuItem onClick={() => handleCloseAction('In Location', venue)}>Edit &nbsp;<b>Venue in locations</b></MenuItem>
                     </Menu>
                   </TableCell>
                 </TableRow>
