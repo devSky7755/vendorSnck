@@ -34,6 +34,8 @@ const VendorsPage = Loader(lazy(() => import('src/content/admin/vendors')));
 const MenuItemsPage = Loader(lazy(() => import('src/content/admin/menuitems')));
 const StaffsPage = Loader(lazy(() => import('src/content/admin/staff')));
 const PromosPage = Loader(lazy(() => import('src/content/admin/promos')));
+const VenueAreasPage = Loader(lazy(() => import('src/content/admin/venuearea')));
+const VenueLocationsPage = Loader(lazy(() => import('src/content/admin/venuelocation')));
 
 // Dashboards
 const Dashboard = Loader(lazy(() => import('src/content/dashboards')));
@@ -373,6 +375,34 @@ const adminRoutes: RouteObject[] = [
       {
         path: '',
         element: <StaffsPage />
+      }
+    ]
+  },
+  {
+    path: 'venueareas',
+    element: <SidebarLayout />,
+    children: [
+      {
+        path: ':venueId',
+        element: <VenueAreasPage />
+      },
+      {
+        path: '',
+        element: <VenueAreasPage />
+      }
+    ]
+  },
+  {
+    path: 'venuelocations',
+    element: <SidebarLayout />,
+    children: [
+      {
+        path: ':venueId',
+        element: <VenueLocationsPage />
+      },
+      {
+        path: '',
+        element: <VenueLocationsPage />
       }
     ]
   },
