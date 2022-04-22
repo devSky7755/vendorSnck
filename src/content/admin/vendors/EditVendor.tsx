@@ -89,6 +89,7 @@ const EditVendorDialog: React.FC<EditVendorInterface> = (props) => {
                         <Grid item xs={12} md={6}>
                             <TextField
                                 select
+                                required
                                 label="Venue"
                                 size='small'
                                 InputLabelProps={{ shrink: true }}

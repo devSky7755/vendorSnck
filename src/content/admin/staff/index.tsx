@@ -6,13 +6,15 @@ import StaffsTable from './StaffsTable';
 import EditStaffDialog from './EditStaff';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
-//import { patchStaff, postStaff, deleteStaff } from 'src/Api/apiClient';
+import { getAllStaffs, patchStaff, postStaff, deleteStaff, getVenue } from 'src/Api/apiClient';
 import { getVendorStand } from 'src/Api/apiClient';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import Status404 from 'src/content/pages/Status/Status404';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import PageHeader from './PageHeader';
+import { Venue } from 'src/models/venue';
+import { VendorStand } from 'src/models/vendorStand';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -41,16 +43,18 @@ const FooterWrapper = styled(Box)(
 
 interface StaffsPageProps {
   token: string;
+  venues: Venue[];
 }
 
 function StaffsPage(props: StaffsPageProps) {
   const { vendorId } = useParams();
-  const { token } = props;
+  const { token, venues } = props;
 
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [vendor, setVendor] = useState(null);
+  const [vendors, setVendors] = useState<VendorStand[]>([]);
   const [notFound, setNotFound] = useState(false);
   const [staffs, setStaffs] = useState<Staff[]>([]);
 
@@ -63,15 +67,39 @@ function StaffsPage(props: StaffsPageProps) {
           setNotFound(true);
         } else {
           setVendor(res);
-          setStaffs(res.staffs || []);
         }
       }).catch(ex => {
         setNotFound(true);
       })
-    } else {
-
     }
-  }, []);
+
+    getAllStaffs(token).then(res => {
+      if (vendorId) {
+        setStaffs(res.filter(x => x.vendorStandId === vendorId));
+      } else {
+        setStaffs(res);
+      }
+    });
+  }, [vendorId]);
+
+  useEffect(() => {
+    loadVendors();
+  }, [vendorId, venues])
+
+  const loadVendors = () => {
+    setVendors([]);
+    let promises = [];
+    venues && venues.forEach(venue => {
+      promises.push(getVenue(venue.id));
+    });
+    Promise.all(promises).then(res => {
+      let all_vendors = [];
+      res.forEach(x => {
+        if (x.vendorStands) all_vendors = [...all_vendors, ...x.vendorStands];
+      })
+      setVendors(all_vendors);
+    });
+  }
 
   const onAction = (action, data) => {
     if (action === 'Edit') {
@@ -88,7 +116,11 @@ function StaffsPage(props: StaffsPageProps) {
       setEditing(data);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      setEditing({ active: false });
+      if (vendorId) {
+        setEditing({ active: false, vendorStandId: vendorId });
+      } else {
+        setEditing({ active: false });
+      }
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);
@@ -102,59 +134,52 @@ function StaffsPage(props: StaffsPageProps) {
 
 
   const handleSave = (staff) => {
-    if (!staff.id) {
-      staff.id = Date.now().toString();
-      setStaffs(prev => [...prev, staff]);
-    } else {
-      let newStaffs = [...staffs];
-      let index = newStaffs.findIndex(x => x.id === staff.id);
-      if (index >= 0) {
-        newStaffs[index] = staff;
-        setStaffs(newStaffs);
-      }
-    }
-
-    /*
     let patch: Staff = { ...staff };
     delete patch.id;
     delete patch.updatedAt;
     delete patch.createdAt;
     delete patch.deletedAt;
-    delete patch.vendorStandId;
+    delete patch.vendor_stand;
+
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 
     if (staff.id) {
-      patchStaff(token, vendorId, staff, patch).then(res => {
+      patchStaff(token, staff, patch).then(res => {
         let newStaffs = [...staffs];
         let index = newStaffs.findIndex(x => x.id === staff.id);
         if (index >= 0) {
           newStaffs[index] = res;
+          if (vendorId) {
+            newStaffs = newStaffs.filter(x => x.vendorStandId === vendorId);
+          }
           setStaffs(newStaffs);
         }
       }).catch(ex => {
         console.log(ex.message);
       })
     } else {
-      postStaff(token, vendorId, patch).then(res => {
-        setStaffs(prev => [...prev, res]);
+      postStaff(token, patch).then(res => {
+        const staff_vendor = vendors.find(x => x.id === staff.vendorStandId);
+        res.vendor_stand = {
+          id: staff_vendor.id,
+          name: staff_vendor.name
+        }
+        if (!vendorId || (vendorId && res.vendorStandId === vendorId)) {
+          setStaffs(prev => [...prev, res]);
+        }
       }).catch(ex => {
         console.log(ex.message);
       })
     }
-    */
   }
 
   const handleDelete = (staff) => {
-    let filtered = staffs.filter(x => x.id !== staff.id);
-    setStaffs(filtered);
-    /*
     deleteStaff(token, staff).then(success => {
       if (success) {
         let filtered = staffs.filter(x => x.id !== staff.id);
         setStaffs(filtered);
       }
     })
-    */
   }
 
   const handleSelectionChanged = (selectedIDs) => {
@@ -163,19 +188,9 @@ function StaffsPage(props: StaffsPageProps) {
   }
 
   const handleStaffPatch = (staff, key, value) => {
-    /*
     let patch = {};
     patch[key] = value;
-    */
 
-    let newStaffs = [...staffs];
-    let index = newStaffs.findIndex(x => x.id === staff.id);
-    if (index >= 0) {
-      newStaffs[index][key] = value
-      setStaffs(newStaffs);
-    }
-
-    /*
     patchStaff(token, staff, patch).then(res => {
       let newStaffs = [...staffs];
       let index = newStaffs.findIndex(x => x.id === staff.id);
@@ -184,7 +199,6 @@ function StaffsPage(props: StaffsPageProps) {
         setStaffs(newStaffs);
       }
     });
-    */
   }
 
   if (notFound) {
@@ -197,8 +211,9 @@ function StaffsPage(props: StaffsPageProps) {
         <title>Staffs</title>
       </Helmet>
       {
-        editOpen && editing &&
+        editOpen && editing && vendors.length > 0 &&
         <EditStaffDialog
+          vendors={vendors}
           staff={editing}
           open={editOpen}
           onAction={onAction}
@@ -242,6 +257,7 @@ function StaffsPage(props: StaffsPageProps) {
 function reduxState(state) {
   return {
     token: state.auth && state.auth.token,
+    venues: state.venues && state.venues.venues
   }
 }
 export default connect(reduxState)(StaffsPage);

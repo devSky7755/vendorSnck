@@ -44,7 +44,7 @@ function UsersSetting() {
     if (search) {
       const params: UsersPageQueryParams = parseQuery(search);
       if (params.role && params.role.toLowerCase() === 'runner') {
-        setUserRole('Runner');
+        setUserRole('runner');
       }
     }
   }, []);
@@ -55,7 +55,7 @@ function UsersSetting() {
 
   const onAddUser = () => {
     setEditing({
-      role: 'Admin',
+      role: 'admin',
     });
     setEditOpen(true);
   }

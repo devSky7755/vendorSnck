@@ -70,7 +70,7 @@ const temp_top_items: MenuItemV1[] = [
 const temp_runners: Staff[] = [
   {
     id: '52',
-    role: 'Runner',
+    role: 'runner',
     firstName: 'Jack',
     lastName: 'Jackson',
     active: true,
@@ -82,7 +82,7 @@ const temp_runners: Staff[] = [
   },
   {
     id: '51',
-    role: 'Runner',
+    role: 'runner',
     firstName: 'Dave',
     lastName: 'Davidson',
     active: true,
@@ -94,7 +94,7 @@ const temp_runners: Staff[] = [
   },
   {
     id: '31',
-    role: 'Runner',
+    role: 'runner',
     firstName: 'Frank',
     lastName: 'Frankson',
     active: true,
@@ -106,7 +106,7 @@ const temp_runners: Staff[] = [
   },
   {
     id: '20',
-    role: 'Runner',
+    role: 'runner',
     firstName: 'Kris',
     lastName: 'Krison',
     active: true,

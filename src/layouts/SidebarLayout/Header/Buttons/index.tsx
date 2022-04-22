@@ -18,13 +18,14 @@ function GetPageTitle(pathname) {
       return 'Venues';
     case '/vendorstands':
       return 'Vendors';
-    case '/menuitems':
-      return 'Menu Items';
-    case '/staff':
-      return 'Staff';
     case '/promos':
       return 'Promo';
     default:
+      if (pathname.startsWith('/menuitems')) {
+        return 'Menu Items';
+      } else if (pathname.startsWith('/staff')) {
+        return 'Staff';
+      }
       return '';
   }
 }

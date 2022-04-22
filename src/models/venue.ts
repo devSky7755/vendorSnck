@@ -59,7 +59,7 @@ export function getVenueSeatField(venue: Venue) {
         return fields;
     }
     while (true) {
-        if (venue['inVenueLocationHierarchy' + index]) {
+        if (venue['inVenueLocationHierarchy' + index] !== null && venue['inVenueLocationHierarchy' + index] !== undefined) {
             fields.push(venue['inVenueLocationHierarchy' + index]);
             index++;
         } else {

@@ -1,31 +1,50 @@
-export type UserRole = 'Admin' | 'Runner' | 'Packer';
+export type UserRole = 'admin' | 'manager' | 'runner' | 'packer';
+
+export interface IDName {
+  id: string;
+  name: string;
+}
 
 export interface Staff {
   id: string;
-  role: UserRole;
-  email?: string;
-  mobileNo?: string;
   firstName: string;
   lastName: string;
-  active: boolean;
-  lastSeen: string;
-  lastSeenTimeStamp: number;
-
+  mobileNo?: string;
   vendorStandId?: string;
+  active?: boolean;
+  role?: UserRole;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
+  vendor_stand?: IDName;
 
+  email?: string;
+  lastSeen?: string;
+  lastSeenTimeStamp?: number;
   average?: number;
   average_change?: number;
   daily_count?: number;
+}
+
+export function GetStaffRoleLabel(role) {
+  switch (role) {
+    case 'admin':
+      return 'Admin';
+    case 'manager':
+      return 'Vendor Manager';
+    case 'packer':
+      return 'Packer';
+    case 'runner':
+      return 'Runner';
+  }
+  return role;
 }
 
 
 export const tempUsers: Staff[] = [
   {
     id: '52',
-    role: 'Runner',
+    role: 'runner',
     firstName: 'Jack',
     lastName: 'Jackson',
     active: true,
@@ -34,7 +53,7 @@ export const tempUsers: Staff[] = [
   },
   {
     id: '51',
-    role: 'Runner',
+    role: 'runner',
     firstName: 'Dave',
     lastName: 'Davidson',
     active: false,
@@ -43,7 +62,7 @@ export const tempUsers: Staff[] = [
   },
   {
     id: '31',
-    role: 'Packer',
+    role: 'packer',
     firstName: 'Frank',
     lastName: 'Frankson',
     active: true,

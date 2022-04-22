@@ -7,6 +7,7 @@ import { styled, Box, Button, DialogActions, Grid, IconButton, Switch, TextField
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import { VendorStand } from 'src/models/vendorStand';
 
 const DialogSubtitle = styled(Typography)(
     ({ theme }) => `
@@ -17,11 +18,18 @@ const DialogSubtitle = styled(Typography)(
 interface EditStaffInterface {
     onAction: Function;
     open: boolean;
+    vendors: VendorStand[];
     staff?: Staff;
 };
 
+const UserRoles = [
+    { label: 'Vendor Manager', value: 'manager' },
+    { label: 'Runner', value: 'runner' }
+];
+
+
 const EditStaffDialog: React.FC<EditStaffInterface> = (props) => {
-    const { onAction, staff, open } = props;
+    const { onAction, staff, open, vendors } = props;
     const [editing, setEditingStaff] = useState(staff);
     const [showError, setShowError] = useState(false);
 
@@ -30,6 +38,7 @@ const EditStaffDialog: React.FC<EditStaffInterface> = (props) => {
     const validateInput = () => {
         if (!editing.firstName || editing.firstName.trim().length === 0) return false;
         if (!editing.lastName || editing.lastName.trim().length === 0) return false;
+        if (!editing.vendorStandId) return false;
         return true;
     }
 
@@ -40,8 +49,6 @@ const EditStaffDialog: React.FC<EditStaffInterface> = (props) => {
             setShowError(true);
         }
     }
-
-    const UserRoles = ['Admin', 'Runner', 'Packer'];
 
     return (
         <Dialog onClose={() => {
@@ -123,13 +130,36 @@ const EditStaffDialog: React.FC<EditStaffInterface> = (props) => {
                         <Grid item xs={12}>
                             <TextField
                                 select
+                                label="Vendor"
+                                required
+                                InputLabelProps={{ shrink: true }}
+                                error={showError && !editing.vendorStandId}
+                                size='small'
+                                fullWidth
+                                value={editing.vendorStandId}
+                                onChange={(e) => {
+                                    setEditingStaff({
+                                        ...editing,
+                                        vendorStandId: e.target.value
+                                    });
+                                }}
+                            >
+                                {vendors.map((vendor) => (
+                                    <MenuItem key={vendor.id} value={vendor.id}>{vendor.name}</MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                select
+                                InputLabelProps={{ shrink: true }}
                                 label="Staff Type"
                                 size='small'
                                 fullWidth
                                 value={editing.role}
                                 onChange={(e) => {
                                     const role = e.target.value;
-                                    if (role === 'Admin' || role === 'Runner' || role === 'Packer') {
+                                    if (role === 'manager' || role === 'runner') {
                                         setEditingStaff({
                                             ...editing,
                                             role: role
@@ -138,7 +168,7 @@ const EditStaffDialog: React.FC<EditStaffInterface> = (props) => {
                                 }}
                             >
                                 {UserRoles.map((option) => (
-                                    <MenuItem key={option} value={option}>{option}</MenuItem>
+                                    <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
                                 ))}
                             </TextField>
                         </Grid>

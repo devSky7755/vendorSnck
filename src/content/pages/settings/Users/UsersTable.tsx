@@ -25,7 +25,7 @@ import {
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Label from 'src/components/Label';
-import { Staff, UserRole } from 'src/models/staff';
+import { GetStaffRoleLabel, Staff, UserRole } from 'src/models/staff';
 
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -75,7 +75,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
   const [showFilter, setShowFilter] = useState<boolean>(false);
   const [actionID, setActionID] = useState<string>('');
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
-  const [expanded, setExpanded] = useState<string[]>(['Runner', 'Packer']);
+  const [expanded, setExpanded] = useState<string[]>(['runner', 'packer']);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const [filters, setFilters] = useState<Filters>({
@@ -103,11 +103,11 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
       name: 'All'
     },
     {
-      id: 'Runner',
+      id: 'runner',
       name: 'Runner'
     },
     {
-      id: 'Packer',
+      id: 'packer',
       name: 'Packer'
     }
   ];
@@ -223,7 +223,7 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
               gutterBottom
               noWrap
             >
-              {role}
+              {GetStaffRoleLabel(role)}
             </Typography>
           </TableCell>
           <TableCell align="right">
@@ -378,10 +378,10 @@ const UsersTable: FC<UsersTableProps> = ({ users, onEditingUser, user_role, sear
           </TableHead>
           <TableBody>
             {
-              renderUsers(filteredUsers, 'Runner')
+              renderUsers(filteredUsers, 'runner')
             }
             {
-              renderUsers(filteredUsers, 'Packer')
+              renderUsers(filteredUsers, 'packer')
             }
           </TableBody>
         </Table>

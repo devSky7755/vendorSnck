@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import { Staff } from 'src/models/staff';
+import { GetStaffRoleLabel, Staff } from 'src/models/staff';
 import { VendorStand } from 'src/models/vendorStand';
 
 interface StaffsTableProps {
@@ -79,7 +79,6 @@ const StaffsTable: FC<StaffsTableProps> = ({ vendor, staffs, onAction, onSelecti
             <TableRow>
               <TableCell padding="checkbox" style={{ height: 52 }}>
               </TableCell>
-              <TableCell>ID</TableCell>
               <TableCell>First Name</TableCell>
               <TableCell>Last Name</TableCell>
               <TableCell>Mobile No</TableCell>
@@ -108,7 +107,6 @@ const StaffsTable: FC<StaffsTableProps> = ({ vendor, staffs, onAction, onSelecti
                       }
                     />
                   </TableCell>
-                  <TableCell>{index + 1}</TableCell>
                   <TableCell>
                     {staff.firstName}
                   </TableCell>
@@ -119,13 +117,13 @@ const StaffsTable: FC<StaffsTableProps> = ({ vendor, staffs, onAction, onSelecti
                     {staff.mobileNo}
                   </TableCell>
                   <TableCell>
-                    {staff.role}
+                    {GetStaffRoleLabel(staff.role)}
                   </TableCell>
                   <TableCell>
-                    {vendor && vendor.name}
+                    {staff.vendor_stand && staff.vendor_stand.name}
                   </TableCell>
                   <TableCell>
-                    <Switch checked={staff.active} onChange={e => {
+                    <Switch checked={staff.active || false} onChange={e => {
                       handleStaffPatch(staff, 'active', e.target.checked);
                     }} />
                   </TableCell>

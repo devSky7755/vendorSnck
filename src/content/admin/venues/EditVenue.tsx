@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
@@ -27,10 +27,15 @@ const EditVenueDialog: React.FC<EditVenueInterface> = (props) => {
     const [fields, setFields] = useState(getVenueSeatField(venue));
     const [showError, setShowError] = useState(false);
 
-    const isNew = !venue.name
+    const isNew = !venue.id
+
+    useEffect(() => {
+        setFields(getVenueSeatField(venue));
+    }, [venue])
 
     const validateInput = () => {
         if (!editing.name || editing.name.trim().length === 0) return false;
+        if (!fields || !fields[0] || fields[0].trim().length === 0) return false;
         return true;
     }
 
@@ -247,14 +252,16 @@ const EditVenueDialog: React.FC<EditVenueInterface> = (props) => {
                         {
                             fields.map((field, index) => {
                                 return (
-                                    <Grid item xs={12} md={3} key={index}>
+                                    <Grid item xs={12} md={4} key={index}>
                                         <TextField
                                             label={"In Venue Location Heirarchy " + (index + 1)}
                                             size='small'
                                             fullWidth
+                                            required={index === 0}
+                                            error={showError && (index === 0) && field.trim().length === 0}
                                             InputLabelProps={{ shrink: true }}
                                             InputProps={
-                                                index === fields.length - 1 ? (
+                                                index === fields.length - 1 && index > 0 ? (
                                                     {
                                                         endAdornment: <IconButton onClick={e => {
                                                             let newFields = [...fields];

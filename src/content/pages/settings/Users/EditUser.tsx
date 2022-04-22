@@ -17,15 +17,15 @@ interface EditUserInterface {
 
 const UserRoles = [
     {
-        value: 'Admin',
-        label: 'Admin',
+        value: 'manager',
+        label: 'Vendor Manager',
     },
     {
-        value: 'Runner',
+        value: 'runner',
         label: 'Runner',
     },
     {
-        value: 'Packer',
+        value: 'packer',
         label: 'Packer',
     }
 ];
@@ -63,7 +63,7 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                         value={editing.role}
                         onChange={(e) => {
                             const role = e.target.value;
-                            if (role === 'Admin' || role === 'Runner' || role === 'Packer') {
+                            if (role === 'manager' || role === 'runner' || role === 'packer') {
                                 setEditingUser({
                                     ...editing,
                                     role: role

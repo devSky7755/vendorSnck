@@ -1,13 +1,15 @@
 import { ApiResponse } from "src/models/api_response";
 import { BASE_URL, isVendorApp } from "src/models/constant";
 import { MenuItem } from "src/models/menu_item";
+import { Staff } from "src/models/staff";
 import { VendorStand } from "src/models/vendorStand";
 import { Venue } from "src/models/venue";
 
 const VerifyEndPoint = isVendorApp ? 'auth/staff/verification-code' : 'auth/admin/verification-code';
 const AuthEndPoint = isVendorApp ? 'auth/staff/login' : 'auth/admin/login';
 const VenuesEndpoint = 'venues';
-const VendorStandEndpoint = 'vendorStands/'
+const VendorStandEndpoint = 'vendorStands/';
+const StaffsEndpoint = 'staffs/';
 
 
 ///Authentication
@@ -177,7 +179,6 @@ export function deleteVendorStand(token: string, id: string): Promise<boolean> {
 }
 
 //Menu Items
-
 export function patchMenuItem(token: string, vendorId: string, menu: MenuItem, patch): Promise<MenuItem> {
     return fetch(BASE_URL + VendorStandEndpoint + vendorId + '/menuItems/' + menu.id, {
         method: 'PATCH',
@@ -216,6 +217,77 @@ export function postMenuItem(token: string, vendorId: string, menu: MenuItem): P
 
 export function deleteMenuItem(token: string, menu: MenuItem): Promise<boolean> {
     return fetch(BASE_URL + VendorStandEndpoint + menu.vendorStandId + '/menuItems/' + menu.id, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return true;
+        } else {
+            return false;
+        }
+    })
+}
+
+//Staffs
+export function getAllStaffs(token: string): Promise<Staff[]> {
+    return fetch(BASE_URL + StaffsEndpoint, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    }).then(res => res.json()).then(res => {
+        if (res.success && res.data && res.data.staffs) {
+            return res.data.staffs as Staff[];
+        } else {
+            return [];
+        }
+    })
+}
+
+export function patchStaff(token: string, staff: Staff, patch): Promise<Staff> {
+    return fetch(BASE_URL + StaffsEndpoint + staff.id, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(patch)
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return res.data as Staff;
+        } else {
+            return staff;
+        }
+    })
+}
+
+export function postStaff(token: string, staff: Staff): Promise<Staff> {
+    return fetch(BASE_URL + StaffsEndpoint, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(staff)
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return res.data as Staff;
+        } else {
+            return null;
+        }
+    })
+}
+
+export function deleteStaff(token: string, staff: Staff): Promise<boolean> {
+    return fetch(BASE_URL + StaffsEndpoint + staff.id, {
         method: 'DELETE',
         headers: {
             'Accept': 'application/json',
