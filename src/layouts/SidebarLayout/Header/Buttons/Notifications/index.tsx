@@ -2,19 +2,21 @@ import {
   alpha,
   Badge,
   Box,
+  Button,
   Divider,
+  Drawer,
   IconButton,
   List,
   ListItem,
-  Popover,
   Tooltip,
   Typography
 } from '@mui/material';
-import { useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import NotificationsActiveTwoToneIcon from '@mui/icons-material/NotificationsActiveTwoTone';
 import { styled } from '@mui/material/styles';
-
+import CloseIcon from '@mui/icons-material/Close';
 import { formatDistance, subDays } from 'date-fns';
+import { MockNotifications } from './mock';
 
 export const NotificationsBadge = styled(Badge)(
   ({ theme }) => `
@@ -43,7 +45,16 @@ export const NotificationsBadge = styled(Badge)(
 function HeaderNotifications() {
   const ref = useRef<any>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
+  const [notifications] = useState<any[]>(MockNotifications);
+  const [unRead, setUnRead] = useState<number>(0);
 
+  useEffect(() => {
+    setUnRead(
+      notifications.filter((notf) => {
+        return !notf.isViewed;
+      }).length
+    );
+  }, [notifications]);
   const handleOpen = (): void => {
     setOpen(true);
   };
@@ -55,9 +66,13 @@ function HeaderNotifications() {
   return (
     <>
       <Tooltip arrow title="Notifications">
-        <IconButton ref={ref} onClick={handleOpen} style={{ color: '#FFFFFFBD' }}>
+        <IconButton
+          ref={ref}
+          onClick={handleOpen}
+          style={{ color: '#FFFFFFBD' }}
+        >
           <NotificationsBadge
-            badgeContent={1}
+            badgeContent={5}
             anchorOrigin={{
               vertical: 'top',
               horizontal: 'right'
@@ -67,48 +82,102 @@ function HeaderNotifications() {
           </NotificationsBadge>
         </IconButton>
       </Tooltip>
-      <Popover
-        anchorEl={ref.current}
-        onClose={handleClose}
-        open={isOpen}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right'
-        }}
-      >
-        <Box sx={{ p: 2 }} display="flex" alignItems="center" justifyContent="space-between">
-          <Typography variant="h5">Notifications</Typography>
+
+      <Drawer anchor="right" open={isOpen} onClose={handleClose}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            px: 2,
+            py: 1,
+            boxShadow: '0px 1px 6px 0px rgb(0 0 0 / 50%)',
+            alignItems: 'center'
+          }}
+        >
+          <NotificationsBadge
+            badgeContent={unRead}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+          >
+            <Typography variant="h6">Notifications</Typography>
+          </NotificationsBadge>
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{
+              color: (theme) => theme.palette.grey[500],
+              background: 'white',
+              '&.MuiButtonBase-root:hover': {
+                bgcolor: 'white'
+              }
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
         </Box>
-        <Divider />
-        <List sx={{ p: 0 }}>
-          <ListItem sx={{ p: 2, minWidth: 350, display: { xs: 'block', sm: 'flex' } }}>
-            <Box flex="1">
-              <Box display="flex" justifyContent="space-between">
-                <Typography sx={{ fontWeight: 'bold' }}>
-                  Messaging Platform
-                </Typography>
-                <Typography variant="caption" sx={{ textTransform: 'none' }}>
-                  {formatDistance(subDays(new Date(), 3), new Date(), {
-                    addSuffix: true
-                  })}
-                </Typography>
-              </Box>
-              <Typography
-                component="span"
-                variant="body2"
-                color="text.secondary"
-              >
-                {' '}
-                new messages in your inbox
-              </Typography>
-            </Box>
-          </ListItem>
+        <List sx={{ p: 0, flex: 1 }}>
+          {notifications.map((notification, key) => {
+            return (
+              <Fragment key={key}>
+                <ListItem
+                  key={key}
+                  className={notification.isViewed ? '' : 'bg-warning'}
+                  sx={{
+                    p: 2,
+                    minWidth: 350,
+                    display: { xs: 'block', sm: 'flex' }
+                  }}
+                >
+                  <Box flex="1">
+                    <Box>
+                      <Typography
+                        variant="caption"
+                        sx={{ textTransform: 'none' }}
+                      >
+                        {formatDistance(new Date(notification.at), new Date(), {
+                          addSuffix: true
+                        })}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        color="text.secondary"
+                        pr="6px"
+                      >
+                        {notification.title}
+                      </Typography>
+                      <Button>{notification.action.title}</Button>
+                    </Box>
+                  </Box>
+                </ListItem>
+                <Divider light />
+              </Fragment>
+            );
+          })}
         </List>
-      </Popover>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'end',
+            px: 2,
+            py: 1,
+            boxShadow: '0px 1px 6px 0px rgb(0 0 0 / 50%)',
+            alignItems: 'center'
+          }}
+        >
+          <Button>Mark as read</Button>
+        </Box>
+      </Drawer>
     </>
   );
 }
