@@ -81,14 +81,12 @@ const PromosTable: FC<PromosTableProps> = ({ promos, onAction, onSelectionChange
             <TableRow>
               <TableCell padding="checkbox" style={{ height: 52 }}>
               </TableCell>
-              <TableCell>ID</TableCell>
               <TableCell>Code</TableCell>
               <TableCell>Type</TableCell>
               <TableCell>Value</TableCell>
               <TableCell>Usage</TableCell>
               <TableCell>Commences</TableCell>
               <TableCell>Expires</TableCell>
-              <TableCell>Active</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
@@ -96,6 +94,8 @@ const PromosTable: FC<PromosTableProps> = ({ promos, onAction, onSelectionChange
             {promos.map((promo, index) => {
               const isSelected = selectedPromos.includes(promo.id);
               const value = promo.value || 0;
+              const commences = promo.commences ? new Date(promo.commences).toLocaleString() : ''
+              const expires = promo.expires ? new Date(promo.expires).toLocaleString() : ''
               return (
                 <TableRow
                   hover
@@ -111,18 +111,12 @@ const PromosTable: FC<PromosTableProps> = ({ promos, onAction, onSelectionChange
                       }
                     />
                   </TableCell>
-                  <TableCell>{index + 1}</TableCell>
                   <TableCell>{promo.code}</TableCell>
                   <TableCell>{promo.type}</TableCell>
-                  <TableCell>{promo.type === 'Percentage' ? value.toFixed(2) + '%' : '$' + value.toFixed(2)}</TableCell>
-                  <TableCell>{promo.usage}</TableCell>
-                  <TableCell>{promo.commences?.toString()}</TableCell>
-                  <TableCell>{promo.expires?.toString()}</TableCell>
-                  <TableCell>
-                    <Switch checked={promo.active || false} onChange={e => {
-                      handlePromoPatch(promo, 'active', e.target.checked);
-                    }} />
-                  </TableCell>
+                  <TableCell>{promo.type === 'percentage' ? value.toFixed(2) + '%' : '$' + value.toFixed(2)}</TableCell>
+                  <TableCell>{promo.multipleUse ? 'Multiple use' : 'One time use'}</TableCell>
+                  <TableCell>{commences}</TableCell>
+                  <TableCell>{expires}</TableCell>
                   <TableCell align="right" padding="checkbox">
                     <IconButton size='small' onClick={(event) => {
                       handleClickAction(event, promo.id);

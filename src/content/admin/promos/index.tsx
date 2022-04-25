@@ -6,9 +6,8 @@ import PromosTable from './PromosTable';
 import EditPromoDialog from './EditPromo';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
-//import { patchPromo, postPromo, deletePromo } from 'src/Api/apiClient';
-import { useNavigate } from 'react-router';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
+import { deletePromo, getPromos, patchPromo, postPromo } from 'src/Api/apiClient';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -48,14 +47,16 @@ function PromosPage(props: PromosPageProps) {
 
   const [selectedPromos, setSelectedPromos] = useState<Promo[]>([]);
 
-  const navigate = useNavigate();
-
   useEffect(() => {
     loadPromos();
   }, []);
 
   const loadPromos = () => {
-    setPromos([]);
+    getPromos(token).then(res => {
+      if (res) {
+        setPromos(res);
+      }
+    })
   }
 
   const onAction = (action, data) => {
@@ -73,7 +74,7 @@ function PromosPage(props: PromosPageProps) {
       setEditing(data);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      setEditing({ active: false, type: 'Percentage', usage: 'One time use' });
+      setEditing({ type: 'percentage' });
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);
@@ -85,38 +86,65 @@ function PromosPage(props: PromosPageProps) {
     }
   }
 
-
   const handleSave = (promo) => {
-    if (!promo.id) {
-      promo.id = Date.now().toString();
-      setPromos(prev => [...prev, promo]);
+    let patch: Promo = { ...promo };
+    delete patch.id;
+    delete patch.updatedAt;
+    delete patch.createdAt;
+    delete patch.deletedAt;
+
+    Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
+
+    if (promo.id) {
+      patchPromo(token, promo, patch).then(res => {
+        let newPromos = [...promos];
+        let index = newPromos.findIndex(x => x.id === promo.id);
+        if (index >= 0) {
+          newPromos[index] = res;
+          setPromos(newPromos);
+        }
+      }).catch(ex => {
+        console.log(ex.message);
+      })
     } else {
-      let newPromos = [...promos];
-      let index = newPromos.findIndex(x => x.id === promo.id);
-      if (index >= 0) {
-        newPromos[index] = promo;
-        setPromos(newPromos);
-      }
+      postPromo(token, patch).then(res => {
+        if (res) {
+          setPromos(prev => [...prev, res]);
+        }
+      }).catch(ex => {
+        console.log(ex.message);
+      })
     }
   }
 
-  const handleDelete = (promo) => {
-    let filtered = promos.filter(x => x.id !== promo.id);
-    setPromos(filtered);
+  const handleDelete = (item) => {
+    deletePromo(token, item).then(res => {
+      if (res) {
+        const filtered = promos.filter(x => x.id !== item.id);
+        setPromos(filtered);
+      }
+    })
+  }
+
+  const handlePromoPatch = (promo, key, value) => {
+    let patch = {};
+    patch[key] = value;
+
+    patchPromo(token, promo, patch).then(res => {
+      if (res) {
+        let newPromos = [...promos];
+        let index = newPromos.findIndex(x => x.id === promo.id);
+        if (index >= 0) {
+          newPromos[index][key] = value;
+          setPromos(newPromos);
+        }
+      }
+    });
   }
 
   const handleSelectionChanged = (selectedIDs) => {
     const selected = promos.filter(x => selectedIDs.includes(x.id));
     setSelectedPromos(selected);
-  }
-
-  const handlePromoPatch = (promo, key, value) => {
-    let newPromos = [...promos];
-    let index = newPromos.findIndex(x => x.id === promo.id);
-    if (index >= 0) {
-      newPromos[index][key] = value
-      setPromos(newPromos);
-    }
   }
 
   return (

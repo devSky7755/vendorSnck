@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
@@ -20,10 +20,24 @@ interface EditPromoInterface {
     promo?: Promo;
 };
 
+const promoTypes = [
+    { label: 'Percentage', value: 'percentage' },
+    { label: 'Fixed', value: 'fixed' }
+];
+
+const toLocalDate = (date) => {
+    let timestamp = Date.parse(date);
+    timestamp -= new Date().getTimezoneOffset() * 60000;
+    return new Date(timestamp).toISOString();
+}
+
 const EditPromoDialog: React.FC<EditPromoInterface> = (props) => {
     const { onAction, promo, open } = props;
     const [editing, setEditingPromo] = useState(promo);
     const [showError, setShowError] = useState(false);
+
+    const [commences, setCommences] = useState(promo.commences && toLocalDate(promo.commences));
+    const [expires, setExpires] = useState(promo.expires && toLocalDate(promo.expires));
 
     const isNew = !promo.id
 
@@ -34,14 +48,17 @@ const EditPromoDialog: React.FC<EditPromoInterface> = (props) => {
 
     const handleSave = () => {
         if (validateInput()) {
+            if (commences) {
+                editing.commences = new Date(commences);
+            }
+            if (expires) {
+                editing.expires = new Date(expires);
+            }
             onAction('Save', editing);
         } else {
             setShowError(true);
         }
     }
-
-    const promoTypes = ['Percentage', 'Value'];
-    const promoUsages = ['One time use', 'Multiple use'];
 
     return (
         <Dialog onClose={() => {
@@ -56,14 +73,6 @@ const EditPromoDialog: React.FC<EditPromoInterface> = (props) => {
                 </IconButton>
             </DialogTitle>
             <Box>
-                <Box sx={{ p: 1 }} style={{ background: '#0000000A' }}>
-                    <Switch checked={editing.active || false} onChange={e => {
-                        setEditingPromo({
-                            ...editing,
-                            active: e.target.checked
-                        })
-                    }} ></Switch> <Typography component='span' variant='subtitle1'>Active</Typography>
-                </Box>
                 <Box sx={{ px: 2, py: 2 }} className='border-bottom'>
                     <DialogSubtitle variant='subtitle1' sx={{ pb: 2 }}>Promo Details</DialogSubtitle>
                     <Grid container spacing={3}>
@@ -94,7 +103,7 @@ const EditPromoDialog: React.FC<EditPromoInterface> = (props) => {
                                 fullWidth
                                 value={editing.type || ''}
                                 onChange={(e) => {
-                                    if (e.target.value === 'Percentage' || e.target.value === 'Value') {
+                                    if (e.target.value === 'percentage' || e.target.value === 'fixed') {
                                         setEditingPromo({
                                             ...editing,
                                             type: e.target.value
@@ -102,9 +111,9 @@ const EditPromoDialog: React.FC<EditPromoInterface> = (props) => {
                                     }
                                 }}
                             >
-                                {promoTypes.map((type) => (
-                                    <MenuItem key={type} value={type}>
-                                        {type}
+                                {promoTypes.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
                                     </MenuItem>
                                 ))}
                             </TextField>
@@ -117,7 +126,7 @@ const EditPromoDialog: React.FC<EditPromoInterface> = (props) => {
                                 InputLabelProps={{ shrink: true }}
                                 fullWidth
                                 InputProps={{
-                                    startAdornment: <InputAdornment position="start">{editing.type === 'Percentage' ? '%' : '$'}</InputAdornment>,
+                                    startAdornment: <InputAdornment position="start">{editing.type === 'percentage' ? '%' : '$'}</InputAdornment>,
                                     inputProps: { min: 0, max: 100, step: 0.01 }
                                 }}
                                 value={editing.value}
@@ -138,28 +147,12 @@ const EditPromoDialog: React.FC<EditPromoInterface> = (props) => {
                             </TextField>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField
-                                select
-                                label="Promo Usage"
-                                size='small'
-                                InputLabelProps={{ shrink: true }}
-                                fullWidth
-                                value={editing.usage || ''}
-                                onChange={(e) => {
-                                    if (e.target.value === 'One time use' || e.target.value === 'Multiple use') {
-                                        setEditingPromo({
-                                            ...editing,
-                                            usage: e.target.value
-                                        });
-                                    }
-                                }}
-                            >
-                                {promoUsages.map((type) => (
-                                    <MenuItem key={type} value={type}>
-                                        {type}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
+                            <Switch checked={editing.multipleUse || false} onChange={e => {
+                                setEditingPromo({
+                                    ...editing,
+                                    multipleUse: e.target.checked
+                                })
+                            }} ></Switch> <Typography component='span' variant='subtitle1'>Multiple Use</Typography>
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <TextField
@@ -168,12 +161,9 @@ const EditPromoDialog: React.FC<EditPromoInterface> = (props) => {
                                 type='datetime-local'
                                 InputLabelProps={{ shrink: true }}
                                 fullWidth
-                                value={editing.commences || ''}
+                                value={(commences && commences.substring(0, 16)) || ''}
                                 onChange={(e) => {
-                                    setEditingPromo({
-                                        ...editing,
-                                        commences: e.target.value
-                                    });
+                                    setCommences(e.target.value);
                                 }}
                             >
                             </TextField>
@@ -185,12 +175,9 @@ const EditPromoDialog: React.FC<EditPromoInterface> = (props) => {
                                 type='datetime-local'
                                 InputLabelProps={{ shrink: true }}
                                 fullWidth
-                                value={editing.expires || ''}
+                                value={(expires && expires.substring(0, 16)) || ''}
                                 onChange={(e) => {
-                                    setEditingPromo({
-                                        ...editing,
-                                        expires: e.target.value
-                                    });
+                                    setExpires(e.target.value);
                                 }}
                             >
                             </TextField>

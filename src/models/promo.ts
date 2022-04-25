@@ -1,16 +1,13 @@
-export type PromoType = 'Percentage' | 'Value';
-export type PromoUsageType = 'One time use' | 'Multiple use';
+export type PromoType = 'percentage' | 'fixed';
 
 export interface Promo {
     id: string;
-    active: boolean;
     code: string;
     type: PromoType;
     value: number;
-    usage: PromoUsageType;
-    commences?: string;
-    expires?: string;
-
+    multipleUse: boolean;
+    commences?: Date;
+    expires?: Date;
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;
