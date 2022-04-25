@@ -3,8 +3,8 @@ import { useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
-import { Venue, VenueInLocation as VenueLocation } from 'src/models/venue';
-import { styled, Box, Button, DialogActions, Grid, IconButton, Switch, TextField } from '@mui/material';
+import { Venue, VenueDistributionArea, VenueInLocation as VenueLocation } from 'src/models/venue';
+import { styled, Box, Button, DialogActions, Grid, IconButton, Switch, TextField, MenuItem } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
@@ -18,17 +18,20 @@ interface EditVenueLocationInterface {
     onAction: Function;
     open: boolean;
     venue: Venue;
+    areas: VenueDistributionArea[];
     venueLocation?: VenueLocation;
 };
 
 const EditVenueLocationDialog: React.FC<EditVenueLocationInterface> = (props) => {
-    const { onAction, venue, venueLocation, open } = props;
+    const { onAction, venue, venueLocation, open, areas } = props;
     const [editing, setEditingVenueLocation] = useState(venueLocation);
     const [showError, setShowError] = useState(false);
 
     const isNew = !venueLocation.id
 
     const validateInput = () => {
+        if (!editing.hierarchy1 || editing.hierarchy1.trim().length === 0) return false;
+        if (!editing.distributionAreaId || editing.distributionAreaId.trim().length === 0) return false;
         return true;
     }
 
@@ -54,7 +57,7 @@ const EditVenueLocationDialog: React.FC<EditVenueLocationInterface> = (props) =>
             </DialogTitle>
             <Box>
                 <Box sx={{ p: 1 }} style={{ background: '#0000000A' }}>
-                    <Switch checked={editing.active} onChange={e => {
+                    <Switch checked={editing.active || false} onChange={e => {
                         setEditingVenueLocation({
                             ...editing,
                             active: e.target.checked
@@ -70,15 +73,15 @@ const EditVenueLocationDialog: React.FC<EditVenueLocationInterface> = (props) =>
                                 <TextField
                                     label={venue.inVenueLocationHierarchy1}
                                     size='small'
+                                    required
+                                    error={showError && !editing.hierarchy1}
                                     InputLabelProps={{ shrink: true }}
                                     fullWidth
-                                    value={(editing.seatFields && editing.seatFields[0]) || ''}
+                                    value={editing.hierarchy1}
                                     onChange={(e) => {
-                                        let newfields = [...editing.seatFields];
-                                        newfields[0] = e.target.value;
                                         setEditingVenueLocation({
                                             ...editing,
-                                            seatFields: newfields
+                                            hierarchy1: e.target.value
                                         });
                                     }}
                                 >
@@ -93,13 +96,11 @@ const EditVenueLocationDialog: React.FC<EditVenueLocationInterface> = (props) =>
                                     size='small'
                                     InputLabelProps={{ shrink: true }}
                                     fullWidth
-                                    value={(editing.seatFields && editing.seatFields[1]) || ''}
+                                    value={editing.hierarchy2}
                                     onChange={(e) => {
-                                        let newfields = [...editing.seatFields];
-                                        newfields[1] = e.target.value;
                                         setEditingVenueLocation({
                                             ...editing,
-                                            seatFields: newfields
+                                            hierarchy2: e.target.value
                                         });
                                     }}
                                 >
@@ -114,19 +115,39 @@ const EditVenueLocationDialog: React.FC<EditVenueLocationInterface> = (props) =>
                                     size='small'
                                     InputLabelProps={{ shrink: true }}
                                     fullWidth
-                                    value={(editing.seatFields && editing.seatFields[2]) || ''}
+                                    value={editing.hierarchy3}
                                     onChange={(e) => {
-                                        let newfields = [...editing.seatFields];
-                                        newfields[2] = e.target.value;
                                         setEditingVenueLocation({
                                             ...editing,
-                                            seatFields: newfields
+                                            hierarchy3: e.target.value
                                         });
                                     }}
                                 >
                                 </TextField>
                             </Grid>
                         }
+                        <Grid item xs={12}>
+                            <TextField
+                                select
+                                InputLabelProps={{ shrink: true }}
+                                label="Distribution Area"
+                                size='small'
+                                fullWidth
+                                error={showError && !editing.distributionAreaId}
+                                required
+                                value={editing.distributionAreaId}
+                                onChange={(e) => {
+                                    setEditingVenueLocation({
+                                        ...editing,
+                                        distributionAreaId: e.target.value
+                                    })
+                                }}
+                            >
+                                {areas.map((option) => (
+                                    <MenuItem key={option.id} value={option.id}>{option.name}</MenuItem>
+                                ))}
+                            </TextField>
+                        </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 label="QR Code"
@@ -136,11 +157,11 @@ const EditVenueLocationDialog: React.FC<EditVenueLocationInterface> = (props) =>
                                 InputProps={{
                                     endAdornment: <Button size='small' style={{ whiteSpace: 'nowrap' }}>UPDATE QR</Button>,
                                 }}
-                                value={editing.qr_code || ''}
+                                value={editing.qrCode || ''}
                                 onChange={(e) => {
                                     setEditingVenueLocation({
                                         ...editing,
-                                        qr_code: e.target.value
+                                        qrCode: e.target.value
                                     });
                                 }}
                             >
@@ -154,18 +175,18 @@ const EditVenueLocationDialog: React.FC<EditVenueLocationInterface> = (props) =>
                     </Box>
                     <Grid container spacing={2}>
                         <Grid item xs={6} md={3}>
-                            <Switch checked={editing.pickup} onChange={e => {
+                            <Switch checked={editing.pickupEnabled || false} onChange={e => {
                                 setEditingVenueLocation({
                                     ...editing,
-                                    pickup: e.target.checked
+                                    pickupEnabled: e.target.checked
                                 })
                             }}></Switch>Pickup
                         </Grid>
                         <Grid item xs={6} md={9}>
-                            <Switch checked={editing.delivery} onChange={e => {
+                            <Switch checked={editing.deliveryEnabled || false} onChange={e => {
                                 setEditingVenueLocation({
                                     ...editing,
-                                    delivery: e.target.checked
+                                    deliveryEnabled: e.target.checked
                                 })
                             }}></Switch>
                             Delivery

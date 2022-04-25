@@ -11,6 +11,7 @@ import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import PageHeader from './PageHeader';
 import { useParams } from 'react-router';
+import { deleteVenueDistributionArea, getVenueDistributionAreas, patchVenueDistributionArea, postVenueDistributionArea } from 'src/Api/apiClient';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -59,6 +60,11 @@ function VenueAreasPage(props: VenueAreasPageProps) {
     else {
       const v = venues.find(x => x.id === venueId);
       setVenue(v);
+      getVenueDistributionAreas(token, venueId).then(res => {
+        if (res) {
+          setVenueAreas(res);
+        }
+      })
     }
   }, [venueId, venues])
 
@@ -77,7 +83,7 @@ function VenueAreasPage(props: VenueAreasPageProps) {
       setEditing(data);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      setEditing({ active: false, pickup: false, delivery: false });
+      setEditing({ venueId: venueId });
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);
@@ -88,24 +94,48 @@ function VenueAreasPage(props: VenueAreasPageProps) {
       setEditing(null);
     }
   }
-
   const handleSave = (item) => {
-    if (!item.id) {
-      item.id = Date.now().toString();
-      setVenueAreas(prev => [...prev, item]);
+    let patch: VenueArea = { ...item };
+    delete patch.id;
+    delete patch.updatedAt;
+    delete patch.createdAt;
+    delete patch.deletedAt;
+    delete patch.venueId;
+    delete patch.active;
+    delete patch.pickup;
+    delete patch.delivery;
+
+    Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
+
+    if (item.id) {
+      patchVenueDistributionArea(token, venueId, item, patch).then(res => {
+        let newAreas = [...venueAreas];
+        let index = newAreas.findIndex(x => x.id === item.id);
+        if (index >= 0) {
+          newAreas[index] = res;
+          setVenueAreas(newAreas);
+        }
+      }).catch(ex => {
+        console.log(ex.message);
+      })
     } else {
-      let newAreas = [...venueAreas];
-      let index = newAreas.findIndex(x => x.id === item.id);
-      if (index >= 0) {
-        newAreas[index] = item;
-        setVenueAreas(newAreas);
-      }
+      postVenueDistributionArea(token, venueId, patch).then(res => {
+        if (res) {
+          setVenueAreas(prev => [...prev, res]);
+        }
+      }).catch(ex => {
+        console.log(ex.message);
+      })
     }
   }
 
   const handleDelete = (item) => {
-    let filtered = venueAreas.filter(x => x.id !== item.id);
-    setVenueAreas(filtered);
+    deleteVenueDistributionArea(token, venueId, item).then(res => {
+      if (res) {
+        let filtered = venueAreas.filter(x => x.id !== item.id);
+        setVenueAreas(filtered);
+      }
+    })
   }
 
   const handleSelectionChanged = (selectedIDs) => {
@@ -114,12 +144,17 @@ function VenueAreasPage(props: VenueAreasPageProps) {
   }
 
   const handleVenueAreaPatch = (venueArea, key, value) => {
-    let newAreas = [...venueAreas];
-    let index = newAreas.findIndex(x => x.id === venueArea.id);
-    if (index >= 0) {
-      newAreas[index][key] = value
-      setVenueAreas(newAreas);
-    }
+    let patch = {};
+    patch[key] = value;
+
+    patchVenueDistributionArea(token, venueId, venueArea, patch).then(res => {
+      let newAreas = [...venueAreas];
+      let index = newAreas.findIndex(x => x.id === venueArea.id);
+      if (index >= 0) {
+        newAreas[index] = res
+        setVenueAreas(newAreas);
+      }
+    });
   }
 
   return (

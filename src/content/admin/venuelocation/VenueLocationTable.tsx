@@ -10,17 +10,20 @@ import {
   TableContainer,
   Checkbox,
   Switch,
-  styled
+  styled,
+  TextField
 } from '@mui/material';
 
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import { VenueInLocation as VenueLocation } from 'src/models/venue';
+import { VenueDistributionArea, VenueInLocation as VenueLocation } from 'src/models/venue';
 import { Venue } from 'src/models/venue';
+import venuelocation from '.';
 
 interface VenueLocationsTableProps {
   className?: string;
   venueLocations: VenueLocation[];
   venue: Venue;
+  areas: VenueDistributionArea[];
   onAction: Function;
   onSelectionChanged: Function;
   onVenueLocationPatch: Function;
@@ -34,7 +37,7 @@ const URLTableCell = styled(TableCell)(
 `
 );
 
-const VenueLocationsTable: FC<VenueLocationsTableProps> = ({ venueLocations, venue, onAction, onSelectionChanged, onVenueLocationPatch }) => {
+const VenueLocationsTable: FC<VenueLocationsTableProps> = ({ venueLocations, areas, venue, onAction, onSelectionChanged, onVenueLocationPatch }) => {
   const [actionID, setActionID] = useState<string>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedVenueLocations, setSelectedVenueLocations] = useState<string[]>(
@@ -110,7 +113,7 @@ const VenueLocationsTable: FC<VenueLocationsTableProps> = ({ venueLocations, ven
           <TableBody>
             {venueLocations.map((venueLocation, index) => {
               const isSelected = selectedVenueLocations.includes(venueLocation.id);
-
+              const area = areas.find(x => x.id === venueLocation.distributionAreaId);
               return (
                 <TableRow
                   hover
@@ -128,35 +131,51 @@ const VenueLocationsTable: FC<VenueLocationsTableProps> = ({ venueLocations, ven
                   </TableCell>
                   {
                     venue && venue.inVenueLocationHierarchy1 && venue.inVenueLocationHierarchy1.length > 0 &&
-                    <TableCell>{venueLocation.seatFields && venueLocation.seatFields[0]}</TableCell>
+                    <TableCell>{venueLocation.hierarchy1}</TableCell>
                   }
                   {
                     venue && venue.inVenueLocationHierarchy2 && venue.inVenueLocationHierarchy2.length > 0 &&
-                    <TableCell>{venueLocation.seatFields && venueLocation.seatFields[1]}</TableCell>
+                    <TableCell>{venueLocation.hierarchy2}</TableCell>
                   }
                   {
                     venue && venue.inVenueLocationHierarchy3 && venue.inVenueLocationHierarchy3.length > 0 &&
-                    <TableCell>{venueLocation.seatFields && venueLocation.seatFields[2]}</TableCell>
+                    <TableCell>{venueLocation.hierarchy3}</TableCell>
                   }
                   <TableCell>
+                    <TextField
+                      select
+                      InputProps={{ disableUnderline: true }}
+                      fullWidth
+                      value={venueLocation.distributionAreaId}
+                      onChange={e => {
+                        handleVenueLocationPatch(venueLocation, 'distributionAreaId', e.target.value);
+                      }}
+                      variant="standard"
+                    >
+                      {areas.map((option) => (
+                        <MenuItem key={option.id} value={option.id}>
+                          {option.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
                   </TableCell>
                   <TableCell>
-                    <Switch checked={venueLocation.active} onChange={e => {
+                    <Switch checked={venueLocation.active || false} onChange={e => {
                       handleVenueLocationPatch(venueLocation, 'active', e.target.checked);
                     }} />
                   </TableCell>
                   <TableCell>
-                    <Switch checked={venueLocation.delivery} onChange={e => {
-                      handleVenueLocationPatch(venueLocation, 'delivery', e.target.checked);
+                    <Switch checked={venueLocation.deliveryEnabled || false} onChange={e => {
+                      handleVenueLocationPatch(venueLocation, 'deliveryEnabled', e.target.checked);
                     }} />
                   </TableCell>
                   <TableCell>
-                    <Switch checked={venueLocation.pickup} onChange={e => {
-                      handleVenueLocationPatch(venueLocation, 'pickup', e.target.checked);
+                    <Switch checked={venueLocation.pickupEnabled || false} onChange={e => {
+                      handleVenueLocationPatch(venueLocation, 'pickupEnabled', e.target.checked);
                     }} />
                   </TableCell>
                   <URLTableCell style={{ maxWidth: 250 }}>
-                    {venueLocation.qr_code}
+                    {venueLocation.qrCode}
                   </URLTableCell>
                   <TableCell align="right" padding="checkbox">
                     <IconButton size='small' onClick={(event) => {

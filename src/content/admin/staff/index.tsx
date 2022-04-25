@@ -6,7 +6,7 @@ import StaffsTable from './StaffsTable';
 import EditStaffDialog from './EditStaff';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
-import { getAllStaffs, patchStaff, postStaff, deleteStaff, getVenue } from 'src/Api/apiClient';
+import { getAllStaffs, patchStaff, postStaff, deleteStaff, getVendorStands } from 'src/Api/apiClient';
 import { getVendorStand } from 'src/Api/apiClient';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 import { useParams } from 'react-router';
@@ -88,17 +88,11 @@ function StaffsPage(props: StaffsPageProps) {
 
   const loadVendors = () => {
     setVendors([]);
-    let promises = [];
-    venues && venues.forEach(venue => {
-      promises.push(getVenue(venue.id));
-    });
-    Promise.all(promises).then(res => {
-      let all_vendors = [];
-      res.forEach(x => {
-        if (x && x.vendorStands) all_vendors = [...all_vendors, ...x.vendorStands];
-      })
-      setVendors(all_vendors);
-    });
+    getVendorStands(token).then(res => {
+      if (res) {
+        setVendors(res);
+      }
+    })
   }
 
   const onAction = (action, data) => {

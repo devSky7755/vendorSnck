@@ -9,7 +9,7 @@ import BulkActions from './BulkActions';
 import { patchMenuItem, postMenuItem, deleteMenuItem } from 'src/Api/apiClient';
 import { getVendorStand } from 'src/Api/apiClient';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import Status404 from 'src/content/pages/Status/Status404';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import PageHeader from './PageHeader';

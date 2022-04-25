@@ -6,9 +6,8 @@ import VendorsTable from './VendorsTable';
 import EditVendorDialog from './EditVendor';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
-import { patchVendorStand, postVendorStand, deleteVendorStand } from 'src/Api/apiClient';
+import { patchVendorStand, postVendorStand, deleteVendorStand, getVendorStands } from 'src/Api/apiClient';
 import { Venue } from 'src/models/venue';
-import { getVenue } from 'src/Api/apiClient';
 import { useNavigate } from 'react-router';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 
@@ -59,17 +58,11 @@ function VendorsPage(props: VendorsPageProps) {
 
   const loadVendors = () => {
     setVendors([]);
-    let promises = [];
-    venues && venues.forEach(venue => {
-      promises.push(getVenue(venue.id));
-    });
-    Promise.all(promises).then(res => {
-      let all_vendors = [];
-      res.forEach(x => {
-        if (x && x.vendorStands) all_vendors = [...all_vendors, ...x.vendorStands];
-      })
-      setVendors(all_vendors);
-    });
+    getVendorStands(token).then(res=>{
+      if (res) {
+        setVendors(res);
+      }
+    })
   }
 
   const onAction = (action, data) => {

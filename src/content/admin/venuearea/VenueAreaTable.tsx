@@ -118,17 +118,17 @@ const VenueAreasTable: FC<VenueAreasTableProps> = ({ venueAreas, venues, onActio
                     {venueArea.name}
                   </TableCell>
                   <TableCell>
-                    <Switch checked={venueArea.active} onChange={e => {
+                    <Switch checked={venueArea.active || false} onChange={e => {
                       handleVenueAreaPatch(venueArea, 'active', e.target.checked);
                     }} />
                   </TableCell>
                   <TableCell>
-                    <Switch checked={venueArea.delivery} onChange={e => {
+                    <Switch checked={venueArea.delivery || false} onChange={e => {
                       handleVenueAreaPatch(venueArea, 'delivery', e.target.checked);
                     }} />
                   </TableCell>
                   <TableCell>
-                    <Switch checked={venueArea.pickup} onChange={e => {
+                    <Switch checked={venueArea.pickup || false} onChange={e => {
                       handleVenueAreaPatch(venueArea, 'pickup', e.target.checked);
                     }} />
                   </TableCell>

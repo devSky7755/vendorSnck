@@ -55,7 +55,7 @@ const EditVenueAreaDialog: React.FC<EditVenueAreaInterface> = (props) => {
             </DialogTitle>
             <Box>
                 <Box sx={{ p: 1 }} style={{ background: '#0000000A' }}>
-                    <Switch checked={editing.active} onChange={e => {
+                    <Switch checked={editing.active || false} onChange={e => {
                         setEditingVenueArea({
                             ...editing,
                             active: e.target.checked
@@ -91,7 +91,7 @@ const EditVenueAreaDialog: React.FC<EditVenueAreaInterface> = (props) => {
                     </Box>
                     <Grid container spacing={2}>
                         <Grid item xs={6} md={3}>
-                            <Switch checked={editing.pickup} onChange={e => {
+                            <Switch checked={editing.pickup || false} onChange={e => {
                                 setEditingVenueArea({
                                     ...editing,
                                     pickup: e.target.checked
@@ -99,7 +99,7 @@ const EditVenueAreaDialog: React.FC<EditVenueAreaInterface> = (props) => {
                             }}></Switch>Pickup
                         </Grid>
                         <Grid item xs={6} md={9}>
-                            <Switch checked={editing.delivery} onChange={e => {
+                            <Switch checked={editing.delivery || false} onChange={e => {
                                 setEditingVenueArea({
                                     ...editing,
                                     delivery: e.target.checked

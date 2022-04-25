@@ -1,3 +1,4 @@
+import { IDName } from "./staff";
 import { VendorStand } from "./vendorStand";
 
 export interface Venue {
@@ -34,12 +35,18 @@ export interface Venue {
 
 export interface VenueInLocation {
     id: string;
-    seatFields?: string[];
-    distributionArea?: VenueDistributionArea;
-    qr_code?: string;
+    hierarchy1: string;
+    hierarchy2?: string;
+    hierarchy3?: string;
+    distributionAreaId: string;
+    distribution_area?: IDName;
+    qrCode?: string;
     active?: boolean;
-    delivery?: boolean;
-    pickup?: boolean;
+    deliveryEnabled?: boolean;
+    pickupEnabled?: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt?: Date;
 }
 
 export interface VenueDistributionArea {
@@ -49,6 +56,9 @@ export interface VenueDistributionArea {
     active?: boolean;
     delivery?: boolean;
     pickup?: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
+    deletedAt?: Date;
 }
 
 export function getVenueSeatField(venue: Venue) {
