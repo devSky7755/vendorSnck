@@ -149,6 +149,22 @@ function LoginPage({ token, lastLoggedIn, login }) {
         });
     }
 
+    const onKeyDownVerification = (e) => {
+        if (e.key === 'Enter') {
+            if (code && code.length === 4) {
+                handleVerification();
+            }
+        }
+    }
+
+    const onPhoneKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            if (phone && phone.length >= 8) {
+                handlePhoneNumber();
+            }
+        }
+    }
+
     return (
         <OnboardingWrapper>
             <Helmet>
@@ -244,10 +260,12 @@ function LoginPage({ token, lastLoggedIn, login }) {
                                                 variant='outlined'
                                                 label='Verification code'
                                                 fullWidth
+                                                autoFocus
                                                 value={code}
                                                 helperText={codeHelperText}
                                                 inputProps={{ maxLength: 4 }}
                                                 error={codeErr}
+                                                onKeyDown={onKeyDownVerification}
                                                 style={{ fontSize: 16 }}
                                                 onChange={(e) => {
                                                     setCode(e.target.value);
@@ -276,9 +294,11 @@ function LoginPage({ token, lastLoggedIn, login }) {
                                                 fullWidth
                                                 value={phone}
                                                 error={phoneErr}
+                                                autoFocus
                                                 helperText={phoneHelperText}
                                                 style={{ fontSize: 16, fontWeight: 500 }}
                                                 defaultCountry={'us'}
+                                                onKeyDown={onPhoneKeyDown}
                                                 disableAreaCodes={true}
                                                 onChange={(value) => {
                                                     setPhone(value);

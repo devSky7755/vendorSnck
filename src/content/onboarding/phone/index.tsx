@@ -55,6 +55,15 @@ function OnboardingPhone({ setPhone }) {
         });
     }
 
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            const disabled = !touAgreed || !phone || phone.length < 8;  
+            if (!disabled) {
+                handleNext();
+            }
+        }
+    }
+
     const disabled = !touAgreed || !phone || phone.length < 8;
 
     return (
@@ -83,6 +92,8 @@ function OnboardingPhone({ setPhone }) {
                             defaultCountry={'us'}
                             helperText={message}
                             error={err}
+                            autoFocus
+                            onKeyDown={onKeyDown}
                             disableAreaCodes={true}
                             onChange={(value) => {
                                 setPhoneNumber(value);

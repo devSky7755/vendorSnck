@@ -85,6 +85,14 @@ function OnboardingVerification({ phone, login, setVendorStand }) {
         })
     }
 
+    const onKeyDown = (e)=>{
+        if (e.key === 'Enter') {
+            if (code && code.length === 4) {
+                handleVerify();
+            }
+        }
+    }
+
     return (
         <OnboardingWrapper>
             <Helmet>
@@ -112,6 +120,8 @@ function OnboardingVerification({ phone, login, setVendorStand }) {
                             label='Verification code'
                             fullWidth
                             value={code}
+                            autoFocus
+                            onKeyDown={onKeyDown}
                             helperText={message}
                             error={err}
                             style={{ fontSize: 16, fontWeight: 500 }}
