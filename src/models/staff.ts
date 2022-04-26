@@ -1,4 +1,4 @@
-export type UserRole = 'admin' | 'manager' | 'runner' | 'packer';
+export type StaffRole = 'admin' | 'manager' | 'runner' | 'packer';
 
 export interface IDName {
   id: string;
@@ -12,7 +12,7 @@ export interface Staff {
   mobileNo?: string;
   vendorStandId?: string;
   active?: boolean;
-  role?: UserRole;
+  role?: StaffRole;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
@@ -41,7 +41,7 @@ export function GetStaffRoleLabel(role) {
 }
 
 
-export const tempUsers: Staff[] = [
+export const tempStaffs: Staff[] = [
   {
     id: '52',
     role: 'runner',

@@ -1,6 +1,6 @@
 import { Customer } from "./customer";
 import { MenuItemV1, tempMenus } from "./menu_item";
-import { Staff, tempUsers } from "./staff";
+import { Staff, tempStaffs } from "./staff";
 
 export type OrderType = 'Delivery' | 'Pickup';
 export type OrderStatus = 'New' | 'Preparing' | 'Ready' | 'Delivering' | 'Waitlist' | 'Completed' | 'Issued'
@@ -253,7 +253,7 @@ export const temp_orders: Order[] = [
             firstName: 'Derek',
             lastName: 'Derekson'
         },
-        delivery_person: tempUsers[0]
+        delivery_person: tempStaffs[0]
     },
     {
         id: 573,
@@ -270,7 +270,7 @@ export const temp_orders: Order[] = [
             firstName: 'Derek',
             lastName: 'Derekson'
         },
-        delivery_person: tempUsers[1]
+        delivery_person: tempStaffs[1]
     },
     {
         id: 571,

@@ -54,8 +54,8 @@ const vendorMenuItems: MenuItems[] = [
         link: '/settings/menus'
       },
       {
-        name: 'Users',
-        link: '/settings/users'
+        name: 'Staff',
+        link: '/settings/staff'
       },
       {
         name: 'Printers',
@@ -118,11 +118,11 @@ const adminMenuItems: MenuItems[] = [
     ]
   },
   {
-    heading: 'Admin Profile',
+    heading: 'Admin',
     items: [
       {
-        name: 'Admin Profile',
-        link: '/profile',
+        name: 'Dashboard',
+        link: '/dashboards',
       },
       {
         name: 'Logout',

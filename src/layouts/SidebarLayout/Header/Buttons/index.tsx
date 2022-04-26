@@ -13,7 +13,7 @@ import { isVendorApp } from 'src/models/constant';
 function GetPageTitle(pathname) {
   switch (pathname) {
     case '/dashboards':
-      return 'Summary';
+      return 'Dashboard';
     case '/venues':
       return 'Venues';
     case '/vendorstands':

@@ -13,7 +13,7 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
         <Typography sx={{ mt: 1 }} variant="h5" gutterBottom>
-          Staffs - {vendor.name}
+          Staff - {vendor.name}
         </Typography>
       </Grid>
       {

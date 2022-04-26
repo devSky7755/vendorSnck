@@ -18,11 +18,11 @@ import Logout from './content/login/logout';
 import { isVendorApp } from './models/constant';
 
 const Loader = (Component) => (props) =>
-(
-  <Suspense fallback={<SuspenseLoader />}>
-    <Component {...props} />
-  </Suspense>
-);
+  (
+    <Suspense fallback={<SuspenseLoader />}>
+      <Component {...props} />
+    </Suspense>
+  );
 
 // Pages
 
@@ -42,8 +42,8 @@ const Dashboard = Loader(lazy(() => import('src/content/dashboards')));
 // Settings
 
 const UserProfile = Loader(lazy(() => import('src/content/pages/UserProfile')));
-const UserSettings = Loader(
-  lazy(() => import('src/content/pages/settings/Users'))
+const StaffSettings = Loader(
+  lazy(() => import('src/content/pages/settings/Staff'))
 );
 const MenuSettings = Loader(
   lazy(() => import('src/content/pages/settings/Menus'))
@@ -196,11 +196,11 @@ const vendorRoutes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <Navigate to="/settings/users" replace />
+        element: <Navigate to="/settings/staff" replace />
       },
       {
-        path: 'users',
-        element: <UserSettings />
+        path: 'staff',
+        element: <StaffSettings />
       },
       {
         path: 'menus',
@@ -329,15 +329,11 @@ const adminRoutes: RouteObject[] = [
   },
   {
     path: 'promos',
-    element: (
-      <SidebarLayout />
-    ),
+    element: <SidebarLayout />,
     children: [
       {
         path: '',
-        element: (
-          <PromosPage />
-        )
+        element: <PromosPage />
       }
     ]
   },
