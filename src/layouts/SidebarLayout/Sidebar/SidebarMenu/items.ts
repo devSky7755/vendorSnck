@@ -54,8 +54,8 @@ const vendorMenuItems: MenuItems[] = [
         link: '/settings/menus'
       },
       {
-        name: 'Users',
-        link: '/settings/users'
+        name: 'Staff',
+        link: '/settings/staff'
       },
       {
         name: 'Printers',

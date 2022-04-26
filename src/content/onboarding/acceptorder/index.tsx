@@ -51,7 +51,7 @@ function OnboardingAcceptOrder() {
                     </Typography>
                     <PhoneWrapper sx={{ pt: 3 }}>
                         <Button color='primary' style={{ textTransform: 'none' }} onClick={() => {
-                            navigate('/settings/users');
+                            navigate('/settings/staff');
                         }}><Typography component="span" variant="subtitle1">Add team members</Typography></Button>
                     </PhoneWrapper>
                     <StyledDivider />

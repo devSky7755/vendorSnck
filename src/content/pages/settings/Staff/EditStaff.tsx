@@ -9,13 +9,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import MuiPhoneNumber from 'material-ui-phone-number';
 
 
-interface EditUserInterface {
+interface EditStaffInterface {
     onClose: Function,
     open: boolean,
-    user?: Staff,
+    staff?: Staff,
 };
 
-const UserRoles = [
+const StaffRoles = [
     {
         value: 'manager',
         label: 'Vendor Manager',
@@ -30,9 +30,9 @@ const UserRoles = [
     }
 ];
 
-const EditUserDialog: React.FC<EditUserInterface> = (props) => {
-    const { onClose, user, open } = props;
-    const [editing, setEditingUser] = useState(user)
+const EditStaffDialog: React.FC<EditStaffInterface> = (props) => {
+    const { onClose, staff, open } = props;
+    const [editing, setEditingStaff] = useState(staff)
 
     const handleClose = () => {
         onClose(editing);
@@ -43,7 +43,7 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
             onClose(null);
         }} open={open} PaperProps={{ style: { width: 480 } }}>
             <DialogTitle className='border-bottom d-flex font-bold' sx={{ px: 2, py: 1 }}>
-                <Typography component='span' variant='h6'>Edit User</Typography>
+                <Typography component='span' variant='h6'>Edit Staff</Typography>
                 <IconButton className='float-right' sx={{ p: 0 }} size='small' onClick={() => {
                     onClose(null);
                 }}>
@@ -64,25 +64,25 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                         onChange={(e) => {
                             const role = e.target.value;
                             if (role === 'manager' || role === 'runner' || role === 'packer') {
-                                setEditingUser({
+                                setEditingStaff({
                                     ...editing,
                                     role: role
                                 });
                             }
                         }}
                     >
-                        {UserRoles.map((option) => (
+                        {StaffRoles.map((option) => (
                             <MenuItem key={option.value} value={option.value}>
                                 {option.label}
                             </MenuItem>
                         ))}
                     </TextField>
                     <Typography variant='body2' sx={{ pt: 2 }}>
-                        Admin has access to all permissions. Can edit the menu, availability, create and delete users, cancel orders, and see all financial data.
+                        Admin has access to all permissions. Can edit the menu, availability, create and delete staffs, cancel orders, and see all financial data.
                     </Typography>
                 </Box>
                 <Box sx={{ px: 2, pb: 2, pt: 1 }} className='border-bottom'>
-                    <Typography variant='subtitle1' sx={{ pb: 2 }}>User Details</Typography>
+                    <Typography variant='subtitle1' sx={{ pb: 2 }}>Staff Details</Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
@@ -91,7 +91,7 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                                 fullWidth
                                 value={editing.firstName}
                                 onChange={(e) => {
-                                    setEditingUser({
+                                    setEditingStaff({
                                         ...editing,
                                         firstName: e.target.value
                                     });
@@ -106,7 +106,7 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                                 fullWidth
                                 value={editing.lastName}
                                 onChange={(e) => {
-                                    setEditingUser({
+                                    setEditingStaff({
                                         ...editing,
                                         lastName: e.target.value
                                     });
@@ -122,7 +122,7 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                                 fullWidth
                                 value={editing.email}
                                 onChange={(e) => {
-                                    setEditingUser({
+                                    setEditingStaff({
                                         ...editing,
                                         email: e.target.value
                                     });
@@ -141,7 +141,7 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
                                 defaultCountry={'us'}
                                 disableAreaCodes={true}
                                 onChange={(value) => {
-                                    setEditingUser({
+                                    setEditingStaff({
                                         ...editing,
                                         mobileNo: value
                                     });
@@ -171,4 +171,4 @@ const EditUserDialog: React.FC<EditUserInterface> = (props) => {
     );
 }
 
-export default EditUserDialog;
+export default EditStaffDialog;
