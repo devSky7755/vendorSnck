@@ -118,11 +118,11 @@ const adminMenuItems: MenuItems[] = [
     ]
   },
   {
-    heading: 'Admin Profile',
+    heading: 'Admin',
     items: [
       {
-        name: 'Admin Profile',
-        link: '/profile',
+        name: 'Dashboard',
+        link: '/dashboards',
       },
       {
         name: 'Logout',

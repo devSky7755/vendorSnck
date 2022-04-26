@@ -161,7 +161,7 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venues, onAction, onSele
                     >
                       <MenuItem onClick={() => handleCloseAction('Edit', vendor)}>Edit</MenuItem>
                       <MenuItem onClick={() => handleCloseAction('Delete', vendor)}>Delete</MenuItem>
-                      <MenuItem onClick={() => handleCloseAction('Manage Staff', vendor)}>Manage Staffs</MenuItem>
+                      <MenuItem onClick={() => handleCloseAction('Manage Staff', vendor)}>Manage Staff</MenuItem>
                       <MenuItem onClick={() => handleCloseAction('Manage Menu', vendor)}>Manage Menu Items</MenuItem>
                     </Menu>
                   </TableCell>

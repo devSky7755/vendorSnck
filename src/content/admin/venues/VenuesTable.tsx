@@ -160,8 +160,8 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
                     >
                       <MenuItem onClick={() => handleCloseAction('Edit', venue)}>Edit</MenuItem>
                       <MenuItem onClick={() => handleCloseAction('Delete', venue)}>Delete</MenuItem>
-                      <MenuItem onClick={() => handleCloseAction('Distribution Area', venue)}>Edit &nbsp;<b>Distribution areas</b></MenuItem>
-                      <MenuItem onClick={() => handleCloseAction('In Location', venue)}>Edit &nbsp;<b>Venue in locations</b></MenuItem>
+                      <MenuItem onClick={() => handleCloseAction('Distribution Area', venue)}>Edit&nbsp;<b>Distribution Areas</b></MenuItem>
+                      <MenuItem onClick={() => handleCloseAction('In Location', venue)}>Edit&nbsp;<b>In Venue Locations</b></MenuItem>
                     </Menu>
                   </TableCell>
                 </TableRow>
