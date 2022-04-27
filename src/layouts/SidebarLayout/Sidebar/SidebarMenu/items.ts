@@ -64,11 +64,11 @@ const vendorMenuItems: MenuItems[] = [
     ]
   },
   {
-    heading: 'User Profile',
+    heading: 'Manager',
     items: [
       {
-        name: 'User Profile',
-        link: '/profile',
+        name: 'Dashboard',
+        link: '/dashboards',
       },
       {
         name: 'Logout',

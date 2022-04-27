@@ -36,7 +36,7 @@ function UserProfile() {
             </Helmet>
             <PageTitleWrapper>
                 <Typography variant="h5" component="h5" sx={{ py: 1 }}>
-                    User Profile
+                    Manager Profile
                 </Typography>
             </PageTitleWrapper>
             {
