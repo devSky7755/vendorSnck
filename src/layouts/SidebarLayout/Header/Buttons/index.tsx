@@ -20,6 +20,8 @@ function GetPageTitle(pathname) {
       return 'Vendors';
     case '/promos':
       return 'Promo';
+    case '/customers':
+      return 'Customers';
     default:
       if (pathname.startsWith('/menuitems')) {
         return 'Menu Items';
@@ -84,20 +86,31 @@ function HeaderButtons({ pauseUntil, refreshPause }) {
           {GetPageTitle(location.pathname.toLowerCase())}
         </Typography>
       }
-      <Box sx={{ mx: .5 }} component="span">
-        <HeaderNotifications />
-      </Box>
-      <Box sx={{ mx: .5 }} component="span">
-        <IconButton style={{ color: '#FFFFFFBD' }} onClick={() => {
-          navigate('/help', {
-            state: { showSkip: false },
-            replace: true
-          });
-        }}>
-          <HelpOutlineIcon />
-        </IconButton>
-      </Box>
-      <HeaderSearch />
+      {
+        /*
+        <Box sx={{ mx: .5 }} component="span">
+          <HeaderNotifications />
+        </Box>
+        */
+      }
+      {
+        isVendorApp &&
+        <Box sx={{ mx: .5 }} component="span">
+          <IconButton style={{ color: '#FFFFFFBD' }} onClick={() => {
+            navigate('/help', {
+              state: { showSkip: false },
+              replace: true
+            });
+          }}>
+            <HelpOutlineIcon />
+          </IconButton>
+        </Box>
+      }
+      {
+        /*
+        <HeaderSearch />
+        */
+      }
     </Box >
   );
 }

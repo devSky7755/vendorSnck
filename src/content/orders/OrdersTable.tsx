@@ -368,7 +368,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
             {type === 'delivery' && <TableCell>Delivery Person</TableCell>}
             {type === 'pickup' && <TableCell>User Notified</TableCell>}
             {type !== 'delivery' && type !== 'pickup' && (
-              <TableCell> Service Settings</TableCell>
+              <TableCell>Order Type</TableCell>
             )}
             <TableCell>
               {type === 'delivery' || type === 'pickup' ? 'Due In' : 'Waiting'}
@@ -525,13 +525,13 @@ const OrdersTable: FC<OrdersTableProps> = ({
                       <TableRow
                         className={
                           prepare_delayed ||
-                          delivery_delayed ||
-                          deliverying_delayed ||
-                          pickup_delayed
+                            delivery_delayed ||
+                            deliverying_delayed ||
+                            pickup_delayed
                             ? 'bg-warning'
                             : no_item
-                            ? 'bg-error'
-                            : ''
+                              ? 'bg-error'
+                              : ''
                         }
                         hover
                         key={order.id}
@@ -579,8 +579,8 @@ const OrdersTable: FC<OrdersTableProps> = ({
                             <Typography variant="body2" component="span">
                               {order.delivery_person &&
                                 order.delivery_person.firstName +
-                                  ' ' +
-                                  order.delivery_person.lastName}
+                                ' ' +
+                                order.delivery_person.lastName}
                             </Typography>
                           </TableCell>
                         )}
@@ -629,9 +629,9 @@ const OrdersTable: FC<OrdersTableProps> = ({
                             sx={{ mb: 0 }}
                             noWrap
                           >
-                            {order.customer.name}
+                            {order.customer.firstName} {order.customer.lastName}
                           </Typography>
-                          {order.customer.seat && (
+                          {order.customer.inVenueLocationId && (
                             <Typography
                               variant="body2"
                               color={'#00000099'}
@@ -639,7 +639,7 @@ const OrdersTable: FC<OrdersTableProps> = ({
                               fontSize={10}
                               noWrap
                             >
-                              {order.customer.seat}
+                              {order.customer.inVenueLocationId}
                             </Typography>
                           )}
                         </TableCell>

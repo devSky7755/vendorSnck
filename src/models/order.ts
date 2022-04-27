@@ -33,8 +33,9 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() - 2 * 60 * 1000,
         customer: {
-            name: 'Jack Jackson',
-            seat: 'Seat 1 | Row B | Section B'
+            firstName: 'Jack',
+            lastName: 'Jackson',
+            inVenueLocationId: 'Seat 1 | Row B | Section B'
         }
     },
     {
@@ -50,7 +51,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() - 3.2 * 60 * 1000,
         customer: {
-            name: 'Peter Peterson',
+            firstName: 'Peter',
+            lastName: 'Peterson'
         },
     },
     {
@@ -65,8 +67,9 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 13.2 * 60 * 1000,
         customer: {
-            name: 'David Daveson',
-            seat: 'Seat 2 | Row C | Section D'
+            firstName: 'David',
+            lastName: 'Daveson',
+            inVenueLocationId: 'Seat 2 | Row C | Section D'
         },
     },
     {
@@ -81,7 +84,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 12.2 * 60 * 1000,
         customer: {
-            name: 'Derek Derekson',
+            firstName: 'Derek',
+            lastName: 'Derekson'
         },
     },
     {
@@ -96,7 +100,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 14.8 * 60 * 1000,
         customer: {
-            name: 'Janet Janetson',
+            firstName: 'Janet',
+            lastName: 'Janetson'
         },
     },
     {
@@ -110,7 +115,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 22.8 * 60 * 1000,
         customer: {
-            name: 'Derek Derekson',
+            firstName: 'Derek',
+            lastName: 'Derekson',
         },
     },
     {
@@ -124,7 +130,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 23.8 * 60 * 1000,
         customer: {
-            name: 'Janet Janetson',
+            firstName: 'Derek',
+            lastName: 'Derekson',
         },
     },
 
@@ -143,8 +150,9 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() - 2 * 60 * 1000,
         customer: {
-            name: 'Jack Jackson',
-            seat: 'Seat 1 | Row B | Section B'
+            firstName: 'Derek',
+            lastName: 'Derekson',
+            inVenueLocationId: 'Seat 1 | Row B | Section B'
         },
     },
     {
@@ -160,7 +168,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() - 3.2 * 60 * 1000,
         customer: {
-            name: 'Peter Peterson',
+            firstName: 'Derek',
+            lastName: 'Derekson',
         },
     },
     {
@@ -175,8 +184,9 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 13.2 * 60 * 1000,
         customer: {
-            name: 'David Daveson',
-            seat: 'Seat 2 | Row C | Section D'
+            firstName: 'Derek',
+            lastName: 'Derekson',
+            inVenueLocationId: 'Seat 2 | Row C | Section D'
         },
     },
     {
@@ -191,7 +201,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 12.2 * 60 * 1000,
         customer: {
-            name: 'Derek Derekson',
+            firstName: 'Derek',
+            lastName: 'Derekson',
         },
     },
     /* ready */
@@ -207,7 +218,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 14.8 * 60 * 1000,
         customer: {
-            name: 'Janet Janetson',
+            firstName: 'Derek',
+            lastName: 'Derekson',
         },
     },
     {
@@ -222,7 +234,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() - 1.8 * 60 * 1000,
         customer: {
-            name: 'Janet Janetson',
+            firstName: 'Derek',
+            lastName: 'Derekson'
         },
     },
     {
@@ -237,7 +250,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 22.8 * 60 * 1000,
         customer: {
-            name: 'Derek Derekson',
+            firstName: 'Derek',
+            lastName: 'Derekson'
         },
         delivery_person: tempStaffs[0]
     },
@@ -253,7 +267,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 23.8 * 60 * 1000,
         customer: {
-            name: 'Janet Janetson',
+            firstName: 'Derek',
+            lastName: 'Derekson'
         },
         delivery_person: tempStaffs[1]
     },
@@ -269,7 +284,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 14.8 * 60 * 1000,
         customer: {
-            name: 'Janet Janetson',
+            firstName: 'Derek',
+            lastName: 'Derekson'
         },
     },
     {
@@ -284,7 +300,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() - 1.8 * 60 * 1000,
         customer: {
-            name: 'Janet Janetson',
+            firstName: 'Derek',
+            lastName: 'Derekson'
         },
     },
     {
@@ -298,7 +315,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 22.8 * 60 * 1000,
         customer: {
-            name: 'Derek Derekson',
+            firstName: 'Derek',
+            lastName: 'Derekson'
         },
     },
     {
@@ -312,7 +330,8 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 23.8 * 60 * 1000,
         customer: {
-            name: 'Janet Janetson',
+            firstName: 'Derek',
+            lastName: 'Derekson'
         },
     }
 ];

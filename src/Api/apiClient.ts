@@ -1,5 +1,6 @@
 import { ApiResponse } from "src/models/api_response";
 import { BASE_URL, isVendorApp } from "src/models/constant";
+import { Customer } from "src/models/customer";
 import { MenuItem } from "src/models/menu_item";
 import { Promo } from "src/models/promo";
 import { Staff } from "src/models/staff";
@@ -12,6 +13,7 @@ const VenuesEndpoint = 'venues/';
 const PromosEndpoint = 'promos/';
 const VendorStandEndpoint = 'vendorStands/';
 const StaffsEndpoint = 'staffs/';
+const CustomersEndpoint = 'customers/';
 
 
 ///Authentication
@@ -519,6 +521,59 @@ export function postPromo(token: string, item: Promo): Promise<Promo> {
 
 export function deletePromo(token: string, item: Promo): Promise<boolean> {
     return fetch(BASE_URL + PromosEndpoint + item.id, {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return true;
+        } else {
+            return false;
+        }
+    })
+}
+
+//Customer
+export function getCustomers(token): Promise<Customer[]> {
+    return fetch(BASE_URL + CustomersEndpoint, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }).then(res => res.json()).then(res => {
+        if (res.success && res.data) {
+            return res.data.customers as Customer[];
+        } else {
+            return null;
+        }
+    })
+}
+
+export function patchCustomer(token: string, item: Customer, patch): Promise<Customer> {
+    return fetch(BASE_URL + CustomersEndpoint + item.id, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(patch)
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return res.data as Customer;
+        } else {
+            return null;
+        }
+    })
+}
+
+export function deleteCustomer(token: string, item: Customer): Promise<boolean> {
+    return fetch(BASE_URL + CustomersEndpoint + item.id, {
         method: 'DELETE',
         headers: {
             'Accept': 'application/json',

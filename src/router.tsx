@@ -16,8 +16,6 @@ import OnboardingAcceptOrder from './content/onboarding/acceptorder';
 import FAQ from './content/pages/Docs/FAQ';
 import Logout from './content/login/logout';
 import { isVendorApp } from './models/constant';
-import { OrderIssue } from './content/orders/issue';
-import { ActionBoard } from './content/orders/issue/action';
 
 const Loader = (Component) => (props) =>
   (
@@ -34,12 +32,9 @@ const VendorsPage = Loader(lazy(() => import('src/content/admin/vendors')));
 const MenuItemsPage = Loader(lazy(() => import('src/content/admin/menuitems')));
 const StaffsPage = Loader(lazy(() => import('src/content/admin/staff')));
 const PromosPage = Loader(lazy(() => import('src/content/admin/promos')));
-const VenueAreasPage = Loader(
-  lazy(() => import('src/content/admin/venuearea'))
-);
-const VenueLocationsPage = Loader(
-  lazy(() => import('src/content/admin/venuelocation'))
-);
+const CustomersPage = Loader(lazy(() => import('src/content/admin/customers')));
+const VenueAreasPage = Loader(lazy(() => import('src/content/admin/venuearea')));
+const VenueLocationsPage = Loader(lazy(() => import('src/content/admin/venuelocation')));
 
 // Dashboards
 const Dashboard = Loader(lazy(() => import('src/content/dashboards')));
@@ -339,6 +334,20 @@ const adminRoutes: RouteObject[] = [
       {
         path: '',
         element: <PromosPage />
+      }
+    ]
+  },
+  {
+    path: 'customers',
+    element: (
+      <SidebarLayout />
+    ),
+    children: [
+      {
+        path: '',
+        element: (
+          <CustomersPage />
+        )
       }
     ]
   },

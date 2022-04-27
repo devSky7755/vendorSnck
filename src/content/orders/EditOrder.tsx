@@ -129,10 +129,10 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
                             <Button size='small'>Contact</Button>
                         </Grid>
                         <Grid item xs={12}>
-                            <Typography variant='subtitle1'>{order.customer.name}</Typography>
+                            <Typography variant='subtitle1'>{order.customer.firstName} {order.customer.lastName}</Typography>
                             {
-                                order.customer.seat &&
-                                <Typography variant='body1'>{order.customer.seat}</Typography>
+                                order.customer.inVenueLocationId &&
+                                <Typography variant='body1'>{order.customer.inVenueLocationId}</Typography>
                             }
                         </Grid>
                     </Grid>
