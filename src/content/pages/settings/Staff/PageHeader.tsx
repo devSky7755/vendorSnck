@@ -1,22 +1,25 @@
 import { Typography, Button, Grid, IconButton } from '@mui/material';
+import { VendorStand } from 'src/models/vendorStand';
 
-import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
-import { SearchOutlined } from '@mui/icons-material';
+// import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
+// import { SearchOutlined } from '@mui/icons-material';
 
 interface PageHeaderProps {
-  onToggleSearch?: Function;
-  onAddStaff?: Function;
+  // onToggleSearch?: Function;
+  vendor?: VendorStand;
 }
 
 const PageHeader: React.FC<PageHeaderProps> = (props) => {
+  const { vendor } = props;
+
   return (
     <Grid container justifyContent="space-between" alignItems="center">
       <Grid item>
         <Typography variant="h5" gutterBottom>
-          Staffs
+          Staffs - {vendor.name}
         </Typography>
       </Grid>
-      <Grid item>
+      {/* <Grid item>
         <IconButton
           color="primary"
           size="small"
@@ -38,7 +41,7 @@ const PageHeader: React.FC<PageHeaderProps> = (props) => {
         >
           Add Staff
         </Button>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 };

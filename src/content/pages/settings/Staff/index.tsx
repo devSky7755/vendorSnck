@@ -11,7 +11,17 @@ import EditStaffDialog from './EditStaff';
 import { useLocation } from 'react-router';
 import { parseQuery } from 'src/utils/functions';
 import { connect } from 'react-redux';
-import { getAllStaffs } from 'src/Api/apiClient';
+import {
+  deleteStaff,
+  getAllStaffs,
+  getVendorStand,
+  getVendorStands,
+  patchStaff,
+  postStaff
+} from 'src/Api/apiClient';
+import { VendorStand } from 'src/models/vendorStand';
+import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
+import BulkActions from './BulkActions';
 
 const SearchWrapper = styled(Box)(
   ({ theme }) => `
@@ -56,45 +66,116 @@ interface StaffsSettingProps {
 
 function StaffsSetting(props: StaffsSettingProps) {
   const { token } = props;
-  const { search } = useLocation();
-  const [showSearch, setShowSearch] = useState<boolean>(false);
-  const [searchStr, setSearchString] = useState(null);
+
   const [editOpen, setEditOpen] = useState<boolean>(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [editing, setEditing] = useState(null);
+
+  const [vendor, setVendor] = useState<VendorStand>();
   const [staffs, setStaffs] = useState<Staff[]>([]);
-  const [staffRole, setStaffRole] = useState(null);
+
+  const [selectedStaffs, setSelectedStaffs] = useState<Staff[]>([]);
 
   useEffect(() => {
-    if (search) {
-      const params: StaffsPageQueryParams = parseQuery(search);
-      if (params.role && params.role.toLowerCase() === 'runner') {
-        setStaffRole('runner');
-      }
-    }
-
     getAllStaffs(token).then((res) => {
       setStaffs(res);
+      if (res.length > 0) {
+        getVendorStand(res[0].vendorStandId).then((vs: VendorStand) => {
+          setVendor(vs);
+        });
+      }
     });
   }, []);
 
-  const onToggleSearch = () => {
-    setShowSearch(!showSearch);
+  const onAction = (action, data) => {
+    if (action === 'Edit') {
+      setEditing(data);
+      setEditOpen(true);
+    } else if (action === 'Close') {
+      setEditOpen(false);
+      setEditing(null);
+    } else if (action === 'Save') {
+      setEditOpen(false);
+      handleSave(data);
+    } else if (action === 'Delete') {
+      setEditOpen(false);
+      setEditing(data);
+      setDeleteOpen(true);
+    } else if (action === 'Add New') {
+      setEditing({ active: false, vendorStandId: vendor?.id });
+      setEditOpen(true);
+    } else if (action === 'Cancel Remove') {
+      setDeleteOpen(false);
+      setEditing(null);
+    } else if (action === 'Remove') {
+      setDeleteOpen(false);
+      handleDelete(editing);
+      setEditing(null);
+    }
   };
 
-  const onAddStaff = () => {
-    setEditing({
-      role: 'admin'
+  const handleSave = (staff) => {
+    let patch: Staff = { ...staff };
+    delete patch.id;
+    delete patch.updatedAt;
+    delete patch.createdAt;
+    delete patch.deletedAt;
+    delete patch.vendor_stand;
+
+    Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
+
+    if (staff.id) {
+      patchStaff(token, staff, patch)
+        .then((res) => {
+          let newStaffs = [...staffs];
+          let index = newStaffs.findIndex((x) => x.id === staff.id);
+          if (index >= 0) {
+            newStaffs[index] = res;
+            setStaffs(newStaffs);
+          }
+        })
+        .catch((ex) => {
+          console.log(ex.message);
+        });
+    } else {
+      postStaff(token, patch)
+        .then((res) => {
+          if (res) {
+            setStaffs((prev) => [...prev, res]);
+          }
+        })
+        .catch((ex) => {
+          console.log(ex.message);
+        });
+    }
+  };
+
+  const handleDelete = (staff) => {
+    deleteStaff(token, staff).then((success) => {
+      if (success) {
+        let filtered = staffs.filter((x) => x.id !== staff.id);
+        setStaffs(filtered);
+      }
     });
-    setEditOpen(true);
   };
 
-  const onEditing = (staff) => {
-    setEditing(staff);
-    setEditOpen(true);
+  const handleSelectionChanged = (selectedIDs) => {
+    const selected = staffs.filter((x) => selectedIDs.includes(x.id));
+    setSelectedStaffs(selected);
   };
 
-  const onEdit = (staff) => {
-    setEditOpen(false);
+  const handleStaffPatch = (staff, key, value) => {
+    let patch = {};
+    patch[key] = value;
+
+    patchStaff(token, staff, patch).then((res) => {
+      let newStaffs = [...staffs];
+      let index = newStaffs.findIndex((x) => x.id === staff.id);
+      if (index >= 0) {
+        newStaffs[index] = res;
+        setStaffs(newStaffs);
+      }
+    });
   };
 
   return (
@@ -102,47 +183,50 @@ function StaffsSetting(props: StaffsSettingProps) {
       <Helmet>
         <title>Staffs</title>
       </Helmet>
-      <PageTitleWrapper>
-        <PageHeader onAddStaff={onAddStaff} onToggleSearch={onToggleSearch} />
-      </PageTitleWrapper>
-      <Box>
-        {showSearch && (
-          <SearchWrapper>
-            <TextField
-              InputProps={{
-                disableUnderline: true,
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchTwoTone />
-                  </InputAdornment>
-                )
-              }}
-              type="search"
-              variant="standard"
-              fullWidth
-              placeholder="Search by email, name, surname, phone number"
-              value={searchStr}
-              onChange={(e) => {
-                setSearchString(e.target.value);
-              }}
-            ></TextField>
-          </SearchWrapper>
+      {editOpen && editing && vendor && (
+        <EditStaffDialog
+          vendor={vendor}
+          staff={editing}
+          open={editOpen}
+          onAction={onAction}
+        />
+      )}
+      {deleteOpen && editing && vendor && (
+        <ConfirmDialog
+          success="Remove"
+          successLabel="DELETE"
+          cancelLabel="RETURN"
+          cancel="Cancel Remove"
+          header="Are you sure you want to delete this staff?"
+          text="It cannot be recovered"
+          open={deleteOpen}
+          onAction={onAction}
+        />
+      )}
+      <Box style={{ height: '100%' }}>
+        {vendor && (
+          <PageTitleWrapper>
+            <PageHeader vendor={vendor} />
+          </PageTitleWrapper>
         )}
-        {editOpen && editing && (
-          <EditStaffDialog staff={editing} open={editOpen} onClose={onEdit} />
-        )}
-        <TableWrapper>
-          <Card>
-            <StaffsTable
-              staffs={staffs}
-              onEditingStaff={(staff) => onEditing(staff)}
-              search={searchStr}
-              staff_role={staffRole}
-            />
-          </Card>
-        </TableWrapper>
+        <Box style={{ height: vendor ? 'calc(100% - 56px)' : '100%' }}>
+          <ContainerWrapper>
+            <TableWrapper>
+              <StaffsTable
+                staffs={staffs}
+                onAction={onAction}
+                onSelectionChanged={handleSelectionChanged}
+                onStaffPatch={handleStaffPatch}
+              />
+            </TableWrapper>
+          </ContainerWrapper>
+          {vendor && (
+            <FooterWrapper>
+              <BulkActions selected={selectedStaffs} onAction={onAction} />
+            </FooterWrapper>
+          )}
+        </Box>
       </Box>
-      <Footer />
     </>
   );
 }

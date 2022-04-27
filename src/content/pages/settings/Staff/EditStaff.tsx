@@ -1,174 +1,249 @@
 import { useState } from 'react';
-
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
 import { Staff } from 'src/models/staff';
-import { Box, Button, Checkbox, DialogActions, Grid, IconButton, MenuItem, Switch, TextField } from '@mui/material';
+import {
+  styled,
+  Box,
+  Button,
+  DialogActions,
+  Grid,
+  IconButton,
+  Switch,
+  TextField,
+  MenuItem
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import MuiPhoneNumber from 'material-ui-phone-number';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import { VendorStand } from 'src/models/vendorStand';
 
+const DialogSubtitle = styled(Typography)(
+  ({ theme }) => `
+          color: #00000099;
+  `
+);
 
 interface EditStaffInterface {
-    onClose: Function,
-    open: boolean,
-    staff?: Staff,
-};
+  onAction: Function;
+  open: boolean;
+  staff?: Staff;
+  vendor: VendorStand;
+}
 
-const StaffRoles = [
-    {
-        value: 'manager',
-        label: 'Vendor Manager',
-    },
-    {
-        value: 'runner',
-        label: 'Runner',
-    },
-    {
-        value: 'packer',
-        label: 'Packer',
-    }
+const UserRoles = [
+  { label: 'Vendor Manager', value: 'manager' },
+  { label: 'Runner', value: 'runner' }
 ];
 
 const EditStaffDialog: React.FC<EditStaffInterface> = (props) => {
-    const { onClose, staff, open } = props;
-    const [editing, setEditingStaff] = useState(staff)
+  const { onAction, staff, open, vendor } = props;
+  const [editing, setEditingStaff] = useState(staff);
+  const [showError, setShowError] = useState(false);
 
-    const handleClose = () => {
-        onClose(editing);
-    };
+  const isNew = !staff.id;
 
-    return (
-        <Dialog onClose={() => {
-            onClose(null);
-        }} open={open} PaperProps={{ style: { width: 480 } }}>
-            <DialogTitle className='border-bottom d-flex font-bold' sx={{ px: 2, py: 1 }}>
-                <Typography component='span' variant='h6'>Edit Staff</Typography>
-                <IconButton className='float-right' sx={{ p: 0 }} size='small' onClick={() => {
-                    onClose(null);
-                }}>
-                    <CloseIcon />
-                </IconButton>
-            </DialogTitle>
-            <Box>
-                <Box sx={{ p: 1 }} style={{ background: '#0000000A' }}>
-                    <Switch ></Switch> <Typography component='span' variant='subtitle1'>Active</Typography>
-                </Box>
-                <Box sx={{ p: 2 }} className='border-bottom'>
-                    <TextField
-                        select
-                        label="Role"
-                        size='small'
-                        fullWidth
-                        value={editing.role}
-                        onChange={(e) => {
-                            const role = e.target.value;
-                            if (role === 'manager' || role === 'runner' || role === 'packer') {
-                                setEditingStaff({
-                                    ...editing,
-                                    role: role
-                                });
-                            }
-                        }}
-                    >
-                        {StaffRoles.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </TextField>
-                    <Typography variant='body2' sx={{ pt: 2 }}>
-                        Admin has access to all permissions. Can edit the menu, availability, create and delete staffs, cancel orders, and see all financial data.
-                    </Typography>
-                </Box>
-                <Box sx={{ px: 2, pb: 2, pt: 1 }} className='border-bottom'>
-                    <Typography variant='subtitle1' sx={{ pb: 2 }}>Staff Details</Typography>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="Name"
-                                size='small'
-                                fullWidth
-                                value={editing.firstName}
-                                onChange={(e) => {
-                                    setEditingStaff({
-                                        ...editing,
-                                        firstName: e.target.value
-                                    });
-                                }}
-                            >
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="Surname"
-                                size='small'
-                                fullWidth
-                                value={editing.lastName}
-                                onChange={(e) => {
-                                    setEditingStaff({
-                                        ...editing,
-                                        lastName: e.target.value
-                                    });
-                                }}
-                            >
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="Email"
-                                size='small'
-                                type={'email'}
-                                fullWidth
-                                value={editing.email}
-                                onChange={(e) => {
-                                    setEditingStaff({
-                                        ...editing,
-                                        email: e.target.value
-                                    });
-                                }}
-                            >
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <MuiPhoneNumber
-                                variant='outlined'
-                                fullWidth
-                                label='Phone'
-                                size='small'
-                                value={editing.mobileNo}
-                                style={{ fontSize: 18 }}
-                                defaultCountry={'us'}
-                                disableAreaCodes={true}
-                                onChange={(value) => {
-                                    setEditingStaff({
-                                        ...editing,
-                                        mobileNo: value
-                                    });
-                                }}
-                            />
-                        </Grid>
-                    </Grid>
-                </Box>
-                <Box sx={{ px: 2, py: 1 }} className='border-bottom'>
-                    <Typography variant='subtitle1' sx={{ pb: 1 }}>Locations</Typography>
-                    <Grid container spacing={0}>
-                        <Grid item xs={12}>
-                            <Checkbox size='small'></Checkbox><Typography variant='body1' component='span'>HotDog Stand</Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Checkbox size='small'></Checkbox><Typography variant='body1' component='span'>Snackr Kiosk</Typography>
-                        </Grid>
-                    </Grid>
-                </Box>
-            </Box>
-            <DialogActions sx={{ py: 2, px: 2 }}>
-                <Button color='primary' variant='contained' fullWidth onClick={handleClose}>
-                    Save
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
-}
+  const validateInput = () => {
+    if (!editing.firstName || editing.firstName.trim().length === 0)
+      return false;
+    if (!editing.lastName || editing.lastName.trim().length === 0) return false;
+    if (!editing.vendorStandId) return false;
+    return true;
+  };
+
+  const handleSave = () => {
+    if (validateInput()) {
+      onAction('Save', editing);
+    } else {
+      setShowError(true);
+    }
+  };
+
+  return (
+    <Dialog
+      onClose={() => {
+        onAction('Close');
+      }}
+      open={open}
+      PaperProps={{ style: { width: 1280, maxWidth: 640 } }}
+    >
+      <DialogTitle className="border-bottom d-flex" sx={{ px: 2, py: 1 }}>
+        <Typography component="span" variant="h6">
+          Edit Staff
+        </Typography>
+        <IconButton
+          className="float-right"
+          sx={{ p: 0 }}
+          size="small"
+          onClick={() => {
+            onAction('Close');
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <Box>
+        <Box sx={{ p: 1 }} style={{ background: '#0000000A' }}>
+          <Switch
+            checked={editing.active || false}
+            onChange={(e) => {
+              setEditingStaff({
+                ...editing,
+                active: e.target.checked
+              });
+            }}
+          ></Switch>{' '}
+          <Typography component="span" variant="subtitle1">
+            Active
+          </Typography>
+        </Box>
+        <Box sx={{ px: 2, py: 2 }} className="border-bottom">
+          <DialogSubtitle variant="subtitle1" sx={{ pb: 2 }}>
+            Staff Details
+          </DialogSubtitle>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <TextField
+                InputLabelProps={{ shrink: true }}
+                label="First Name"
+                size="small"
+                required
+                error={
+                  showError &&
+                  (!editing.firstName || editing.firstName.trim().length === 0)
+                }
+                fullWidth
+                value={editing.firstName || ''}
+                onChange={(e) => {
+                  setEditingStaff({
+                    ...editing,
+                    firstName: e.target.value
+                  });
+                }}
+              ></TextField>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                InputLabelProps={{ shrink: true }}
+                label="Last Name"
+                size="small"
+                required
+                error={
+                  showError &&
+                  (!editing.lastName || editing.lastName.trim().length === 0)
+                }
+                fullWidth
+                value={editing.lastName || ''}
+                onChange={(e) => {
+                  setEditingStaff({
+                    ...editing,
+                    lastName: e.target.value
+                  });
+                }}
+              ></TextField>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                type="tel"
+                InputLabelProps={{ shrink: true }}
+                label="Mobile No"
+                size="small"
+                required
+                error={
+                  showError &&
+                  (!editing.mobileNo || editing.mobileNo.trim().length === 0)
+                }
+                fullWidth
+                value={editing.mobileNo || ''}
+                onChange={(e) => {
+                  setEditingStaff({
+                    ...editing,
+                    mobileNo: e.target.value
+                  });
+                }}
+              ></TextField>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                select
+                disabled
+                label="Vendor"
+                required
+                InputLabelProps={{ shrink: true }}
+                error={showError && !editing.vendorStandId}
+                size="small"
+                fullWidth
+                value={editing.vendorStandId}
+                onChange={(e) => {
+                  setEditingStaff({
+                    ...editing,
+                    vendorStandId: e.target.value
+                  });
+                }}
+              >
+                <MenuItem key={vendor.id} value={vendor.id}>
+                  {vendor.name}
+                </MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                select
+                InputLabelProps={{ shrink: true }}
+                label="Staff Type"
+                size="small"
+                fullWidth
+                value={editing.role}
+                onChange={(e) => {
+                  const role = e.target.value;
+                  if (role === 'manager' || role === 'runner') {
+                    setEditingStaff({
+                      ...editing,
+                      role: role
+                    });
+                  }
+                }}
+              >
+                {UserRoles.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+      <DialogActions sx={{ py: 2 }}>
+        {!isNew && (
+          <Button
+            color="primary"
+            size="small"
+            variant="outlined"
+            style={{ width: 200, height: 40 }}
+            onClick={() => {
+              onAction('Delete', staff);
+            }}
+          >
+            <InfoOutlinedIcon
+              sx={{ mr: 2 }}
+              fontSize="small"
+            ></InfoOutlinedIcon>
+            Delete
+          </Button>
+        )}
+        <Button
+          color="primary"
+          variant="contained"
+          style={{ width: 200, height: 40 }}
+          onClick={handleSave}
+        >
+          Save
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 export default EditStaffDialog;
