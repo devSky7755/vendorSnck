@@ -3,7 +3,7 @@ import { useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
-import { Order } from 'src/models/order';
+import { GetOrderItemCount, Order } from 'src/models/order';
 import { Box, Button, Table, DialogActions, Grid, IconButton, TableContainer, TableRow, TableCell, TableBody } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import HistoryIcon from '@mui/icons-material/History';
@@ -55,8 +55,6 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
     else if (editing.status === 'Delivering' && editing.order_type === 'Delivery') actionName = 'Delivered';
     else if (editing.status === 'Ready' && editing.order_type === 'Pickup') actionName = 'Picked up';
     else if (editing.status === 'Waitlist' && editing.order_type === 'Pickup') actionName = 'Picked up';
-
-
 
     return (
         <Dialog onClose={() => {
@@ -112,7 +110,7 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
                         </Grid>
                         <Grid item>
                             <Typography className='color-60-grey' variant='subtitle2'>Items</Typography>
-                            <Typography variant='body1'>{order.item_count}</Typography>
+                            <Typography variant='body1'>{GetOrderItemCount(editing)}</Typography>
                         </Grid>
                         <Grid item>
                             <Typography className='color-60-grey' variant='subtitle2'>Due Time</Typography>

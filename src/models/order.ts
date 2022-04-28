@@ -8,7 +8,6 @@ export type OrderStatus = 'New' | 'Preparing' | 'Ready' | 'Delivering' | 'Waitli
 export interface Order {
     id: number;
     order_type: OrderType;
-    item_count: number;
     items: MenuItemV1[];
     status: OrderStatus;
     created: number;
@@ -19,10 +18,17 @@ export interface Order {
     delivery_person?: Staff;
 }
 
+export function GetOrderItemCount(order: Order) {
+    if (!order || !order.items) return 0;
+    let count = 0;
+    order.items.forEach(item => {
+        count += item.count;
+    })
+    return count;
+}
 export const temp_orders: Order[] = [
     {
         id: 567,
-        item_count: 4,
         order_type: 'Delivery',
         status: 'New',
         created: Date.now() - 15 * 60 * 1000,
@@ -31,7 +37,7 @@ export const temp_orders: Order[] = [
             { ...tempMenus[2], count: 1 },
             { ...tempMenus[3], count: 2 },
         ],
-        duetime: Date.now() - 2 * 60 * 1000,
+        duetime: Date.now() + 2 * 60 * 1000,
         customer: {
             firstName: 'Jack',
             lastName: 'Jackson',
@@ -40,16 +46,14 @@ export const temp_orders: Order[] = [
     },
     {
         id: 568,
-        item_count: 2,
         order_type: 'Pickup',
         status: 'New',
         created: Date.now() - 13.2 * 60 * 1000,
-        user_notified: Date.now() - 5.6 * 60 * 1000,
         items: [
             { ...tempMenus[0], count: 3 },
             { ...tempMenus[4], count: 2 },
         ],
-        duetime: Date.now() - 3.2 * 60 * 1000,
+        duetime: Date.now() + 3.2 * 60 * 1000,
         customer: {
             firstName: 'Peter',
             lastName: 'Peterson'
@@ -57,7 +61,6 @@ export const temp_orders: Order[] = [
     },
     {
         id: 569,
-        item_count: 2,
         order_type: 'Delivery',
         status: 'New',
         created: Date.now() - 7 * 60 * 1000,
@@ -74,7 +77,6 @@ export const temp_orders: Order[] = [
     },
     {
         id: 570,
-        item_count: 1,
         order_type: 'Delivery',
         status: 'New',
         created: Date.now() - 7.3 * 60 * 1000,
@@ -89,12 +91,10 @@ export const temp_orders: Order[] = [
         },
     },
     {
-        id: 671,
-        item_count: 1,
+        id: 571,
         order_type: 'Pickup',
         status: 'New',
         created: Date.now() - 7.6 * 60 * 1000,
-        user_notified: Date.now() - 3.6 * 60 * 1000,
         items: [
             { ...tempMenus[4], count: 3 },
         ],
@@ -106,7 +106,6 @@ export const temp_orders: Order[] = [
     },
     {
         id: 572,
-        item_count: 1,
         order_type: 'Pickup',
         status: 'New',
         created: Date.now() - 2.6 * 60 * 1000,
@@ -115,13 +114,12 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 22.8 * 60 * 1000,
         customer: {
-            firstName: 'Derek',
-            lastName: 'Derekson',
+            firstName: 'BBB',
+            lastName: 'BBBson',
         },
     },
     {
         id: 573,
-        item_count: 1,
         order_type: 'Pickup',
         status: 'New',
         created: Date.now() - 2.6 * 60 * 1000,
@@ -130,15 +128,14 @@ export const temp_orders: Order[] = [
         ],
         duetime: Date.now() + 23.8 * 60 * 1000,
         customer: {
-            firstName: 'Derek',
-            lastName: 'Derekson',
+            firstName: 'AAA',
+            lastName: 'AAAson',
         },
     },
 
     /*preparing*/
     {
-        id: 567,
-        item_count: 4,
+        id: 574,
         order_type: 'Delivery',
         status: 'Preparing',
         created: Date.now() - 15 * 60 * 1000,
@@ -156,25 +153,22 @@ export const temp_orders: Order[] = [
         },
     },
     {
-        id: 568,
-        item_count: 2,
+        id: 575,
         order_type: 'Pickup',
         status: 'Preparing',
         created: Date.now() - 13.2 * 60 * 1000,
-        user_notified: Date.now() - 5.6 * 60 * 1000,
         items: [
             { ...tempMenus[0], count: 3 },
             { ...tempMenus[4], count: 2 },
         ],
         duetime: Date.now() - 3.2 * 60 * 1000,
         customer: {
-            firstName: 'Derek',
-            lastName: 'Derekson',
+            firstName: 'Peter',
+            lastName: 'Peterson',
         },
     },
     {
-        id: 569,
-        item_count: 2,
+        id: 576,
         order_type: 'Delivery',
         status: 'Preparing',
         created: Date.now() - 7 * 60 * 1000,
@@ -190,8 +184,7 @@ export const temp_orders: Order[] = [
         },
     },
     {
-        id: 570,
-        item_count: 1,
+        id: 577,
         order_type: 'Delivery',
         status: 'Preparing',
         created: Date.now() - 7.3 * 60 * 1000,
@@ -207,8 +200,7 @@ export const temp_orders: Order[] = [
     },
     /* ready */
     {
-        id: 771,
-        item_count: 1,
+        id: 578,
         order_type: 'Delivery',
         status: 'Ready',
         created: Date.now() - 7.6 * 60 * 1000,
@@ -223,8 +215,7 @@ export const temp_orders: Order[] = [
         },
     },
     {
-        id: 471,
-        item_count: 1,
+        id: 579,
         order_type: 'Delivery',
         status: 'Ready',
         created: Date.now() - 7.6 * 60 * 1000,
@@ -239,8 +230,7 @@ export const temp_orders: Order[] = [
         },
     },
     {
-        id: 572,
-        item_count: 1,
+        id: 580,
         order_type: 'Delivery',
         status: 'Delivering',
         dispatch_time: Date.now() - 12.6 * 60 * 1000,
@@ -256,8 +246,7 @@ export const temp_orders: Order[] = [
         delivery_person: tempStaffs[0]
     },
     {
-        id: 573,
-        item_count: 1,
+        id: 581,
         order_type: 'Delivery',
         status: 'Delivering',
         dispatch_time: Date.now() - 2.6 * 60 * 1000,
@@ -273,8 +262,7 @@ export const temp_orders: Order[] = [
         delivery_person: tempStaffs[1]
     },
     {
-        id: 571,
-        item_count: 1,
+        id: 582,
         order_type: 'Pickup',
         status: 'Ready',
         created: Date.now() - 7.6 * 60 * 1000,
@@ -289,8 +277,7 @@ export const temp_orders: Order[] = [
         },
     },
     {
-        id: 591,
-        item_count: 1,
+        id: 583,
         order_type: 'Pickup',
         status: 'Ready',
         created: Date.now() - 7.6 * 60 * 1000,
@@ -305,8 +292,7 @@ export const temp_orders: Order[] = [
         },
     },
     {
-        id: 572,
-        item_count: 1,
+        id: 584,
         order_type: 'Pickup',
         status: 'Waitlist',
         created: Date.now() - 2.6 * 60 * 1000,
@@ -320,8 +306,7 @@ export const temp_orders: Order[] = [
         },
     },
     {
-        id: 573,
-        item_count: 1,
+        id: 585,
         order_type: 'Pickup',
         status: 'Waitlist',
         created: Date.now() - 2.6 * 60 * 1000,

@@ -3,7 +3,7 @@ import {
   Checkbox, IconButton, Table, TableBody, TableCell, TableHead, TableRow, TableContainer,
   Typography, Switch, Menu, MenuItem
 } from '@mui/material';
-import { Order } from 'src/models/order';
+import { GetOrderItemCount, Order } from 'src/models/order';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -66,9 +66,7 @@ const GetGroupedOrders = (orders: Order[], type: string, showPreOrders = false) 
 
     while (last_duetime > starttime) {
       let filtered = orders.filter(x => x.duetime >= starttime && x.duetime < endtime);
-      if (type === 'new' && showPreOrders) {
-        filtered = filtered.filter(x => x.status === 'Preparing');
-      }
+
       if (filtered.length > 0) {
         const group_time = formatAMPM(new Date(endtime));
 
@@ -78,12 +76,10 @@ const GetGroupedOrders = (orders: Order[], type: string, showPreOrders = false) 
           warning = warning + `${late_prepare.length} order(s) are late to prepare`;
         }
         let no_item_count = 0;
-        if (type !== 'new') {
-          filtered.forEach((order) => {
-            let is_no_item = order.items.find(x => x.currentAvailable === 0);
-            if (is_no_item) no_item_count++;
-          });
-        }
+        filtered.forEach((order) => {
+          let is_no_item = order.items.find(x => x.currentAvailable === 0);
+          if (is_no_item) no_item_count++;
+        });
 
         grouped.push({
           name: group_time,
@@ -334,7 +330,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
         </TableCell>
         <TableCell>#{order.id}</TableCell>
         <TableCell>
-          {order.item_count}
+          {GetOrderItemCount(order)}
           {hasAlchol && (
             <Typography variant="caption" className="border-warning alchol-label" color="#FF864E"
               sx={{ ml: 2, px: 1 }} gutterBottom noWrap>
