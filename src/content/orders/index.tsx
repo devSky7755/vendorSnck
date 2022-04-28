@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import OrdersTable from './OrdersTable';
 import EditOrderDialog from './EditOrder';
 import BulkActions from './BulkActions';
-import { temp_orders } from 'src/models/order';
+import { Order, temp_orders } from 'src/models/order';
 import OrdersDetail from './OrdersDetail';
 import { useParams } from 'react-router-dom';
 import { NotificationBoard } from './notification';
@@ -47,7 +47,7 @@ const ContainerWrapper = styled(Box)(
   `
 );
 
-function OrdersPage() {
+const OrdersPage = () => {
   const { type } = useParams();
 
   const [editOpen, setEditOpen] = useState(false);
@@ -56,35 +56,28 @@ function OrdersPage() {
   const [issueWith, setIssueWith] = useState(null);
   const [orders, setOrders] = useState([]);
   const [sideVisible, setSideVisible] = useState(false);
-  const [selected, setSelectedOrders] = useState([]);
+  const [selected, setSelectedOrders] = useState<Order[]>([]);
   const [showOrderDetail, setShowOrderDetail] = useState(false);
-  const [openNotificatoin, setOpenNotification] = useState(true);
+  const [openNotificatoin, setOpenNotification] = useState(false);
 
   useEffect(() => {
     let filtered = [];
+    console.log(type);
     switch (type.toLowerCase()) {
       case 'new':
-        filtered = temp_orders.filter((x) => x.status === 'New');
+        filtered = temp_orders.filter(x => x.status === 'New');
         break;
       case 'preparing':
-        filtered = temp_orders.filter((x) => x.status === 'Preparing');
+        filtered = temp_orders.filter(x => x.status === 'Preparing');
         break;
       case 'delivery':
-        filtered = temp_orders.filter(
-          (x) =>
-            (x.status === 'Ready' && x.order_type === 'Delivery') ||
-            x.status === 'Delivering'
-        );
+        filtered = temp_orders.filter(x => (x.status === 'Ready' && x.order_type === 'Delivery') || x.status === 'Delivering');
         break;
       case 'pickup':
-        filtered = temp_orders.filter(
-          (x) =>
-            (x.status === 'Ready' && x.order_type === 'Pickup') ||
-            x.status === 'Waitlist'
-        );
+        filtered = temp_orders.filter(x => (x.status === 'Ready' && x.order_type === 'Pickup') || x.status === 'Waitlist');
         break;
       default:
-        filtered = temp_orders.filter((x) => x.status === 'New');
+        filtered = [...temp_orders];
         break;
     }
     setOrders(filtered);
@@ -102,19 +95,23 @@ function OrdersPage() {
     setSelectedOrders(selected);
   };
 
-  const onAction = (action) => {
-    if (action === 'View') {
-      onView();
+  const onAction = (action, data) => {
+    if (action === 'View Items') {
+      onViewItems();
     } else if (action === 'Print') {
-      onPrint();
+      onPrint(data);
     } else if (action === 'Reset') {
       onReset();
     } else if (action === 'Issue') {
-      onIssue();
+      onIssue(data);
+    } else if (action === 'Edit') {
+      onEdit(data);
+    } else if (action === 'Filter') {
+      onToggleFilter();
     }
   };
 
-  const onView = () => {
+  const onViewItems = () => {
     setSideVisible(true);
   };
 
@@ -125,26 +122,28 @@ function OrdersPage() {
   const onReset = () => {
     setSelectedOrders(null);
   };
-  const onPrint = () => {};
-  const onIssue = () => {};
 
-  const onViewOrder = (order) => {
+  const onPrint = (order) => { };
+  const onIssue = (order) => {
+    setIssueWith(order);
+    setIssueWithOpen(true);
+  };
+
+  const onEdit = (order) => {
     setEditing(order);
     setEditOpen(true);
   };
 
-  const onIssueWithOrder = (order) => {
-    setIssueWith(order);
-    setIssueWithOpen(true);
-  };
+  const onToggleFilter = () => {
+
+  }
 
   const ordersTblProps = {
     orders,
     selected,
     type,
     onSelectionChanged,
-    onViewOrder,
-    onIssueWithOrder
+    onAction
   };
 
   return (
@@ -174,7 +173,6 @@ function OrdersPage() {
               <Grid item style={{ width: 240 }}>
                 <RightSidebarWrapper>
                   <OrdersDetail
-                    orders={orders}
                     selected={selected}
                     type={type}
                     onHide={onHideSidebar}

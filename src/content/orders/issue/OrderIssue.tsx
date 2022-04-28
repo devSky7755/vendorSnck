@@ -91,7 +91,6 @@ const OrderIssue = ({ setOpen, order, open }) => {
 
   const handleClose = (result = {}) => {
     setOpen(false);
-    console.log(result);
   };
   const [actionDetails, setActionDetails] = useState<any>(null);
   const [dlgTitle, setDlgTitle] = useState('Issue with Order');

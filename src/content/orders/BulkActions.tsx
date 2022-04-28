@@ -25,7 +25,7 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
               variant="contained"
               disabled={!selected || !selected.length}
               onClick={() => {
-                props.onAction('Print');
+                props.onAction('Print Bulk', selected);
               }}
             >
               PRINT SELECTED {selected && selected.length > 0 && `(${selected.length})`}
@@ -87,7 +87,7 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
             variant="contained"
             disabled={!selected || !selected.length}
             onClick={() => {
-              props.onAction('View');
+              props.onAction('View Items');
             }}
           >
             VIEW ITEMS {selected && selected.length > 0 && `(${selected.length})`}
@@ -100,7 +100,7 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
               color='primary'
               sx={{ ml: 1 }}
               onClick={() => {
-                props.onAction('Issue');
+                props.onAction('Issue', selected[0]);
               }}
             >
               ISSUE WITH ORDER

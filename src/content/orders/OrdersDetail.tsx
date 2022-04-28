@@ -19,14 +19,13 @@ import CloseIcon from '@mui/icons-material/Close';
 interface OrdersDetailProps {
     type: string;
     className?: string;
-    orders: Order[];
-    selected: number[];
+    selected: Order[];
     onHide: Function;
 }
 
 
-const OrdersDetail: FC<OrdersDetailProps> = ({ type, orders, selected, onHide }) => {
-    const [selectedOrders, setSelectedOrders] = useState<number[]>(selected);
+const OrdersDetail: FC<OrdersDetailProps> = ({ type, selected, onHide }) => {
+    const [selectedOrders, setSelectedOrders] = useState<Order[]>(selected);
     const [itemlist, setItemList] = useState<MenuItem[]>([]);
 
     useEffect(() => {
@@ -39,8 +38,7 @@ const OrdersDetail: FC<OrdersDetailProps> = ({ type, orders, selected, onHide })
 
     useEffect(() => {
         let new_list: MenuItem[] = [];
-        orders.forEach(order => {
-            if (selectedOrders.includes(order.id) === false) return;
+        selectedOrders.forEach(order => {
             order.items.forEach(item => {
                 let exist = new_list.find(x => x.name === item.name);
                 if (exist) {
@@ -110,14 +108,6 @@ const OrdersDetail: FC<OrdersDetailProps> = ({ type, orders, selected, onHide })
             </TableContainer>
         </Box >
     );
-};
-
-OrdersDetail.propTypes = {
-    orders: PropTypes.array.isRequired
-};
-
-OrdersDetail.defaultProps = {
-    orders: []
 };
 
 export default OrdersDetail;

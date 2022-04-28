@@ -228,19 +228,6 @@ const vendorRoutes: RouteObject[] = [
         path: 'items/:type',
         element: <OrdersPage />
       }
-      // {
-      //   path: 'issue/:id',
-      //   children: [
-      //     {
-      //       path: '',
-      //       element: <OrderIssue />
-      //     },
-      //     {
-      //       path: ':action',
-      //       element: <ActionBoard />
-      //     }
-      //   ]
-      // }
     ]
   }
 ];
