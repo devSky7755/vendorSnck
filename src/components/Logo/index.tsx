@@ -14,23 +14,10 @@ const LogoWrapper = styled(Link)(
 
 const LogoSignWrapper = styled(Box)(
   () => `
-        width: 36px;
+        width: 169px;
         height: 36px;
         margin-top: 4px;
         transform: scale(.8);
-`
-);
-
-const LogoTextWrapper = styled(Box)(
-  ({ theme }) => `
-        margin-top: 10px;
-`
-);
-
-const LogoText = styled(Box)(
-  ({ theme }) => `
-        font-size: 24px;
-        font-weight: ${theme.typography.fontWeightBold};
 `
 );
 
@@ -38,11 +25,8 @@ function Logo() {
   return (
     <LogoWrapper to="/dashboards">
       <LogoSignWrapper>
-        <img src='/icon_512.png' alt="logo" width='100%' height='100%'></img>
+        <img src='/title_logo.png' alt="logo" width='100%' height='100%'></img>
       </LogoSignWrapper>
-      <LogoTextWrapper>
-        <LogoText>Snackr</LogoText>
-      </LogoTextWrapper>
     </LogoWrapper>
   );
 }
