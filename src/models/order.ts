@@ -15,6 +15,7 @@ export interface Order {
     user_notified?: number;
     dispatch_time?: number;
     customer: Customer;
+    price?: number;
     delivery_person?: Staff;
 }
 

@@ -1,3 +1,5 @@
+import { Order } from "./order";
+
 export interface Customer {
     id?: string;
     firstName: string;
@@ -13,4 +15,6 @@ export interface Customer {
     deletedAt?: Date;
     inVenueLocationId?: string;
     mobileNo?: string;
+    note?: string;
+    orders?: Order[]
 }

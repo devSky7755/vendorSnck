@@ -137,34 +137,37 @@ const EditCustomerDialog: React.FC<EditCustomerInterface> = (props) => {
                 </Box>
                 <Box sx={{ px: 2, py: 1 }}>
                     <DialogSubtitle variant='subtitle1' sx={{ pb: 2 }}>Orders</DialogSubtitle>
-                    <TableContainer style={{ width: '100%' }}>
-                        <Table>
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell>
-                                        <Typography variant='subtitle1'>Order No. 0245</Typography>
-                                    </TableCell>
-                                    <TableCell align='right'>$25.60</TableCell>
-                                    <TableCell padding='checkbox'>
-                                        <IconButton className='float-right' sx={{ p: 0 }} size='small'>
-                                            <MoreVertTwoToneIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell>
-                                        <Typography variant='subtitle1'>Order No. 0245</Typography>
-                                    </TableCell>
-                                    <TableCell align='right'>$25.60</TableCell>
-                                    <TableCell padding='checkbox'>
-                                        <IconButton className='float-right' sx={{ p: 0 }} size='small'>
-                                            <MoreVertTwoToneIcon />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    {
+                        editing.orders ? (
+                            <TableContainer style={{ width: '100%' }}>
+                                <Table>
+                                    <TableBody>
+                                        {
+                                            editing.orders.map((order, id) => {
+                                                return (
+                                                    <TableRow>
+                                                        <TableCell>
+                                                            <Typography variant='subtitle1'>Order No. {order.id}</Typography>
+                                                        </TableCell>
+                                                        <TableCell align='right'>${(order.price || 0).toFixed(2)}</TableCell>
+                                                        <TableCell padding='checkbox'>
+                                                            <IconButton className='float-right' sx={{ p: 0 }} size='small'>
+                                                                <MoreVertTwoToneIcon />
+                                                            </IconButton>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
+                                            })
+                                        }
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        ) : (
+                            <Box>
+                                <Typography variant='body1'>No Orders</Typography>
+                            </Box>
+                        )
+                    }
                 </Box>
                 <Box sx={{ px: 2, py: 2 }} className='border-bottom'>
                     <DialogSubtitle variant='subtitle1' sx={{ pb: 2 }}>Note</DialogSubtitle>
@@ -176,9 +179,12 @@ const EditCustomerDialog: React.FC<EditCustomerInterface> = (props) => {
                             style={{ fontSize: '16px', lineHeight: '24px' }}
                             InputLabelProps={{ shrink: true }}
                             fullWidth
-                            contentEditable={false}
-                            defaultValue={'User has lodged a complaint about the speed of delivery and requested a refund on 1 April 2022.'}
+                            defaultValue={editing.note || ''}
                             onChange={(e) => {
+                                setEditingCustomer({
+                                    ...editing,
+                                    note: e.target.value
+                                })
                             }}
                         />
                     </Box>
