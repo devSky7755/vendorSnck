@@ -94,6 +94,8 @@ function VenuesPage(props: VenuesPageProps) {
       navigate('/venueareas/' + data.id);
     } else if (action === 'In Location') {
       navigate('/venuelocations/' + data.id);
+    } else if (action === 'Vendor Stands') {
+      navigate('/vendorstands/' + data.id);
     }
   }
 

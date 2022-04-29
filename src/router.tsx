@@ -18,11 +18,11 @@ import Logout from './content/login/logout';
 import { isVendorApp } from './models/constant';
 
 const Loader = (Component) => (props) =>
-  (
-    <Suspense fallback={<SuspenseLoader />}>
-      <Component {...props} />
-    </Suspense>
-  );
+(
+  <Suspense fallback={<SuspenseLoader />}>
+    <Component {...props} />
+  </Suspense>
+);
 
 // Pages
 
@@ -308,6 +308,10 @@ const adminRoutes: RouteObject[] = [
     path: 'vendorstands',
     element: <SidebarLayout />,
     children: [
+      {
+        path: ':venueId',
+        element: <VendorsPage />
+      },
       {
         path: '',
         element: <VendorsPage />

@@ -18,12 +18,13 @@ const DialogSubtitle = styled(Typography)(
 interface EditVendorInterface {
     onAction: Function;
     open: boolean;
+    venueId: string;
     venues: Venue[];
     vendor?: Vendor;
 };
 
 const EditVendorDialog: React.FC<EditVendorInterface> = (props) => {
-    const { onAction, venues, vendor, open } = props;
+    const { onAction, venues, vendor, open, venueId } = props;
     const [editing, setEditingVendor] = useState(vendor);
     const [showError, setShowError] = useState(false);
 
@@ -91,6 +92,7 @@ const EditVendorDialog: React.FC<EditVendorInterface> = (props) => {
                                 select
                                 required
                                 label="Venue"
+                                disabled={venueId && venueId.length > 0 && editing.venueId === venueId}
                                 size='small'
                                 InputLabelProps={{ shrink: true }}
                                 fullWidth
