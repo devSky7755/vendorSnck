@@ -1,5 +1,4 @@
 import { FC, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import {
     IconButton,
     Table,
@@ -22,7 +21,6 @@ interface OrdersDetailProps {
     selected: Order[];
     onHide: Function;
 }
-
 
 const OrdersDetail: FC<OrdersDetailProps> = ({ type, selected, onHide }) => {
     const [selectedOrders, setSelectedOrders] = useState<Order[]>(selected);
@@ -77,7 +75,7 @@ const OrdersDetail: FC<OrdersDetailProps> = ({ type, selected, onHide }) => {
                                     <TableCell>
                                         <Typography
                                             variant="body2"
-                                            color="text.primary"
+                                            color={!menu.currentAvailable ? "error" : "text.primary"}
                                             gutterBottom
                                             noWrap
                                         >
@@ -87,11 +85,11 @@ const OrdersDetail: FC<OrdersDetailProps> = ({ type, selected, onHide }) => {
                                     <TableCell align="right">
                                         <Typography
                                             variant="body2"
-                                            color="text.primary"
+                                            color={!menu.currentAvailable ? "error" : "text.primary"}
                                             gutterBottom
                                             noWrap
                                         >
-                                            {menu.count}
+                                            {!menu.currentAvailable ? -menu.count : menu.count}
                                         </Typography>
                                     </TableCell>
                                     <TableCell align="right">

@@ -449,11 +449,15 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
             }
             <TableCell>Customer</TableCell>
             <TableCell align="right">
-              {type === 'new' && (
-                <Fragment>
-                  <Switch onChange={handlePreOrders}></Switch> Pre-orders
-                </Fragment>
-              )}
+              {
+                /*
+                type === 'new' && (
+                  <Fragment>
+                    <Switch onChange={handlePreOrders}></Switch> Pre-orders
+                  </Fragment>
+                )
+                */
+              }
               <IconButton size="small" sx={{ ml: 2 }} onClick={() => {
                 onAction('Filter');
               }}>
