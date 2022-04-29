@@ -9,6 +9,8 @@ import OrdersDetail from './OrdersDetail';
 import { useParams } from 'react-router-dom';
 import { NotificationBoard } from './notification';
 import { OrderIssue } from './issue';
+import SidebarFilter from './SidebarFilter';
+import { defaultFilter, OrderFilter } from './order_filter';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -47,6 +49,17 @@ const ContainerWrapper = styled(Box)(
   `
 );
 
+
+const filterOrders = (orders: Order[], filter: OrderFilter) => {
+  var filtered = orders.filter(order => {
+    if (filter.type.includes(order.order_type) === false) return false;
+    if (filter.status.includes(order.status) === false) return false;
+    return true;
+  });
+
+  return filtered;
+}
+
 const OrdersPage = () => {
   const { type } = useParams();
 
@@ -55,10 +68,12 @@ const OrdersPage = () => {
   const [issueWithOpen, setIssueWithOpen] = useState(false);
   const [issueWith, setIssueWith] = useState(null);
   const [orders, setOrders] = useState([]);
-  const [sideVisible, setSideVisible] = useState(false);
+  const [filtered, setFiltered] = useState([]);
   const [selected, setSelectedOrders] = useState<Order[]>([]);
   const [showOrderDetail, setShowOrderDetail] = useState(false);
+  const [showRightFilter, setShowRightFilter] = useState(false);
   const [openNotificatoin, setOpenNotification] = useState(false);
+  const [filter, setFilter] = useState<OrderFilter>(defaultFilter);
 
   useEffect(() => {
     let filtered = [];
@@ -81,10 +96,15 @@ const OrdersPage = () => {
     }
     setOrders(filtered);
     setSelectedOrders([]);
+    setFilter(defaultFilter);
     setShowOrderDetail(false);
     setEditOpen(false);
     setEditing(null);
   }, [type]);
+
+  useEffect(() => {
+    setFiltered(filterOrders(orders, filter));
+  }, [filter, orders])
 
   const onEdited = (order) => {
     setEditOpen(false);
@@ -111,11 +131,13 @@ const OrdersPage = () => {
   };
 
   const onViewItems = () => {
-    setSideVisible(true);
+    setShowRightFilter(false);
+    setShowOrderDetail(true);
   };
 
   const onHideSidebar = () => {
-    setSideVisible(false);
+    setShowOrderDetail(false);
+    setShowRightFilter(false);
   };
 
   const onReset = () => {
@@ -134,13 +156,23 @@ const OrdersPage = () => {
   };
 
   const onToggleFilter = () => {
+    if (showRightFilter) {
+      setShowRightFilter(false);
+    } else {
+      setShowRightFilter(true);
+      setShowOrderDetail(false);
+    }
+  }
 
+  const onChangeFilter = (f) => {
+    setFilter(f);
   }
 
   const ordersTblProps = {
-    orders,
+    orders: filtered,
     selected,
     type,
+    filter,
     onSelectionChanged,
     onAction
   };
@@ -168,14 +200,23 @@ const OrdersPage = () => {
                 <OrdersTable {...ordersTblProps} />
               </TableWrapper>
             </Grid>
-            {sideVisible && (
+            {(showOrderDetail || showRightFilter) && (
               <Grid item style={{ width: 240 }}>
                 <RightSidebarWrapper>
-                  <OrdersDetail
-                    selected={selected}
-                    type={type}
-                    onHide={onHideSidebar}
-                  />
+                  {
+                    showOrderDetail ?
+                      (<OrdersDetail
+                        selected={selected}
+                        type={type}
+                        onHide={onHideSidebar}
+                      />) :
+                      (<SidebarFilter
+                        type={type}
+                        filter={filter}
+                        onChangeFilter={onChangeFilter}
+                        onHide={onHideSidebar}
+                      />)
+                  }
                 </RightSidebarWrapper>
               </Grid>
             )}
