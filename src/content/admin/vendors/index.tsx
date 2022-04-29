@@ -6,10 +6,13 @@ import VendorsTable from './VendorsTable';
 import EditVendorDialog from './EditVendor';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
-import { patchVendorStand, postVendorStand, deleteVendorStand, getVendorStands } from 'src/Api/apiClient';
+import { patchVendorStand, postVendorStand, deleteVendorStand, getVendorStands, getVenue } from 'src/Api/apiClient';
 import { Venue } from 'src/models/venue';
 import { useNavigate } from 'react-router';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
+import { useParams } from 'react-router';
+import PageTitleWrapper from 'src/components/PageTitleWrapper';
+import PageHeader from './PageHeader';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -42,23 +45,42 @@ interface VendorsPageProps {
 }
 
 function VendorsPage(props: VendorsPageProps) {
+  const { venueId } = useParams();
+
   const { token, venues } = props;
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [vendors, setVendors] = useState<Vendor[]>([]);
+  const [venue, setVenue] = useState(null);
 
   const [selectedVendors, setSelectedVendors] = useState<Vendor[]>([]);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    loadVendors();
-  }, [venues]);
+    if (venueId) {
+      getVenue(venueId).then(res => {
+        if (res) {
+          setVenue(res);
+          setVendors(res.vendorStands || [])
+        } else {
+          setVenue(null);
+          setVendors([]);
+        }
+      }).catch(ex => {
+        setVenue(null);
+        setVendors([]);
+      })
+    } else {
+      setVenue(null);
+      loadVendors();
+    }
+  }, [venues, venueId]);
 
   const loadVendors = () => {
     setVendors([]);
-    getVendorStands(token).then(res=>{
+    getVendorStands(token).then(res => {
       if (res) {
         setVendors(res);
       }
@@ -80,7 +102,12 @@ function VendorsPage(props: VendorsPageProps) {
       setEditing(data);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      setEditing({ available: false, deliveryAvailable: false, pickupAvailable: false });
+      if (venueId) {
+        setEditing({ available: false, deliveryAvailable: false, pickupAvailable: false, venueId: venueId });
+      } else {
+        setEditing({ available: false, deliveryAvailable: false, pickupAvailable: false });
+      }
+      
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);
@@ -165,6 +192,7 @@ function VendorsPage(props: VendorsPageProps) {
       {
         editOpen && editing &&
         <EditVendorDialog
+          venueId={venueId}
           venues={venues}
           vendor={editing}
           open={editOpen}
@@ -184,7 +212,13 @@ function VendorsPage(props: VendorsPageProps) {
           onAction={onAction}
         />
       }
-      <Box style={{ height: '100%' }}>
+      {
+        venue &&
+        <PageTitleWrapper>
+          <PageHeader venue={venue} />
+        </PageTitleWrapper>
+      }
+      <Box style={{ height: venue ? 'calc(100% - 56px)' : '100%' }}>
         <ContainerWrapper>
           <TableWrapper>
             <VendorsTable vendors={vendors} venues={venues} onAction={onAction} onSelectionChanged={handleSelectionChanged} onVendorPatch={handleVendorPatch} />
