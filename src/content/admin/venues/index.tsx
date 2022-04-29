@@ -7,7 +7,7 @@ import EditVenueDialog from './EditVenue';
 import { connect } from 'react-redux';
 import { deleteVenue, patchVenue, updateVenue } from 'src/reducers/venues/action';
 import BulkActions from './BulkActions';
-import { patchVenue as patchVenueAPI, postVenue, deleteVenue as deleteVenueAPI } from 'src/Api/apiClient';
+import { patchVenue as patchVenueAPI, postVenue, deleteVenue as deleteVenueAPI, patchBulkVenueAPI, deleteBulkVenuesAPI } from 'src/Api/apiClient';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 import { useNavigate } from 'react-router';
 
@@ -84,6 +84,12 @@ function VenuesPage(props: VenuesPageProps) {
       setDeleteOpen(false);
       handleDelete(editing);
       setEditing(null);
+    } else if (action === 'Bulk Delete') {
+      handleBulkDelete(selectedVenues);
+    } else if (action === 'Bulk Active') {
+      handleBulkVenuePatch(selectedVenues, 'active', true);
+    } else if (action === 'Bulk Inactive') {
+      handleBulkVenuePatch(selectedVenues, 'active', false);
     } else if (action === 'Distribution Area') {
       navigate('/venueareas/' + data.id);
     } else if (action === 'In Location') {
@@ -144,6 +150,33 @@ function VenuesPage(props: VenuesPageProps) {
     patchVenueAPI(token, venue, patch).then(res => {
       props.patchVenue(venue, key, value);
     });
+  }
+
+  const handleBulkVenuePatch = (svenues, key, value) => {
+    let update = {};
+    update[key] = value;
+    let data = {
+      ids: svenues.map(v => v.id),
+      data: update
+    }
+    patchBulkVenueAPI(token, data).then(res => {
+      res.forEach(v => {
+        props.patchVenue(v, key, value);
+      })
+    });
+  }
+
+  const handleBulkDelete = (svenues: Venue[]) => {
+    let data = {
+      ids: svenues.map(v => v.id)
+    }
+    deleteBulkVenuesAPI(token, data).then(success => {
+      if (success) {
+        svenues.forEach(venue => {
+          props.deleteVenue(venue);
+        })
+      }
+    })
   }
 
   return (
