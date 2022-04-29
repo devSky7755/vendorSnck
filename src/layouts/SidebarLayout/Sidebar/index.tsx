@@ -3,8 +3,11 @@ import { Box, Drawer, Hidden, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import SidebarMenu from './SidebarMenu';
 import { connect } from 'react-redux';
-import { toggleSidebar } from 'src/reducers/setting/action'
+import { toggleSidebar } from 'src/reducers/setting/action';
 import { isVendorApp } from 'src/models/constant';
+import { useEffect, useState } from 'react';
+import { VendorStand } from 'src/models/vendorStand';
+import { getVendorStand } from 'src/Api/apiClient';
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -31,10 +34,19 @@ const TopSection = styled(Box)(
 `
 );
 
-function Sidebar({ showSidebar, toggleSidebar }) {
+function Sidebar({ showSidebar, toggleSidebar, token, userData }) {
+  const [vendor, setVendor] = useState<VendorStand>();
+
   const closeSidebar = () => {
     toggleSidebar();
-  }
+  };
+
+  useEffect(() => {
+    if (!userData || !userData?.vendorStandId) return;
+    getVendorStand(userData?.vendorStandId).then((res) => {
+      setVendor(res);
+    });
+  }, [userData]);
 
   if (showSidebar) {
     return (
@@ -42,17 +54,21 @@ function Sidebar({ showSidebar, toggleSidebar }) {
         <Hidden lgDown>
           <SidebarWrapper>
             <Scrollbars autoHide>
-              {
-                isVendorApp &&
+              {isVendorApp && (
                 <TopSection>
                   <Box>
-                    <Typography variant='subtitle2' color={'white'}>HotDog Stand</Typography>
+                    <Typography variant="subtitle2" color={'white'}>
+                      {vendor && vendor?.name}
+                    </Typography>
                   </Box>
                   <Box>
-                    <Typography component='span' variant='body2'>Jack Jackson</Typography>
+                    <Typography component="span" variant="body2">
+                      {userData && userData.firstName}{' '}
+                      {userData && userData.lastName}
+                    </Typography>
                   </Box>
                 </TopSection>
-              }
+              )}
               <SidebarMenu />
             </Scrollbars>
           </SidebarWrapper>
@@ -67,17 +83,21 @@ function Sidebar({ showSidebar, toggleSidebar }) {
           >
             <SidebarWrapper>
               <Scrollbars autoHide>
-                {
-                  isVendorApp &&
+                {isVendorApp && (
                   <TopSection>
                     <Box>
-                      <Typography variant='subtitle2' color={'white'}>HotDog Stand</Typography>
+                      <Typography variant="subtitle2" color={'white'}>
+                        {vendor && vendor?.name}
+                      </Typography>
                     </Box>
                     <Box>
-                      <Typography component='span' variant='body2'>Jack Jackson</Typography>
+                      <Typography component="span" variant="body2">
+                        {userData && userData.firstName}{' '}
+                        {userData && userData.lastName}
+                      </Typography>
                     </Box>
                   </TopSection>
-                }
+                )}
                 <SidebarMenu />
               </Scrollbars>
             </SidebarWrapper>
@@ -86,16 +106,15 @@ function Sidebar({ showSidebar, toggleSidebar }) {
       </>
     );
   } else {
-    return (
-      <>
-      </>
-    )
+    return <></>;
   }
 }
 
 function reduxState(state) {
   return {
-    showSidebar: (state.setting && state.setting.showSidebar) || false
-  }
+    showSidebar: (state.setting && state.setting.showSidebar) || false,
+    token: state.auth && state.auth.token,
+    userData: state.auth && state.auth.data
+  };
 }
 export default connect(reduxState, { toggleSidebar })(Sidebar);

@@ -62,10 +62,11 @@ interface StaffsPageQueryParams {
 
 interface StaffsSettingProps {
   token: string;
+  userData: any;
 }
 
 function StaffsSetting(props: StaffsSettingProps) {
-  const { token } = props;
+  const { token, userData } = props;
 
   const [editOpen, setEditOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -79,13 +80,15 @@ function StaffsSetting(props: StaffsSettingProps) {
   useEffect(() => {
     getAllStaffs(token).then((res) => {
       setStaffs(res);
-      if (res.length > 0) {
-        getVendorStand(res[0].vendorStandId).then((vs: VendorStand) => {
-          setVendor(vs);
-        });
-      }
     });
   }, []);
+
+  useEffect(() => {
+    if (!userData || !userData?.vendorStandId) return;
+    getVendorStand(userData?.vendorStandId).then((res) => {
+      setVendor(res);
+    });
+  }, [userData]);
 
   const onAction = (action, data) => {
     if (action === 'Edit') {
@@ -233,7 +236,8 @@ function StaffsSetting(props: StaffsSettingProps) {
 
 function reduxState(state) {
   return {
-    token: state.auth && state.auth.token
+    token: state.auth && state.auth.token,
+    userData: state.auth && state.auth.data
   };
 }
 export default connect(reduxState)(StaffsSetting);
