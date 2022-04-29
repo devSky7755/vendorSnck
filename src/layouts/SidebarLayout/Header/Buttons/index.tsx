@@ -46,79 +46,93 @@ function HeaderButtons({ pauseUntil, refreshPause }) {
 
   const refresh_pause = () => {
     refreshPause();
-  }
+  };
 
   useEffect(() => {
     if (isVendorApp) {
       const intervalId = setInterval(() => {
-        setRender(x => !x);
+        setRender((x) => !x);
       }, 250);
 
       return function () {
         clearInterval(intervalId);
-      }
+      };
     }
   }, []);
 
-
   return (
     <Box sx={{ mr: 1 }}>
-      {
-        isVendorApp &&
+      {isVendorApp && (
         <Box component="span" sx={{ mr: 2 }}>
-          <Button variant='outlined' size='small' style={{ fontWeight: 'normal', textTransform: 'none', borderColor: '#FFFFFFBD', color: 'white', width: 160, height: 40 }}
+          <Button
+            variant="outlined"
+            size="small"
+            style={{
+              fontWeight: 'normal',
+              textTransform: 'none',
+              borderColor: '#FFFFFFBD',
+              color: 'white',
+              width: 160,
+              height: 40
+            }}
             onClick={() => {
-              refresh_pause();
+              if (seconds > 0) refresh_pause();
+              else navigate('/settings/orders');
             }}
           >
-            {
-              seconds > 0 ? <PauseCircleFilledOutlinedIcon color='warning' sx={{ mr: 1 }} /> : <PlayCircleIcon color='success' sx={{ mr: 1 }} />
-            }
-            {
-              seconds > 0 ? `Paused ${Math.floor(seconds / 60)}:${(seconds % 60).toString().padStart(2, '0')}` : 'Available'
-            }
+            {seconds > 0 ? (
+              <PauseCircleFilledOutlinedIcon color="warning" sx={{ mr: 1 }} />
+            ) : (
+              <PlayCircleIcon color="success" sx={{ mr: 1 }} />
+            )}
+            {seconds > 0
+              ? `Paused ${Math.floor(seconds / 60)}:${(seconds % 60)
+                  .toString()
+                  .padStart(2, '0')}`
+              : 'Available'}
           </Button>
         </Box>
-      }
-      {
-        !isVendorApp &&
-        <Typography component='span' sx={{ mx: 3 }} style={{ fontSize: 22, fontWeight: 600 }}>
+      )}
+      {!isVendorApp && (
+        <Typography
+          component="span"
+          sx={{ mx: 3 }}
+          style={{ fontSize: 22, fontWeight: 600 }}
+        >
           {GetPageTitle(location.pathname.toLowerCase())}
         </Typography>
-      }
-      {
-        /*
+      )}
+      {/*
         <Box sx={{ mx: .5 }} component="span">
           <HeaderNotifications />
         </Box>
-        */
-      }
-      {
-        isVendorApp &&
-        <Box sx={{ mx: .5 }} component="span">
-          <IconButton style={{ color: '#FFFFFFBD' }} onClick={() => {
-            navigate('/help', {
-              state: { showSkip: false },
-              replace: true
-            });
-          }}>
+        */}
+      {isVendorApp && (
+        <Box sx={{ mx: 0.5 }} component="span">
+          <IconButton
+            style={{ color: '#FFFFFFBD' }}
+            onClick={() => {
+              navigate('/help', {
+                state: { showSkip: false },
+                replace: true
+              });
+            }}
+          >
             <HelpOutlineIcon />
           </IconButton>
         </Box>
-      }
-      {
-        /*
+      )}
+      {/*
         <HeaderSearch />
-        */
-      }
-    </Box >
+        */}
+    </Box>
   );
 }
 
 function reduxState(state) {
   return {
     pauseUntil: state.setting && state.setting.pauseUntil
-  }
+  };
 }
 
 export default connect(reduxState, { refreshPause })(HeaderButtons);
