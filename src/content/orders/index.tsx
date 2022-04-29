@@ -62,7 +62,6 @@ const OrdersPage = () => {
 
   useEffect(() => {
     let filtered = [];
-    console.log(type);
     switch (type.toLowerCase()) {
       case 'new':
         filtered = temp_orders.filter(x => x.status === 'New');

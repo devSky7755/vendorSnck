@@ -3,7 +3,7 @@ import { MenuItemV1, tempMenus } from "./menu_item";
 import { Staff, tempStaffs } from "./staff";
 
 export type OrderType = 'Delivery' | 'Pickup';
-export type OrderStatus = 'New' | 'Preparing' | 'Ready' | 'Delivering' | 'Waitlist' | 'Completed' | 'Issued'
+export type OrderStatus = 'New' | 'Preparing' | 'Ready' | 'Delivering' | 'Waitlist' | 'Completed' | 'Issued' | 'Cancelled'
 
 export interface Order {
     id: number;

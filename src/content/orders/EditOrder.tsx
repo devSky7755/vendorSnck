@@ -37,7 +37,22 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
                 });
                 break;
             case 'Dispatch':
-                handleClose();
+                setEditingOrder({
+                    ...editing,
+                    status: 'Delivering'
+                });
+                break;
+            case 'Delivered':
+                setEditingOrder({
+                    ...editing,
+                    status: 'Completed'
+                });
+                break;
+            case 'Picked up':
+                setEditingOrder({
+                    ...editing,
+                    status: 'Waitlist'
+                });
                 break;
             default:
                 break;
@@ -46,7 +61,7 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
 
     const unavailable = editing.items.filter(x => x.currentAvailable === 0);
     const unavailable_items = unavailable.map(x => x.name).join(',');
-    const duetime = order.duetime - Date.now();
+    const duetime = editing.duetime - Date.now();
 
     const buttonDisabled = editing.status === 'Preparing' && unavailable.length > 0;
     let actionName = 'Print';
@@ -54,7 +69,7 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
     else if (editing.status === 'Ready' && editing.order_type === 'Delivery') actionName = 'Dispatch';
     else if (editing.status === 'Delivering' && editing.order_type === 'Delivery') actionName = 'Delivered';
     else if (editing.status === 'Ready' && editing.order_type === 'Pickup') actionName = 'Picked up';
-    else if (editing.status === 'Waitlist' && editing.order_type === 'Pickup') actionName = 'Picked up';
+    else if (editing.status === 'Waitlist' && editing.order_type === 'Pickup') actionName = 'Delivered';
 
     return (
         <Dialog onClose={() => {
@@ -102,11 +117,11 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
                     <Grid container justifyContent='space-between'>
                         <Grid item>
                             <Typography className='color-60-grey' variant='subtitle2'>Order</Typography>
-                            <Typography variant='body1'>{order.order_type}</Typography>
+                            <Typography variant='body1'>{editing.order_type}</Typography>
                         </Grid>
                         <Grid item>
                             <Typography className='color-60-grey' variant='subtitle2'>Status</Typography>
-                            <Typography variant='body1'>{order.status}</Typography>
+                            <Typography variant='body1'>{editing.status}</Typography>
                         </Grid>
                         <Grid item>
                             <Typography className='color-60-grey' variant='subtitle2'>Items</Typography>
@@ -244,7 +259,7 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
                         </Button>
                     </Grid>
                     <Grid item xs={6}>
-                        <Button color='primary' fullWidth onClick={handleClose}>
+                        <Button color='primary' fullWidth onClick={() => handleAction('Issue')}>
                             Issue with Order
                         </Button>
                     </Grid>
