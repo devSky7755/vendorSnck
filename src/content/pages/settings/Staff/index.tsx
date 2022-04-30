@@ -1,35 +1,21 @@
 import { Helmet } from 'react-helmet-async';
 import PageHeader from './PageHeader';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
-import { Box, styled, TextField, InputAdornment, Card } from '@mui/material';
-import Footer from 'src/components/Footer';
+import { Box, styled } from '@mui/material';
 import { useEffect, useState } from 'react';
-import SearchTwoTone from '@mui/icons-material/SearchTwoTone';
-import { Staff, tempStaffs } from 'src/models/staff';
+import { Staff } from 'src/models/staff';
 import StaffsTable from './StaffsTable';
 import EditStaffDialog from './EditStaff';
-import { useLocation } from 'react-router';
-import { parseQuery } from 'src/utils/functions';
 import { connect } from 'react-redux';
 import {
   deleteStaff,
   getAllStaffs,
-  getVendorStand,
-  getVendorStands,
   patchStaff,
   postStaff
 } from 'src/Api/apiClient';
 import { VendorStand } from 'src/models/vendorStand';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 import BulkActions from './BulkActions';
-
-const SearchWrapper = styled(Box)(
-  ({ theme }) => `
-        padding: ${theme.spacing(1)} ${theme.spacing(2)};
-        background: white;
-        border: 1px solid ${theme.general.borderColor};
-`
-);
 
 const ContainerWrapper = styled(Box)(
   ({ theme }) => `
@@ -56,17 +42,13 @@ const TableWrapper = styled(Box)(
 `
 );
 
-interface StaffsPageQueryParams {
-  role?: string;
-}
-
 interface StaffsSettingProps {
   token: string;
-  userData: any;
+  vendorStand: VendorStand;
 }
 
 function StaffsSetting(props: StaffsSettingProps) {
-  const { token, userData } = props;
+  const { token, vendorStand } = props;
 
   const [editOpen, setEditOpen] = useState<boolean>(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -84,11 +66,8 @@ function StaffsSetting(props: StaffsSettingProps) {
   }, []);
 
   useEffect(() => {
-    if (!userData || !userData?.vendorStandId) return;
-    getVendorStand(userData?.vendorStandId).then((res) => {
-      setVendor(res);
-    });
-  }, [userData]);
+    setVendor(vendorStand);
+  }, [vendorStand]);
 
   const onAction = (action, data) => {
     if (action === 'Edit') {
@@ -237,7 +216,7 @@ function StaffsSetting(props: StaffsSettingProps) {
 function reduxState(state) {
   return {
     token: state.auth && state.auth.token,
-    userData: state.auth && state.auth.data
+    vendorStand: state.venues && state.venues.vendorStand
   };
 }
 export default connect(reduxState)(StaffsSetting);

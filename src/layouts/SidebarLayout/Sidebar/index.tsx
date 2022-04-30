@@ -7,7 +7,6 @@ import { toggleSidebar } from 'src/reducers/setting/action';
 import { isVendorApp } from 'src/models/constant';
 import { useEffect, useState } from 'react';
 import { VendorStand } from 'src/models/vendorStand';
-import { getVendorStand } from 'src/Api/apiClient';
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -34,7 +33,7 @@ const TopSection = styled(Box)(
 `
 );
 
-function Sidebar({ showSidebar, toggleSidebar, token, userData }) {
+function Sidebar({ showSidebar, toggleSidebar, token, userData, vendorStand }) {
   const [vendor, setVendor] = useState<VendorStand>();
 
   const closeSidebar = () => {
@@ -42,11 +41,8 @@ function Sidebar({ showSidebar, toggleSidebar, token, userData }) {
   };
 
   useEffect(() => {
-    if (!userData || !userData?.vendorStandId) return;
-    getVendorStand(userData?.vendorStandId).then((res) => {
-      setVendor(res);
-    });
-  }, [userData]);
+    setVendor(vendorStand);
+  }, [vendorStand]);
 
   if (showSidebar) {
     return (
@@ -114,7 +110,8 @@ function reduxState(state) {
   return {
     showSidebar: (state.setting && state.setting.showSidebar) || false,
     token: state.auth && state.auth.token,
-    userData: state.auth && state.auth.data
+    userData: state.auth && state.auth.data,
+    vendorStand: state.venues && state.venues.vendorStand
   };
 }
 export default connect(reduxState, { toggleSidebar })(Sidebar);
