@@ -59,30 +59,31 @@ function VendorsPage(props: VendorsPageProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    loadVendors();
     if (venueId) {
       getVenue(venueId).then(res => {
         if (res) {
           setVenue(res);
-          setVendors(res.vendorStands || [])
         } else {
           setVenue(null);
-          setVendors([]);
         }
       }).catch(ex => {
         setVenue(null);
-        setVendors([]);
       })
     } else {
       setVenue(null);
-      loadVendors();
     }
-  }, [venues, venueId]);
+  }, [venueId]);
 
   const loadVendors = () => {
     setVendors([]);
     getVendorStands(token).then(res => {
       if (res) {
-        setVendors(res);
+        if (venueId) {
+          setVendors(res.filter(x => x.venueId === venueId));
+        } else {
+          setVendors(res);
+        }
       }
     })
   }
@@ -107,7 +108,6 @@ function VendorsPage(props: VendorsPageProps) {
       } else {
         setEditing({ available: false, deliveryAvailable: false, pickupAvailable: false });
       }
-      
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);
@@ -223,7 +223,8 @@ function VendorsPage(props: VendorsPageProps) {
       <Box style={{ height: venue ? 'calc(100% - 56px)' : '100%' }}>
         <ContainerWrapper>
           <TableWrapper>
-            <VendorsTable vendors={vendors} venues={venues} onAction={onAction} onSelectionChanged={handleSelectionChanged} onVendorPatch={handleVendorPatch} />
+            <VendorsTable venue={venue} vendors={vendors} venues={venues}
+              onAction={onAction} onSelectionChanged={handleSelectionChanged} onVendorPatch={handleVendorPatch} />
           </TableWrapper>
         </ContainerWrapper>
         <FooterWrapper>

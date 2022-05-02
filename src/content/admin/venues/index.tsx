@@ -7,7 +7,7 @@ import EditVenueDialog from './EditVenue';
 import { connect } from 'react-redux';
 import { deleteVenue, patchVenue, updateVenue } from 'src/reducers/venues/action';
 import BulkActions from './BulkActions';
-import { patchVenue as patchVenueAPI, postVenue, deleteVenue as deleteVenueAPI, patchBulkVenueAPI, deleteBulkVenuesAPI } from 'src/Api/apiClient';
+import { patchVenue as patchVenueAPI, postVenue, deleteVenue as deleteVenueAPI, patchBulkVenueAPI, deleteBulkVenuesAPI, getVenues } from 'src/Api/apiClient';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 import { useNavigate } from 'react-router';
 
@@ -57,7 +57,11 @@ function VenuesPage(props: VenuesPageProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setVenues(props.venues || []);
+    getVenues().then(res => {
+      if (res) {
+        setVenues(res);
+      }
+    })
   }, [props.venues]);
 
   const onAction = (action, data) => {

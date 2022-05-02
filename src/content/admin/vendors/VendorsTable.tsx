@@ -22,6 +22,7 @@ interface VendorsTableProps {
   className?: string;
   vendors: Vendor[];
   venues: Venue[];
+  venue: Venue;
   onAction: Function;
   onSelectionChanged: Function;
   onVendorPatch: Function;
@@ -35,7 +36,7 @@ const URLTableCell = styled(TableCell)(
 `
 );
 
-const VendorsTable: FC<VendorsTableProps> = ({ vendors, venues, onAction, onSelectionChanged, onVendorPatch }) => {
+const VendorsTable: FC<VendorsTableProps> = ({ vendors, venue, venues, onAction, onSelectionChanged, onVendorPatch }) => {
   const [actionID, setActionID] = useState<string>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedVendors, setSelectedVendors] = useState<string[]>(
@@ -84,9 +85,11 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venues, onAction, onSele
             <TableRow>
               <TableCell padding="checkbox" style={{ height: 52 }}>
               </TableCell>
-              <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
-              <TableCell>Venue</TableCell>
+              {
+                !venue &&
+                <TableCell>Venue</TableCell>
+              }
               <TableCell>Cover Image</TableCell>
               <TableCell>Active</TableCell>
               <TableCell>Delivery</TableCell>
@@ -100,7 +103,7 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venues, onAction, onSele
             {vendors.map((vendor, index) => {
               const isSelected = selectedVendors.includes(vendor.id);
               const imageName = vendor.coverImageUrl?.replace(/^.*[\\\/]/, '');
-              const venue = venues.find(x => x.id === vendor.venueId);
+              const vendor_venue = venues.find(x => x.id === vendor.venueId);
               return (
                 <TableRow
                   hover
@@ -116,13 +119,15 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venues, onAction, onSele
                       }
                     />
                   </TableCell>
-                  <TableCell>{index + 1}</TableCell>
                   <TableCell>
                     {vendor.name}
                   </TableCell>
-                  <TableCell>
-                    {venue && venue.name}
-                  </TableCell>
+                  {
+                    !venue &&
+                    <TableCell>
+                      {vendor_venue && vendor_venue.name}
+                    </TableCell>
+                  }
                   <URLTableCell style={{ maxWidth: 250 }}>
                     {imageName}
                   </URLTableCell>

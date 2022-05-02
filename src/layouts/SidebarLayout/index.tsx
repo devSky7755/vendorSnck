@@ -8,15 +8,16 @@ import Header from './Header';
 import { connect } from 'react-redux';
 import { logout } from 'src/reducers/auth/action';
 import { isVendorApp } from 'src/models/constant';
-import { getVendorStand, getVenues } from 'src/Api/apiClient';
-import { setVendorStand, setVenues } from 'src/reducers/venues/action';
+import { getVendorStand, getVenues, getVendorStands } from 'src/Api/apiClient';
+import { loadVendors, setVendorStand, setVenues } from 'src/reducers/venues/action';
 
 interface SidebarLayoutProps {
   children?: ReactNode;
   token?: string;
   vendorStandId?: string;
   logout?: Function;
-  setVenues?: Function;
+  setVenues: Function;
+  loadVendors: Function;
   setVendorStand: Function;
 }
 
@@ -49,7 +50,7 @@ const MainContainer = styled(Box)(
 `
 );
 
-const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout, setVenues, setVendorStand, vendorStandId }) => {
+const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout, setVenues, setVendorStand, vendorStandId, loadVendors }) => {
   const navigate = useNavigate();
 
   //initialize data
@@ -58,8 +59,11 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({ token, logout, setVenues, setVe
 
     } else {
       getVenues().then(venues => {
-        venues.sort((x, y) => x.id.localeCompare(y.id));
         setVenues(venues);
+      })
+
+      getVendorStands(token).then(vendors => {
+        loadVendors(vendors);
       })
     }
   }, []);
@@ -102,5 +106,5 @@ function reduxState(state) {
   }
 }
 
-export default connect(reduxState, { logout, setVenues, setVendorStand })(SidebarLayout);
+export default connect(reduxState, { logout, setVenues, setVendorStand, loadVendors })(SidebarLayout);
 
