@@ -16,8 +16,9 @@ export interface VendorStand {
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;
-    manager?: string;
     menuItems: MenuItem[];
+    staffsCount?: number;
+    menuItemsCount?: number;
 
     venue?: Venue;
 }

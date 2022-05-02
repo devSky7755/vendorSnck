@@ -16,6 +16,7 @@ import {
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import { VendorStand as Vendor } from 'src/models/vendorStand';
 import { Venue } from 'src/models/venue';
+import { Link } from 'react-router-dom';
 
 interface VendorsTableProps {
   className?: string;
@@ -90,7 +91,8 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venues, onAction, onSele
               <TableCell>Active</TableCell>
               <TableCell>Delivery</TableCell>
               <TableCell>Pickup</TableCell>
-              <TableCell>Vendor Manager</TableCell>
+              <TableCell align='center'>Staffs</TableCell>
+              <TableCell align='center'>Menu Items</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
@@ -99,7 +101,6 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venues, onAction, onSele
               const isSelected = selectedVendors.includes(vendor.id);
               const imageName = vendor.coverImageUrl?.replace(/^.*[\\\/]/, '');
               const venue = venues.find(x => x.id === vendor.venueId);
-
               return (
                 <TableRow
                   hover
@@ -140,8 +141,11 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venues, onAction, onSele
                       handleVendorPatch(vendor, 'pickupAvailable', e.target.checked);
                     }} />
                   </TableCell>
-                  <TableCell>
-                    {vendor.manager || ''}
+                  <TableCell align='center'>
+                    <Link to={`/staff/${vendor.id}`}>{vendor.staffsCount || 0}</Link>
+                  </TableCell>
+                  <TableCell align='center'>
+                    <Link to={`/menuitems/${vendor.id}`}>{vendor.menuItemsCount || 0}</Link>
                   </TableCell>
                   <TableCell align="right" padding="checkbox">
                     <IconButton size='small' onClick={(event) => {

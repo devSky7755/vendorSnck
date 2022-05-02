@@ -130,8 +130,10 @@ function VendorsPage(props: VendorsPageProps) {
     delete patch.updatedAt;
     delete patch.createdAt;
     delete patch.deletedAt;
-    delete patch.manager;
     delete patch.menuItems;
+    delete patch.menuItemsCount;
+    delete patch.staffsCount;
+
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 
     if (vendor.id) {

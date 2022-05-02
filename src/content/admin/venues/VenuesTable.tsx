@@ -15,6 +15,7 @@ import {
 
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import { getVenueSeatField, Venue } from 'src/models/venue';
+import { Link } from 'react-router-dom';
 
 interface VenuesTableProps {
   className?: string;
@@ -87,6 +88,7 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
               <TableCell>Seat Fields</TableCell>
               <TableCell style={{ width: 150 }}>Maps URL</TableCell>
               <TableCell>Venue Image</TableCell>
+              <TableCell align='center'>Vendors</TableCell>
               <TableCell>Active</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
@@ -137,6 +139,9 @@ const VenuesTable: FC<VenuesTableProps> = ({ venues, onAction, onSelectionChange
                       </a>
                     }
                   </URLTableCell>
+                  <TableCell align='center'>
+                    <Link to={`/vendorstands/${venue.id}`}>{venue.vendorStandsCount || 0}</Link>
+                  </TableCell>
                   <TableCell>
                     <Switch checked={venue.active || false} onChange={e => {
                       handleVenuePatch(venue, 'active', e.target.checked);

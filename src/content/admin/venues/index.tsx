@@ -108,6 +108,7 @@ function VenuesPage(props: VenuesPageProps) {
     delete patch.seatFields;
     delete patch.coordinates;
     delete patch.vendorStands;
+    delete patch.vendorStandsCount;
 
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 

@@ -30,6 +30,7 @@ export interface Venue {
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;
+    vendorStandsCount?: number;
     vendorStands?: VendorStand[];
 }
 
