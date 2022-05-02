@@ -5,7 +5,7 @@ import { Venue } from 'src/models/venue';
 import VenuesTable from './VenuesTable';
 import EditVenueDialog from './EditVenue';
 import { connect } from 'react-redux';
-import { deleteVenue, patchVenue, updateVenue } from 'src/reducers/venues/action';
+import { deleteVenue, patchVenue, updateVenue, setVenues } from 'src/reducers/venues/action';
 import BulkActions from './BulkActions';
 import { patchVenue as patchVenueAPI, postVenue, deleteVenue as deleteVenueAPI, patchBulkVenueAPI, deleteBulkVenuesAPI, getVenues } from 'src/Api/apiClient';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
@@ -39,9 +39,20 @@ const FooterWrapper = styled(Box)(
 interface VenuesPageProps {
   venues: Venue[];
   token: string;
+  loadVenues: Function;
   patchVenue: Function;
   updateVenue: Function;
   deleteVenue: Function;
+}
+
+function sortedVenues(venues: Venue[]) {
+  if (!venues) return venues;
+  var sorted = [...venues];
+  sorted.sort((x, y) => {
+    if (x.createdAt < y.createdAt) return -1;
+    return 1;
+  })
+  return sorted;
 }
 
 function VenuesPage(props: VenuesPageProps) {
@@ -50,7 +61,8 @@ function VenuesPage(props: VenuesPageProps) {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [venues, setVenues] = useState<Venue[]>(props.venues || []);
+  const [deleting, setDeleting] = useState<Venue[]>([]);
+  const [venues, setVenues] = useState<Venue[]>(sortedVenues(props.venues) || []);
 
   const [selectedVenues, setSelectedVenues] = useState<Venue[]>([]);
 
@@ -58,10 +70,12 @@ function VenuesPage(props: VenuesPageProps) {
 
   useEffect(() => {
     getVenues().then(res => {
-      if (res) {
-        setVenues(res);
-      }
-    })
+      props.loadVenues(res);
+    });
+  }, [])
+
+  useEffect(() => {
+    setVenues(sortedVenues(props.venues) || []);
   }, [props.venues]);
 
   const onAction = (action, data) => {
@@ -76,20 +90,21 @@ function VenuesPage(props: VenuesPageProps) {
       handleSave(data);
     } else if (action === 'Delete') {
       setEditOpen(false);
-      setEditing(data);
+      setEditing(null);
+      setDeleting([data]);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
       setEditing({ active: false, deliveryEnabled: false, pickupEnabled: false, inVenueLocationHierarchy1: '' });
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);
-      setEditing(null);
+      setDeleting([]);
     } else if (action === 'Remove') {
       setDeleteOpen(false);
-      handleDelete(editing);
-      setEditing(null);
+      handleDelete(deleting);
     } else if (action === 'Bulk Delete') {
-      handleBulkDelete(selectedVenues);
+      setDeleting(selectedVenues);
+      setDeleteOpen(true);
     } else if (action === 'Bulk Active') {
       handleBulkVenuePatch(selectedVenues, 'active', true);
     } else if (action === 'Bulk Inactive') {
@@ -137,12 +152,26 @@ function VenuesPage(props: VenuesPageProps) {
     }
   }
 
-  const handleDelete = (venue) => {
-    deleteVenueAPI(token, venue.id).then(success => {
-      if (success) {
-        props.deleteVenue(venue);
+  const handleDelete = (dvenues) => {
+    if (!dvenues) return;
+    if (dvenues.length === 1) {
+      deleteVenueAPI(token, dvenues[0].id).then(success => {
+        if (success) {
+          props.deleteVenue(dvenues[0]);
+        }
+      })
+    } else {
+      let data = {
+        ids: dvenues.map(v => v.id)
       }
-    })
+      deleteBulkVenuesAPI(token, data).then(success => {
+        if (success) {
+          dvenues.forEach(venue => {
+            props.deleteVenue(venue);
+          })
+        }
+      })
+    }
   }
 
   const handleSelectionChanged = (selectedIDs) => {
@@ -173,19 +202,6 @@ function VenuesPage(props: VenuesPageProps) {
     });
   }
 
-  const handleBulkDelete = (svenues: Venue[]) => {
-    let data = {
-      ids: svenues.map(v => v.id)
-    }
-    deleteBulkVenuesAPI(token, data).then(success => {
-      if (success) {
-        svenues.forEach(venue => {
-          props.deleteVenue(venue);
-        })
-      }
-    })
-  }
-
   return (
     <>
       <Helmet>
@@ -200,12 +216,12 @@ function VenuesPage(props: VenuesPageProps) {
         />
       }
       {
-        deleteOpen && editing &&
+        deleteOpen && deleting && deleting.length > 0 &&
         <ConfirmDialog
           successLabel='DELETE'
           cancelLabel='RETURN'
-          text='It cannot be recovered'
-          header='Are you sure you want to delete this venue?'
+          text={deleting.length > 1 ? 'They cannot be recovered' : 'It cannot be recovered'}
+          header={deleting.length > 1 ? 'Are you sure you want to delete these venues' : 'Are you sure you want to delete this venue?'}
           success='Remove'
           cancel='Cancel Remove'
           open={deleteOpen}
@@ -232,4 +248,4 @@ function reduxState(state) {
     venues: state.venues && state.venues.venues
   }
 }
-export default connect(reduxState, { patchVenue, deleteVenue, updateVenue })(VenuesPage);
+export default connect(reduxState, { patchVenue, deleteVenue, updateVenue, loadVenues: setVenues })(VenuesPage);
