@@ -61,7 +61,7 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
         >
           <MenuItem onClick={() => handleCloseAction('Bulk Active')}>Mark all&nbsp;<b>Active</b></MenuItem>
           <MenuItem onClick={() => handleCloseAction('Bulk Inactive')}>Mark all&nbsp;<b>Inactive</b></MenuItem>
-          <MenuItem onClick={() => handleCloseAction('Bulk Delete')}>Delte&nbsp;<b>Venues</b></MenuItem>
+          <MenuItem onClick={() => handleCloseAction('Bulk Delete')}>Delete&nbsp;<b>Venues</b></MenuItem>
         </Menu>
       </Box>
     </Box>

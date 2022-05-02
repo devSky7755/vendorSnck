@@ -3,10 +3,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
 import { MenuItem as MenuItemModel } from 'src/models/menu_item';
-import { styled, Box, Button, DialogActions, Grid, IconButton, Switch, TextField } from '@mui/material';
+import { styled, Box, Button, DialogActions, Grid, IconButton, Switch, TextField, InputAdornment, MenuItem } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
+import { connect } from 'react-redux';
+import { VendorStand } from 'src/models/vendorStand';
 
 const DialogSubtitle = styled(Typography)(
     ({ theme }) => `
@@ -17,11 +19,13 @@ const DialogSubtitle = styled(Typography)(
 interface EditMenuItemInterface {
     onAction: Function;
     open: boolean;
+    vendor: VendorStand;
+    vendorStands: VendorStand[];
     menuItem?: MenuItemModel;
 };
 
 const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
-    const { onAction, menuItem, open } = props;
+    const { onAction, menuItem, open, vendorStands, vendor } = props;
     const [editing, setEditingMenuItem] = useState(menuItem);
     const [showError, setShowError] = useState(false);
 
@@ -29,6 +33,7 @@ const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
 
     const validateInput = () => {
         if (!editing.name || editing.name.trim().length === 0) return false;
+        if (!editing.vendorStandId || editing.vendorStandId.trim().length === 0) return false;
         return true;
     }
 
@@ -45,7 +50,7 @@ const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
     return (
         <Dialog onClose={() => {
             onAction('Close');
-        }} open={open} PaperProps={{ style: { width: 1280, maxWidth: 1280 } }}>
+        }} open={open} PaperProps={{ style: { width: 640, maxWidth: 640 } }}>
             <DialogTitle className='border-bottom d-flex' sx={{ px: 2, py: 1 }}>
                 <Typography component='span' variant='h6'>Edit Menu Item</Typography>
                 <IconButton className='float-right' sx={{ p: 0 }} size='small' onClick={() => {
@@ -66,7 +71,7 @@ const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
                 <Box sx={{ px: 2, py: 2 }} className='border-bottom'>
                     <DialogSubtitle variant='subtitle1' sx={{ pb: 2 }}>Menu Item Details</DialogSubtitle>
                     <Grid container spacing={3}>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12}>
                             <TextField
                                 InputLabelProps={{ shrink: true }}
                                 label="Menu Item Name"
@@ -84,7 +89,7 @@ const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
                             >
                             </TextField>
                         </Grid>
-                        <Grid item xs={12} md={6}>
+                        <Grid item xs={12}>
                             <TextField
                                 label="Menu Item Description"
                                 size='small'
@@ -117,6 +122,51 @@ const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
                                     });
                                 }}
                             >
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Price"
+                                type='number'
+                                size='small'
+                                InputLabelProps={{ shrink: true }}
+                                fullWidth
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                }}
+                                value={editing.price}
+                                onChange={(e) => {
+                                    setEditingMenuItem({
+                                        ...editing,
+                                        price: Number(e.target.value)
+                                    });
+                                }}
+                            >
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Vendor Stand"
+                                select
+                                required
+                                error={showError && !editing.vendorStandId}
+                                size='small'
+                                disabled={vendor ? true : false}
+                                InputLabelProps={{ shrink: true }}
+                                fullWidth
+                                value={editing.vendorStandId}
+                                onChange={(e) => {
+                                    setEditingMenuItem({
+                                        ...editing,
+                                        vendorStandId: e.target.value
+                                    });
+                                }}
+                            >
+                                {vendorStands.map((vendor) => (
+                                    <MenuItem key={vendor.id} value={vendor.id}>
+                                        {vendor.name}
+                                    </MenuItem>
+                                ))}
                             </TextField>
                         </Grid>
                     </Grid>
@@ -200,7 +250,7 @@ const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
                                     mostPopular: e.target.checked
                                 })
                             }}></Switch>
-                            Featured
+                            Popular
                         </Grid>
                     </Grid>
                 </Box>
@@ -223,4 +273,9 @@ const EditMenuItemDialog: React.FC<EditMenuItemInterface> = (props) => {
     );
 }
 
-export default EditMenuItemDialog;
+function reduxState(state) {
+    return {
+        vendorStands: (state.venues && state.venues.vendorStands) || [],
+    }
+}
+export default connect(reduxState)(EditMenuItemDialog);

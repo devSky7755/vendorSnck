@@ -2,9 +2,27 @@ import { BASE_URL } from "src/models/constant";
 import { MenuItem } from "src/models/menu_item";
 
 const VendorStandEndpoint = 'vendorStands/';
+const MenuItemsEndpoint = 'menuItems/';
 
-export function patchMenuItem(token: string, vendorId: string, menu: MenuItem, patch): Promise<MenuItem> {
-    return fetch(BASE_URL + VendorStandEndpoint + vendorId + '/menuItems/' + menu.id, {
+export function getMenuItems(token: string): Promise<MenuItem[]> {
+    return fetch(BASE_URL + MenuItemsEndpoint, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }).then(res => res.json()).then(res => {
+        if (res.success && res.data) {
+            return res.data.menuItems as MenuItem[];
+        } else {
+            return [];
+        }
+    })
+}
+
+export function patchMenuItem(token: string, menu: MenuItem, patch): Promise<MenuItem> {
+    return fetch(BASE_URL + VendorStandEndpoint + menu.vendorStandId + '/menuItems/' + menu.id, {
         method: 'PATCH',
         headers: {
             'Accept': 'application/json',
@@ -21,8 +39,8 @@ export function patchMenuItem(token: string, vendorId: string, menu: MenuItem, p
     })
 }
 
-export function postMenuItem(token: string, vendorId: string, menu: MenuItem): Promise<MenuItem> {
-    return fetch(BASE_URL + VendorStandEndpoint + vendorId + '/menuItems', {
+export function postMenuItem(token: string, menu: MenuItem): Promise<MenuItem> {
+    return fetch(BASE_URL + VendorStandEndpoint + menu.vendorStandId + '/menuItems', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

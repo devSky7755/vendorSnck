@@ -6,7 +6,7 @@ import MenuItemsTable from './MenuItemsTable';
 import EditMenuItemDialog from './EditMenuItem';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
-import { patchMenuItem, postMenuItem, deleteMenuItem } from 'src/Api/apiClient';
+import { patchMenuItem, postMenuItem, deleteMenuItem, getMenuItems } from 'src/Api/apiClient';
 import { getVendorStand } from 'src/Api/apiClient';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 import { useParams } from 'react-router';
@@ -43,6 +43,17 @@ interface MenuItemsPageProps {
   token: string;
 }
 
+function sortedMenuItems(items: MenuItem[]) {
+  if (!items) return items;
+
+  var sorted = [...items];
+  sorted.sort((x, y) => {
+    if (x.createdAt < y.createdAt) return -1;
+    return 1;
+  });
+  return sorted;
+}
+
 function MenuItemsPage(props: MenuItemsPageProps) {
   const { vendorId } = useParams();
   const { token } = props;
@@ -63,13 +74,15 @@ function MenuItemsPage(props: MenuItemsPageProps) {
           setNotFound(true);
         } else {
           setVendor(res);
-          setMenuItems(res.menuItems || []);
+          setMenuItems(sortedMenuItems(res.menuItems) || []);
         }
       }).catch(ex => {
         setNotFound(true);
       })
     } else {
-
+      getMenuItems(token).then(res => {
+        setMenuItems(sortedMenuItems(res));
+      })
     }
   }, []);
 
@@ -107,12 +120,13 @@ function MenuItemsPage(props: MenuItemsPageProps) {
     delete patch.updatedAt;
     delete patch.createdAt;
     delete patch.deletedAt;
-    delete patch.vendorStandId;
-    //delete patch.tags;
+
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 
     if (menuItem.id) {
-      patchMenuItem(token, vendorId, menuItem, patch).then(res => {
+      patch.vendorStandId = menuItem.vendorStandId;
+
+      patchMenuItem(token, menuItem, patch).then(res => {
         let newMenuItems = [...menuItems];
         let index = newMenuItems.findIndex(x => x.id === menuItem.id);
         if (index >= 0) {
@@ -123,7 +137,7 @@ function MenuItemsPage(props: MenuItemsPageProps) {
         console.log(ex.message);
       })
     } else {
-      postMenuItem(token, vendorId, patch).then(res => {
+      postMenuItem(token, patch).then(res => {
         if (res) {
           setMenuItems(prev => [...prev, res]);
         }
@@ -152,7 +166,7 @@ function MenuItemsPage(props: MenuItemsPageProps) {
     patch[key] = value;
     patch['name'] = menuItem.name;
 
-    patchMenuItem(token, vendorId, menuItem, patch).then(res => {
+    patchMenuItem(token, menuItem, patch).then(res => {
       let newMenuItems = [...menuItems];
       let index = newMenuItems.findIndex(x => x.id === menuItem.id);
       if (index >= 0) {
@@ -174,6 +188,7 @@ function MenuItemsPage(props: MenuItemsPageProps) {
       {
         editOpen && editing &&
         <EditMenuItemDialog
+          vendor={vendor}
           menuItem={editing}
           open={editOpen}
           onAction={onAction}
@@ -202,7 +217,8 @@ function MenuItemsPage(props: MenuItemsPageProps) {
         <Box style={{ height: vendor ? 'calc(100% - 56px)' : '100%' }}>
           <ContainerWrapper>
             <TableWrapper>
-              <MenuItemsTable menuItems={menuItems} onAction={onAction} onSelectionChanged={handleSelectionChanged} onMenuItemPatch={handleMenuItemPatch} />
+              <MenuItemsTable vendor={vendor} menuItems={menuItems} onAction={onAction}
+                onSelectionChanged={handleSelectionChanged} onMenuItemPatch={handleMenuItemPatch} />
             </TableWrapper>
           </ContainerWrapper>
           <FooterWrapper>

@@ -102,7 +102,7 @@ function StaffsSetting(props: StaffsSettingProps) {
     delete patch.updatedAt;
     delete patch.createdAt;
     delete patch.deletedAt;
-    delete patch.vendor_stand;
+    delete patch.vendorStand;
 
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 

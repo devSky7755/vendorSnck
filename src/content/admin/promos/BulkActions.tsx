@@ -49,15 +49,11 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
           style={{ width: 160 }}
           variant="outlined"
           disabled={!selected || !selected.length}
-          // onClick={() => {
-          //   props.onAction('Bulk Action', selected);
-          // }}
           aria-controls={open ? 'demo-customized-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
           disableElevation
           onClick={handleClick}
-          endIcon={<KeyboardArrowUpIcon />}
         >
           Bulk Action
         </Button>

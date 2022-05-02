@@ -16,7 +16,7 @@ export interface Staff {
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
-  vendor_stand?: IDName;
+  vendorStand?: IDName;
 
   email?: string;
   lastSeen?: string;

@@ -133,7 +133,7 @@ function StaffsPage(props: StaffsPageProps) {
     delete patch.updatedAt;
     delete patch.createdAt;
     delete patch.deletedAt;
-    delete patch.vendor_stand;
+    delete patch.vendorStand;
 
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 
@@ -155,7 +155,7 @@ function StaffsPage(props: StaffsPageProps) {
       postStaff(token, patch).then(res => {
         if (res) {
           const staff_vendor = vendors.find(x => x.id === staff.vendorStandId);
-          res.vendor_stand = {
+          res.vendorStand = {
             id: staff_vendor.id,
             name: staff_vendor.name
           }

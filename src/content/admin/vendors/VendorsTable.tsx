@@ -94,7 +94,7 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venue, venues, onAction,
               <TableCell>Active</TableCell>
               <TableCell>Delivery</TableCell>
               <TableCell>Pickup</TableCell>
-              <TableCell align='center'>Staffs</TableCell>
+              <TableCell align='center'>Staff</TableCell>
               <TableCell align='center'>Menu Items</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>

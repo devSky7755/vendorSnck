@@ -15,9 +15,13 @@ import {
 
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import { MenuItem as MenuItemModel } from 'src/models/menu_item';
+import { VendorStand } from 'src/models/vendorStand';
+import { connect } from 'react-redux';
 
 interface MenuItemsTableProps {
   className?: string;
+  vendor: VendorStand;
+  vendorStands: VendorStand[];
   menuItems: MenuItemModel[];
   onAction: Function;
   onSelectionChanged: Function;
@@ -32,7 +36,7 @@ const URLTableCell = styled(TableCell)(
 `
 );
 
-const MenuItemsTable: FC<MenuItemsTableProps> = ({ menuItems, onAction, onSelectionChanged, onMenuItemPatch }) => {
+const MenuItemsTable: FC<MenuItemsTableProps> = ({ menuItems, vendorStands, vendor, onAction, onSelectionChanged, onMenuItemPatch }) => {
   const [actionID, setActionID] = useState<string>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedMenuItems, setSelectedMenuItems] = useState<string[]>(
@@ -88,6 +92,10 @@ const MenuItemsTable: FC<MenuItemsTableProps> = ({ menuItems, onAction, onSelect
               <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Description</TableCell>
+              {
+                !vendor &&
+                <TableCell>Vendor Stand</TableCell>
+              }
               <TableCell>Image URL</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Category</TableCell>
@@ -98,7 +106,7 @@ const MenuItemsTable: FC<MenuItemsTableProps> = ({ menuItems, onAction, onSelect
               }
               <TableCell>Active</TableCell>
               <TableCell>Alcohol</TableCell>
-              <TableCell>Featured</TableCell>
+              <TableCell>Popular</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
@@ -106,6 +114,7 @@ const MenuItemsTable: FC<MenuItemsTableProps> = ({ menuItems, onAction, onSelect
             {menuItems.map((menuItem, index) => {
               const isSelected = selectedMenuItems.includes(menuItem.id);
               const imageName = menuItem.imageUrl?.replace(/^.*[\\\/]/, '');
+              const currentVendor = vendorStands.find(x => x.id === menuItem.vendorStandId);
 
               return (
                 <TableRow
@@ -129,6 +138,12 @@ const MenuItemsTable: FC<MenuItemsTableProps> = ({ menuItems, onAction, onSelect
                   <URLTableCell style={{ maxWidth: 250 }}>
                     {menuItem.description}
                   </URLTableCell>
+                  {
+                    !vendor &&
+                    <TableCell>
+                      {currentVendor && currentVendor.name}
+                    </TableCell>
+                  }
                   <URLTableCell style={{ maxWidth: 250 }}>
                     {imageName}
                   </URLTableCell>
@@ -190,4 +205,9 @@ const MenuItemsTable: FC<MenuItemsTableProps> = ({ menuItems, onAction, onSelect
   );
 };
 
-export default MenuItemsTable;
+function reduxState(state) {
+  return {
+    vendorStands: (state.venues && state.venues.vendorStands) || [],
+  }
+}
+export default connect(reduxState)(MenuItemsTable);
