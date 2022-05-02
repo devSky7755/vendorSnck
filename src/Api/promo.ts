@@ -1,5 +1,5 @@
 import { BASE_URL } from "src/models/constant";
-import { Promo } from "src/models/promo";
+import { BulkPatchPromo, Promo } from "src/models/promo";
 
 const PromosEndpoint = 'promos/';
 
@@ -38,6 +38,27 @@ export function patchPromo(token: string, item: Promo, patch): Promise<Promo> {
     })
 }
 
+export function patchPromos(token: string, ids: string[], data: BulkPatchPromo): Promise<Promo[]> {
+    return fetch(BASE_URL + PromosEndpoint, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            ids,
+            data
+        })
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return res.data as Promo[];
+        } else {
+            return [];
+        }
+    })
+}
+
 export function postPromo(token: string, item: Promo): Promise<Promo> {
     return fetch(BASE_URL + PromosEndpoint, {
         method: 'POST',
@@ -64,6 +85,24 @@ export function deletePromo(token: string, item: Promo): Promise<boolean> {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return true;
+        } else {
+            return false;
+        }
+    })
+}
+
+export function deletePromos(token: string, ids: string[]): Promise<boolean> {
+    return fetch(BASE_URL + PromosEndpoint + 'delete', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ ids })
     }).then(res => res.json()).then(res => {
         if (res.success) {
             return true;
