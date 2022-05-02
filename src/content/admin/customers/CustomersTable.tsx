@@ -2,7 +2,9 @@ import { ChangeEvent, FC, useEffect, useState } from 'react';
 import {
   Card,
   IconButton,
-  Table, Menu, MenuItem,
+  Table,
+  Menu,
+  MenuItem,
   TableBody,
   TableCell,
   TableHead,
@@ -32,18 +34,28 @@ const URLTableCell = styled(TableCell)(
 `
 );
 
-const CustomersTable: FC<CustomersTableProps> = ({ customers, onAction, onSelectionChanged, onCustomerPatch }) => {
+const CustomersTable: FC<CustomersTableProps> = ({
+  customers,
+  onAction,
+  onSelectionChanged,
+  onCustomerPatch
+}) => {
   const [actionID, setActionID] = useState<string>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedCustomers, setSelectedCustomers] = useState<string[]>(
-    []
-  );
+  const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
+
+  useEffect(() => {
+    setSelectedCustomers([]);
+  }, [customers]);
 
   useEffect(() => {
     onSelectionChanged(selectedCustomers);
-  }, [selectedCustomers])
+  }, [selectedCustomers]);
 
-  const handleClickAction = (event: React.MouseEvent<HTMLButtonElement>, customerId: string) => {
+  const handleClickAction = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    customerId: string
+  ) => {
     setActionID(customerId);
     setAnchorEl(event.currentTarget);
   };
@@ -58,10 +70,7 @@ const CustomersTable: FC<CustomersTableProps> = ({ customers, onAction, onSelect
     id: string
   ): void => {
     if (!selectedCustomers.includes(id)) {
-      setSelectedCustomers((prevSelected) => [
-        ...prevSelected,
-        id
-      ]);
+      setSelectedCustomers((prevSelected) => [...prevSelected, id]);
     } else {
       setSelectedCustomers((prevSelected) =>
         prevSelected.filter((x) => x !== id)
@@ -71,16 +80,15 @@ const CustomersTable: FC<CustomersTableProps> = ({ customers, onAction, onSelect
 
   const handleCustomerPatch = (customer, key, value) => {
     onCustomerPatch(customer, key, value);
-  }
+  };
 
   return (
     <Card>
       <TableContainer>
-        <Table size='small'>
+        <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox" style={{ height: 52 }}>
-              </TableCell>
+              <TableCell padding="checkbox" style={{ height: 52 }}></TableCell>
               <TableCell>First Name</TableCell>
               <TableCell>Last Name</TableCell>
               <TableCell>Mobile No.</TableCell>
@@ -93,13 +101,10 @@ const CustomersTable: FC<CustomersTableProps> = ({ customers, onAction, onSelect
             {customers.map((customer, index) => {
               const isSelected = selectedCustomers.includes(customer.id);
               return (
-                <TableRow
-                  hover
-                  key={customer.id}
-                >
+                <TableRow hover key={customer.id}>
                   <TableCell padding="checkbox" style={{ height: 52 }}>
                     <Checkbox
-                      size='small'
+                      size="small"
                       color="primary"
                       checked={isSelected}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
@@ -111,20 +116,37 @@ const CustomersTable: FC<CustomersTableProps> = ({ customers, onAction, onSelect
                   <TableCell>{customer.lastName}</TableCell>
                   <TableCell>{customer.mobileNo}</TableCell>
                   <TableCell>
-                    <Switch checked={customer.tempBlocked || false} onChange={e => {
-                      handleCustomerPatch(customer, 'tempBlocked', e.target.checked);
-                    }} />
+                    <Switch
+                      checked={customer.tempBlocked || false}
+                      onChange={(e) => {
+                        handleCustomerPatch(
+                          customer,
+                          'tempBlocked',
+                          e.target.checked
+                        );
+                      }}
+                    />
                   </TableCell>
                   <TableCell>
-                    <Switch checked={customer.permBlocked || false} onChange={e => {
-                      handleCustomerPatch(customer, 'permBlocked', e.target.checked);
-                    }} />
+                    <Switch
+                      checked={customer.permBlocked || false}
+                      onChange={(e) => {
+                        handleCustomerPatch(
+                          customer,
+                          'permBlocked',
+                          e.target.checked
+                        );
+                      }}
+                    />
                   </TableCell>
                   <TableCell align="right" padding="checkbox">
-                    <IconButton size='small' onClick={(event) => {
-                      handleClickAction(event, customer.id);
-                    }}>
-                      <MoreVertTwoToneIcon fontSize='small' />
+                    <IconButton
+                      size="small"
+                      onClick={(event) => {
+                        handleClickAction(event, customer.id);
+                      }}
+                    >
+                      <MoreVertTwoToneIcon fontSize="small" />
                     </IconButton>
                     <Menu
                       anchorEl={anchorEl}
@@ -133,11 +155,19 @@ const CustomersTable: FC<CustomersTableProps> = ({ customers, onAction, onSelect
                         handleCloseAction('None', customer);
                       }}
                       MenuListProps={{
-                        'aria-labelledby': 'basic-button',
+                        'aria-labelledby': 'basic-button'
                       }}
                     >
-                      <MenuItem onClick={() => handleCloseAction('Edit', customer)}>Edit</MenuItem>
-                      <MenuItem onClick={() => handleCloseAction('Delete', customer)}>Delete</MenuItem>
+                      <MenuItem
+                        onClick={() => handleCloseAction('Edit', customer)}
+                      >
+                        Edit
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => handleCloseAction('Delete', customer)}
+                      >
+                        Delete
+                      </MenuItem>
                     </Menu>
                   </TableCell>
                 </TableRow>

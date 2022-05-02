@@ -7,7 +7,14 @@ import EditCustomerDialog from './EditCustomer';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
-import { deleteCustomer, getCustomers, patchCustomer } from 'src/Api/apiClient';
+import {
+  deleteCustomer,
+  deleteCustomers,
+  getCustomers,
+  patchCustomer,
+  patchCustomers
+} from 'src/Api/apiClient';
+import { ACTIONS } from 'src/components/BulkAction';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -52,12 +59,12 @@ function CustomersPage(props: CustomersPageProps) {
   }, []);
 
   const loadCustomers = () => {
-    getCustomers(token).then(res => {
+    getCustomers(token).then((res) => {
       if (res) {
         setCustomers(res);
       }
-    })
-  }
+    });
+  };
 
   const onAction = (action, data) => {
     if (action === 'Edit') {
@@ -80,8 +87,87 @@ function CustomersPage(props: CustomersPageProps) {
       setDeleteOpen(false);
       handleDelete(editing);
       setEditing(null);
+    } else if (action === 'Bulk Action') {
+      handleBulkAction(data);
     }
-  }
+  };
+
+  const handleBulkAction = (action) => {
+    const ids = selectedCustomers.map((customer) => customer.id);
+    switch (action) {
+      case ACTIONS.ENABLE_TEMPORARY_BLOCK.action:
+        patchCustomers(token, ids, {
+          tempBlocked: true
+        }).then((updatedCustomers) => {
+          let newCustomers = [...customers].map((customer) => {
+            const findCustomer = updatedCustomers.find(
+              (uCustomer) => uCustomer.id === customer.id
+            );
+            return findCustomer ? findCustomer : customer;
+          });
+          setCustomers(newCustomers);
+          setSelectedCustomers([]);
+        });
+        break;
+      case ACTIONS.DISABLE_TEMPORARY_BLOCK.action:
+        patchCustomers(token, ids, {
+          tempBlocked: false
+        }).then((updatedCustomers) => {
+          let newCustomers = [...customers].map((customer) => {
+            const findCustomer = updatedCustomers.find(
+              (uCustomer) => uCustomer.id === customer.id
+            );
+            return findCustomer ? findCustomer : customer;
+          });
+          setCustomers(newCustomers);
+          setSelectedCustomers([]);
+        });
+        break;
+      case ACTIONS.ENABLE_PERMANENT_BLOCK.action:
+        patchCustomers(token, ids, {
+          permBlocked: true
+        }).then((updatedCustomers) => {
+          let newCustomers = [...customers].map((customer) => {
+            const findCustomer = updatedCustomers.find(
+              (uCustomer) => uCustomer.id === customer.id
+            );
+            return findCustomer ? findCustomer : customer;
+          });
+          setCustomers(newCustomers);
+          setSelectedCustomers([]);
+        });
+        break;
+      case ACTIONS.DISABLE_PERMANENT_BLOCK.action:
+        patchCustomers(token, ids, {
+          permBlocked: false
+        }).then((updatedCustomers) => {
+          let newCustomers = [...customers].map((customer) => {
+            const findCustomer = updatedCustomers.find(
+              (uCustomer) => uCustomer.id === customer.id
+            );
+            return findCustomer ? findCustomer : customer;
+          });
+          setCustomers(newCustomers);
+          setSelectedCustomers([]);
+        });
+        break;
+      case ACTIONS.DELETE_CUSTOMERS.action:
+        deleteCustomers(token, ids).then((res) => {
+          if (!res) return;
+          let newCustomers = [...customers].filter((customer) => {
+            const findCustomer = selectedCustomers.find(
+              (sCustomer) => sCustomer.id === customer.id
+            );
+            return findCustomer ? false : true;
+          });
+          setCustomers(newCustomers);
+          setSelectedCustomers([]);
+        });
+        break;
+      default:
+        break;
+    }
+  };
 
   const handleSave = (customer) => {
     let patch: Customer = { ...customer };
@@ -99,81 +185,86 @@ function CustomersPage(props: CustomersPageProps) {
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 
     if (customer.id) {
-      patchCustomer(token, customer, patch).then(res => {
-        let newCustomers = [...customers];
-        let index = newCustomers.findIndex(x => x.id === customer.id);
-        if (index >= 0) {
-          newCustomers[index] = res;
-          setCustomers(newCustomers);
-        }
-      }).catch(ex => {
-        console.log(ex.message);
-      })
+      patchCustomer(token, customer, patch)
+        .then((res) => {
+          let newCustomers = [...customers];
+          let index = newCustomers.findIndex((x) => x.id === customer.id);
+          if (index >= 0) {
+            newCustomers[index] = res;
+            setCustomers(newCustomers);
+          }
+        })
+        .catch((ex) => {
+          console.log(ex.message);
+        });
     }
-  }
+  };
 
   const handleDelete = (item) => {
-    deleteCustomer(token, item).then(res => {
+    deleteCustomer(token, item).then((res) => {
       if (res) {
-        const filtered = customers.filter(x => x.id !== item.id);
+        const filtered = customers.filter((x) => x.id !== item.id);
         setCustomers(filtered);
       }
-    })
-  }
+    });
+  };
 
   const handleCustomerPatch = (customer, key, value) => {
     let patch = {};
     patch[key] = value;
-    patch["firstName"] = customer.firstName;
-    patch["lastName"] = customer.lastName;
+    patch['firstName'] = customer.firstName;
+    patch['lastName'] = customer.lastName;
 
-    patchCustomer(token, customer, patch).then(res => {
+    patchCustomer(token, customer, patch).then((res) => {
       if (res) {
         let newCustomers = [...customers];
-        let index = newCustomers.findIndex(x => x.id === customer.id);
+        let index = newCustomers.findIndex((x) => x.id === customer.id);
         if (index >= 0) {
           newCustomers[index][key] = value;
           setCustomers(newCustomers);
         }
       }
     });
-  }
+  };
 
   const handleSelectionChanged = (selectedIDs) => {
-    const selected = customers.filter(x => selectedIDs.includes(x.id));
+    const selected = customers.filter((x) => selectedIDs.includes(x.id));
     setSelectedCustomers(selected);
-  }
+  };
 
   return (
     <>
       <Helmet>
         <title>Customers</title>
       </Helmet>
-      {
-        editOpen && editing &&
+      {editOpen && editing && (
         <EditCustomerDialog
           customer={editing}
           open={editOpen}
           onAction={onAction}
         />
-      }
-      {
-        deleteOpen && editing &&
+      )}
+      {deleteOpen && editing && (
         <ConfirmDialog
-          success='Remove'
-          successLabel='DELETE'
-          cancelLabel='RETURN'
-          cancel='Cancel Remove'
-          header='Are you sure you want to delete this customer?'
-          text='It cannot be recovered'
+          success="Remove"
+          successLabel="DELETE"
+          cancelLabel="RETURN"
+          cancel="Cancel Remove"
+          header="Are you sure you want to delete this customer?"
+          text="It cannot be recovered"
           open={deleteOpen}
           onAction={onAction}
         />
-      }
+      )}
       <Box style={{ height: '100%' }}>
         <ContainerWrapper>
           <TableWrapper>
-            <CustomersTable customers={customers} onAction={onAction} onSelectionChanged={handleSelectionChanged} onCustomerPatch={handleCustomerPatch} />
+            <CustomersTable
+              customers={customers}
+              onAction={onAction}
+              onSelectionChanged={handleSelectionChanged}
+              onCustomerPatch={handleCustomerPatch}
+            />
           </TableWrapper>
         </ContainerWrapper>
         <FooterWrapper>
@@ -186,7 +277,7 @@ function CustomersPage(props: CustomersPageProps) {
 
 function reduxState(state) {
   return {
-    token: state.auth && state.auth.token,
-  }
+    token: state.auth && state.auth.token
+  };
 }
 export default connect(reduxState)(CustomersPage);

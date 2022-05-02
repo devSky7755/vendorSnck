@@ -18,3 +18,9 @@ export interface Customer {
     note?: string;
     orders?: Order[]
 }
+
+export interface BulkPatchCustomer {
+    tempBlocked?: boolean;
+    permBlocked?: boolean;
+}
+

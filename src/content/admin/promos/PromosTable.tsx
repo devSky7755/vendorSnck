@@ -2,7 +2,9 @@ import { ChangeEvent, FC, useEffect, useState } from 'react';
 import {
   Card,
   IconButton,
-  Table, Menu, MenuItem,
+  Table,
+  Menu,
+  MenuItem,
   TableBody,
   TableCell,
   TableHead,
@@ -32,18 +34,28 @@ const URLTableCell = styled(TableCell)(
 `
 );
 
-const PromosTable: FC<PromosTableProps> = ({ promos, onAction, onSelectionChanged, onPromoPatch }) => {
+const PromosTable: FC<PromosTableProps> = ({
+  promos,
+  onAction,
+  onSelectionChanged,
+  onPromoPatch
+}) => {
   const [actionID, setActionID] = useState<string>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedPromos, setSelectedPromos] = useState<string[]>(
-    []
-  );
+  const [selectedPromos, setSelectedPromos] = useState<string[]>([]);
+
+  useEffect(() => {
+    setSelectedPromos([]);
+  }, [promos]);
 
   useEffect(() => {
     onSelectionChanged(selectedPromos);
-  }, [selectedPromos])
+  }, [selectedPromos]);
 
-  const handleClickAction = (event: React.MouseEvent<HTMLButtonElement>, promoId: string) => {
+  const handleClickAction = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    promoId: string
+  ) => {
     setActionID(promoId);
     setAnchorEl(event.currentTarget);
   };
@@ -58,29 +70,23 @@ const PromosTable: FC<PromosTableProps> = ({ promos, onAction, onSelectionChange
     id: string
   ): void => {
     if (!selectedPromos.includes(id)) {
-      setSelectedPromos((prevSelected) => [
-        ...prevSelected,
-        id
-      ]);
+      setSelectedPromos((prevSelected) => [...prevSelected, id]);
     } else {
-      setSelectedPromos((prevSelected) =>
-        prevSelected.filter((x) => x !== id)
-      );
+      setSelectedPromos((prevSelected) => prevSelected.filter((x) => x !== id));
     }
   };
 
   const handlePromoPatch = (promo, key, value) => {
     onPromoPatch(promo, key, value);
-  }
+  };
 
   return (
     <Card>
       <TableContainer>
-        <Table size='small'>
+        <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox" style={{ height: 52 }}>
-              </TableCell>
+              <TableCell padding="checkbox" style={{ height: 52 }}></TableCell>
               <TableCell>Code</TableCell>
               <TableCell>Type</TableCell>
               <TableCell>Value</TableCell>
@@ -94,16 +100,17 @@ const PromosTable: FC<PromosTableProps> = ({ promos, onAction, onSelectionChange
             {promos.map((promo, index) => {
               const isSelected = selectedPromos.includes(promo.id);
               const value = promo.value || 0;
-              const commences = promo.commences ? new Date(promo.commences).toLocaleString() : ''
-              const expires = promo.expires ? new Date(promo.expires).toLocaleString() : ''
+              const commences = promo.commences
+                ? new Date(promo.commences).toLocaleString()
+                : '';
+              const expires = promo.expires
+                ? new Date(promo.expires).toLocaleString()
+                : '';
               return (
-                <TableRow
-                  hover
-                  key={promo.id}
-                >
+                <TableRow hover key={promo.id}>
                   <TableCell padding="checkbox" style={{ height: 52 }}>
                     <Checkbox
-                      size='small'
+                      size="small"
                       color="primary"
                       checked={isSelected}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
@@ -113,15 +120,24 @@ const PromosTable: FC<PromosTableProps> = ({ promos, onAction, onSelectionChange
                   </TableCell>
                   <TableCell>{promo.code}</TableCell>
                   <TableCell>{promo.type}</TableCell>
-                  <TableCell>{promo.type === 'percentage' ? value.toFixed(2) + '%' : '$' + value.toFixed(2)}</TableCell>
-                  <TableCell>{promo.multipleUse ? 'Multiple use' : 'One time use'}</TableCell>
+                  <TableCell>
+                    {promo.type === 'percentage'
+                      ? value.toFixed(2) + '%'
+                      : '$' + value.toFixed(2)}
+                  </TableCell>
+                  <TableCell>
+                    {promo.multipleUse ? 'Multiple use' : 'One time use'}
+                  </TableCell>
                   <TableCell>{commences}</TableCell>
                   <TableCell>{expires}</TableCell>
                   <TableCell align="right" padding="checkbox">
-                    <IconButton size='small' onClick={(event) => {
-                      handleClickAction(event, promo.id);
-                    }}>
-                      <MoreVertTwoToneIcon fontSize='small' />
+                    <IconButton
+                      size="small"
+                      onClick={(event) => {
+                        handleClickAction(event, promo.id);
+                      }}
+                    >
+                      <MoreVertTwoToneIcon fontSize="small" />
                     </IconButton>
                     <Menu
                       anchorEl={anchorEl}
@@ -130,11 +146,19 @@ const PromosTable: FC<PromosTableProps> = ({ promos, onAction, onSelectionChange
                         handleCloseAction('None', promo);
                       }}
                       MenuListProps={{
-                        'aria-labelledby': 'basic-button',
+                        'aria-labelledby': 'basic-button'
                       }}
                     >
-                      <MenuItem onClick={() => handleCloseAction('Edit', promo)}>Edit</MenuItem>
-                      <MenuItem onClick={() => handleCloseAction('Delete', promo)}>Delete</MenuItem>
+                      <MenuItem
+                        onClick={() => handleCloseAction('Edit', promo)}
+                      >
+                        Edit
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => handleCloseAction('Delete', promo)}
+                      >
+                        Delete
+                      </MenuItem>
                     </Menu>
                   </TableCell>
                 </TableRow>

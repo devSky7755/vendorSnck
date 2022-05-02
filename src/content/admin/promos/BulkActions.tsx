@@ -1,10 +1,6 @@
-import { Box, Button, MenuItem, Divider } from '@mui/material';
+import { Box, Button, MenuItem } from '@mui/material';
 import { Promo } from 'src/models/promo';
 import { useState } from 'react';
-import EditIcon from '@mui/icons-material/Edit';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { ACTIONS, StyledMenu } from 'src/components/BulkAction';
 
