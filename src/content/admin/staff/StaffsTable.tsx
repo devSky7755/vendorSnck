@@ -120,7 +120,7 @@ const StaffsTable: FC<StaffsTableProps> = ({ vendor, staffs, onAction, onSelecti
                     {GetStaffRoleLabel(staff.role)}
                   </TableCell>
                   <TableCell>
-                    {staff.vendor_stand && staff.vendor_stand.name}
+                    {staff.vendorStand && staff.vendorStand.name}
                   </TableCell>
                   <TableCell>
                     <Switch checked={staff.active || false} onChange={e => {
