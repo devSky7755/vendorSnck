@@ -94,7 +94,7 @@ function VenuesPage(props: VenuesPageProps) {
       setDeleting([data]);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      setEditing({ active: false, deliveryEnabled: false, pickupEnabled: false, inVenueLocationHierarchy1: '' });
+      setEditing({ active: true, deliveryEnabled: true, pickupEnabled: true, inVenueLocationHierarchy1: '' });
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);

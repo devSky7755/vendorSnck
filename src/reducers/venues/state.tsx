@@ -20,7 +20,6 @@ const venuesInitialState: VenueState = {
 export const venues = (state = venuesInitialState, action) => {
     let new_venues = null;
     let new_vendors = null;
-    let new_vendor = null;
     let new_venue = null;
     let index = 0;
 

@@ -104,9 +104,9 @@ function VendorsPage(props: VendorsPageProps) {
       setDeleteOpen(true);
     } else if (action === 'Add New') {
       if (venueId) {
-        setEditing({ available: false, deliveryAvailable: false, pickupAvailable: false, venueId: venueId });
+        setEditing({ available: true, deliveryAvailable: true, pickupAvailable: true, venueId: venueId });
       } else {
-        setEditing({ available: false, deliveryAvailable: false, pickupAvailable: false });
+        setEditing({ available: true, deliveryAvailable: true, pickupAvailable: true });
       }
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
