@@ -12,3 +12,8 @@ export interface Promo {
     updatedAt: Date;
     deletedAt?: Date;
 }
+
+export interface BulkPatchPromo {
+    commences?: Date;
+    expires?: Date;
+}

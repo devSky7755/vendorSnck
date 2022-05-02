@@ -7,7 +7,15 @@ import EditPromoDialog from './EditPromo';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
-import { deletePromo, getPromos, patchPromo, postPromo } from 'src/Api/apiClient';
+import {
+  deletePromo,
+  deletePromos,
+  getPromos,
+  patchPromo,
+  patchPromos,
+  postPromo
+} from 'src/Api/apiClient';
+import { ACTIONS } from 'src/components/BulkAction';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -52,12 +60,12 @@ function PromosPage(props: PromosPageProps) {
   }, []);
 
   const loadPromos = () => {
-    getPromos(token).then(res => {
+    getPromos(token).then((res) => {
       if (res) {
         setPromos(res);
       }
-    })
-  }
+    });
+  };
 
   const onAction = (action, data) => {
     if (action === 'Edit') {
@@ -83,8 +91,59 @@ function PromosPage(props: PromosPageProps) {
       setDeleteOpen(false);
       handleDelete(editing);
       setEditing(null);
+    } else if (action === 'Bulk Action') {
+      handleBulkAction(data);
     }
-  }
+  };
+
+  const handleBulkAction = (action) => {
+    const ids = selectedPromos.map((promo) => promo.id);
+    switch (action) {
+      case ACTIONS.COMMENCE_NOW.action:
+        patchPromos(token, ids, {
+          commences: new Date()
+        }).then((updatedPromos) => {
+          let newPromos = [...promos].map((promo) => {
+            const findPromo = updatedPromos.find(
+              (uPromo) => uPromo.id === promo.id
+            );
+            return findPromo ? findPromo : promo;
+          });
+          setPromos(newPromos);
+          setSelectedPromos([]);
+        });
+        break;
+      case ACTIONS.EXPIRE_NOW.action:
+        patchPromos(token, ids, {
+          expires: new Date()
+        }).then((updatedPromos) => {
+          let newPromos = [...promos].map((promo) => {
+            const findPromo = updatedPromos.find(
+              (uPromo) => uPromo.id === promo.id
+            );
+            return findPromo ? findPromo : promo;
+          });
+          setPromos(newPromos);
+          setSelectedPromos([]);
+        });
+        break;
+      case ACTIONS.DELETE_PROMOS.action:
+        deletePromos(token, ids).then((res) => {
+          if (!res) return;
+          let newPromos = [...promos].filter((promo) => {
+            const findPromo = selectedPromos.find(
+              (sPromo) => sPromo.id === promo.id
+            );
+            return findPromo ? false : true;
+          });
+          setPromos(newPromos);
+          setSelectedPromos([]);
+        });
+        break;
+      default:
+        break;
+    }
+  };
 
   const handleSave = (promo) => {
     let patch: Promo = { ...promo };
@@ -96,87 +155,90 @@ function PromosPage(props: PromosPageProps) {
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 
     if (promo.id) {
-      patchPromo(token, promo, patch).then(res => {
-        let newPromos = [...promos];
-        let index = newPromos.findIndex(x => x.id === promo.id);
-        if (index >= 0) {
-          newPromos[index] = res;
-          setPromos(newPromos);
-        }
-      }).catch(ex => {
-        console.log(ex.message);
-      })
+      patchPromo(token, promo, patch)
+        .then((res) => {
+          let newPromos = [...promos];
+          let index = newPromos.findIndex((x) => x.id === promo.id);
+          if (index >= 0) {
+            newPromos[index] = res;
+            setPromos(newPromos);
+          }
+        })
+        .catch((ex) => {
+          console.log(ex.message);
+        });
     } else {
-      postPromo(token, patch).then(res => {
-        if (res) {
-          setPromos(prev => [...prev, res]);
-        }
-      }).catch(ex => {
-        console.log(ex.message);
-      })
+      postPromo(token, patch)
+        .then((res) => {
+          if (res) {
+            setPromos((prev) => [...prev, res]);
+          }
+        })
+        .catch((ex) => {
+          console.log(ex.message);
+        });
     }
-  }
+  };
 
   const handleDelete = (item) => {
-    deletePromo(token, item).then(res => {
+    deletePromo(token, item).then((res) => {
       if (res) {
-        const filtered = promos.filter(x => x.id !== item.id);
+        const filtered = promos.filter((x) => x.id !== item.id);
         setPromos(filtered);
       }
-    })
-  }
+    });
+  };
 
   const handlePromoPatch = (promo, key, value) => {
     let patch = {};
     patch[key] = value;
 
-    patchPromo(token, promo, patch).then(res => {
+    patchPromo(token, promo, patch).then((res) => {
       if (res) {
         let newPromos = [...promos];
-        let index = newPromos.findIndex(x => x.id === promo.id);
+        let index = newPromos.findIndex((x) => x.id === promo.id);
         if (index >= 0) {
           newPromos[index][key] = value;
           setPromos(newPromos);
         }
       }
     });
-  }
+  };
 
   const handleSelectionChanged = (selectedIDs) => {
-    const selected = promos.filter(x => selectedIDs.includes(x.id));
+    const selected = promos.filter((x) => selectedIDs.includes(x.id));
     setSelectedPromos(selected);
-  }
+  };
 
   return (
     <>
       <Helmet>
         <title>Promos</title>
       </Helmet>
-      {
-        editOpen && editing &&
-        <EditPromoDialog
-          promo={editing}
-          open={editOpen}
-          onAction={onAction}
-        />
-      }
-      {
-        deleteOpen && editing &&
+      {editOpen && editing && (
+        <EditPromoDialog promo={editing} open={editOpen} onAction={onAction} />
+      )}
+      {deleteOpen && editing && (
         <ConfirmDialog
-          success='Remove'
-          successLabel='DELETE'
-          cancelLabel='RETURN'
-          cancel='Cancel Remove'
-          header='Are you sure you want to delete this promo?'
-          text='It cannot be recovered'
+          success="Remove"
+          successLabel="DELETE"
+          cancelLabel="RETURN"
+          cancel="Cancel Remove"
+          header="Are you sure you want to delete this promo?"
+          text="It cannot be recovered"
           open={deleteOpen}
           onAction={onAction}
         />
-      }
+      )}
       <Box style={{ height: '100%' }}>
         <ContainerWrapper>
           <TableWrapper>
-            <PromosTable promos={promos} onAction={onAction} onSelectionChanged={handleSelectionChanged} onPromoPatch={handlePromoPatch} />
+            <PromosTable
+              promos={promos}
+              onAction={onAction}
+              onSelectionChanged={handleSelectionChanged}
+              onPromoPatch={handlePromoPatch}
+            />
           </TableWrapper>
         </ContainerWrapper>
         <FooterWrapper>
@@ -189,7 +251,7 @@ function PromosPage(props: PromosPageProps) {
 
 function reduxState(state) {
   return {
-    token: state.auth && state.auth.token,
-  }
+    token: state.auth && state.auth.token
+  };
 }
 export default connect(reduxState)(PromosPage);
