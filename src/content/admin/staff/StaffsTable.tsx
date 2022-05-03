@@ -2,7 +2,9 @@ import { ChangeEvent, FC, useEffect, useState } from 'react';
 import {
   Card,
   IconButton,
-  Table, Menu, MenuItem,
+  Table,
+  Menu,
+  MenuItem,
   TableBody,
   TableCell,
   TableHead,
@@ -20,24 +22,35 @@ import { VendorStand } from 'src/models/vendorStand';
 interface StaffsTableProps {
   className?: string;
   staffs: Staff[];
-  vendor: VendorStand
+  vendor: VendorStand;
   onAction: Function;
   onSelectionChanged: Function;
   onStaffPatch: Function;
 }
 
-const StaffsTable: FC<StaffsTableProps> = ({ vendor, staffs, onAction, onSelectionChanged, onStaffPatch }) => {
+const StaffsTable: FC<StaffsTableProps> = ({
+  vendor,
+  staffs,
+  onAction,
+  onSelectionChanged,
+  onStaffPatch
+}) => {
   const [actionID, setActionID] = useState<string>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedStaffs, setSelectedStaffs] = useState<string[]>(
-    []
-  );
+  const [selectedStaffs, setSelectedStaffs] = useState<string[]>([]);
+
+  useEffect(() => {
+    setSelectedStaffs([]);
+  }, [staffs]);
 
   useEffect(() => {
     onSelectionChanged(selectedStaffs);
-  }, [selectedStaffs])
+  }, [selectedStaffs]);
 
-  const handleClickAction = (event: React.MouseEvent<HTMLButtonElement>, staffId: string) => {
+  const handleClickAction = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    staffId: string
+  ) => {
     setActionID(staffId);
     setAnchorEl(event.currentTarget);
   };
@@ -56,29 +69,23 @@ const StaffsTable: FC<StaffsTableProps> = ({ vendor, staffs, onAction, onSelecti
     id: string
   ): void => {
     if (!selectedStaffs.includes(id)) {
-      setSelectedStaffs((prevSelected) => [
-        ...prevSelected,
-        id
-      ]);
+      setSelectedStaffs((prevSelected) => [...prevSelected, id]);
     } else {
-      setSelectedStaffs((prevSelected) =>
-        prevSelected.filter((x) => x !== id)
-      );
+      setSelectedStaffs((prevSelected) => prevSelected.filter((x) => x !== id));
     }
   };
 
   const handleStaffPatch = (staff, key, value) => {
     onStaffPatch(staff, key, value);
-  }
+  };
 
   return (
     <Card>
       <TableContainer>
-        <Table size='small'>
+        <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox" style={{ height: 52 }}>
-              </TableCell>
+              <TableCell padding="checkbox" style={{ height: 52 }}></TableCell>
               <TableCell>First Name</TableCell>
               <TableCell>Last Name</TableCell>
               <TableCell>Mobile No</TableCell>
@@ -93,13 +100,10 @@ const StaffsTable: FC<StaffsTableProps> = ({ vendor, staffs, onAction, onSelecti
               const isSelected = selectedStaffs.includes(staff.id);
 
               return (
-                <TableRow
-                  hover
-                  key={staff.id}
-                >
+                <TableRow hover key={staff.id}>
                   <TableCell padding="checkbox" style={{ height: 52 }}>
                     <Checkbox
-                      size='small'
+                      size="small"
                       color="primary"
                       checked={isSelected}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
@@ -107,31 +111,29 @@ const StaffsTable: FC<StaffsTableProps> = ({ vendor, staffs, onAction, onSelecti
                       }
                     />
                   </TableCell>
-                  <TableCell>
-                    {staff.firstName}
-                  </TableCell>
-                  <TableCell>
-                    {staff.lastName}
-                  </TableCell>
-                  <TableCell>
-                    {staff.mobileNo}
-                  </TableCell>
-                  <TableCell>
-                    {GetStaffRoleLabel(staff.role)}
-                  </TableCell>
+                  <TableCell>{staff.firstName}</TableCell>
+                  <TableCell>{staff.lastName}</TableCell>
+                  <TableCell>{staff.mobileNo}</TableCell>
+                  <TableCell>{GetStaffRoleLabel(staff.role)}</TableCell>
                   <TableCell>
                     {staff.vendorStand && staff.vendorStand.name}
                   </TableCell>
                   <TableCell>
-                    <Switch checked={staff.active || false} onChange={e => {
-                      handleStaffPatch(staff, 'active', e.target.checked);
-                    }} />
+                    <Switch
+                      checked={staff.active || false}
+                      onChange={(e) => {
+                        handleStaffPatch(staff, 'active', e.target.checked);
+                      }}
+                    />
                   </TableCell>
                   <TableCell align="right" padding="checkbox">
-                    <IconButton size='small' onClick={(event) => {
-                      handleClickAction(event, staff.id);
-                    }}>
-                      <MoreVertTwoToneIcon fontSize='small' />
+                    <IconButton
+                      size="small"
+                      onClick={(event) => {
+                        handleClickAction(event, staff.id);
+                      }}
+                    >
+                      <MoreVertTwoToneIcon fontSize="small" />
                     </IconButton>
                     <Menu
                       anchorEl={anchorEl}
@@ -140,11 +142,19 @@ const StaffsTable: FC<StaffsTableProps> = ({ vendor, staffs, onAction, onSelecti
                         handleCloseAction('None', staff);
                       }}
                       MenuListProps={{
-                        'aria-labelledby': 'basic-button',
+                        'aria-labelledby': 'basic-button'
                       }}
                     >
-                      <MenuItem onClick={() => handleCloseAction('Edit', staff)}>Edit</MenuItem>
-                      <MenuItem onClick={() => handleCloseAction('Delete', staff)}>Delete</MenuItem>
+                      <MenuItem
+                        onClick={() => handleCloseAction('Edit', staff)}
+                      >
+                        Edit
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => handleCloseAction('Delete', staff)}
+                      >
+                        Delete
+                      </MenuItem>
                     </Menu>
                   </TableCell>
                 </TableRow>
