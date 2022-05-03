@@ -26,6 +26,12 @@ export interface Staff {
   daily_count?: number;
 }
 
+export interface BulkPatchStaff {
+  active?: boolean;
+  role?: StaffRole;
+}
+
+
 export function GetStaffRoleLabel(role) {
   switch (role) {
     case 'admin':

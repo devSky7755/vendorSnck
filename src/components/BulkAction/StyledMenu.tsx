@@ -3,22 +3,19 @@ import Menu, { MenuProps } from '@mui/material/Menu';
 
 export const StyledMenu = styled((props: MenuProps) => (
   <Menu
-    elevation={0}
     anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'right'
+      vertical: 'top',
+      horizontal: 'left'
     }}
     transformOrigin={{
-      vertical: 'top',
-      horizontal: 'right'
+      vertical: 'bottom',
+      horizontal: 'left'
     }}
     {...props}
   />
 ))(({ theme }) => ({
   '& .MuiPaper-root': {
     borderRadius: 6,
-    marginTop: theme.spacing(1),
-    minWidth: 180,
     color:
       theme.palette.mode === 'light'
         ? 'rgb(55, 65, 81)'

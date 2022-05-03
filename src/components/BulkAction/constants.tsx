@@ -58,5 +58,25 @@ export const ACTIONS = {
   DELETE_VENDOR_STANDS: {
     label: 'Delete Vendor Stands',
     action: 'delete-vendor-stands'
+  },
+  SET_ACTIVE: {
+    label: 'Set Active',
+    action: 'set-active'
+  },
+  SET_INACTIVE: {
+    label: 'Set Inactive',
+    action: 'set-inactive'
+  },
+  SET_ROLE_AS_RUNNER: {
+    label: 'Set Role as Runner',
+    action: 'set-role-as-runner'
+  },
+  SET_ROLE_AS_MANAGER: {
+    label: 'Set Role as Manager',
+    action: 'set-role-as-manager'
+  },
+  DELETE_STAFF: {
+    label: 'Delete Staff',
+    action: 'delete-staff'
   }
 };

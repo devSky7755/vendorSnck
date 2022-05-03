@@ -1,5 +1,5 @@
 import { BASE_URL } from "src/models/constant";
-import { Staff } from "src/models/staff";
+import { BulkPatchStaff, Staff } from "src/models/staff";
 
 const StaffsEndpoint = 'staffs/';
 
@@ -38,6 +38,27 @@ export function patchStaff(token: string, staff: Staff, patch): Promise<Staff> {
     })
 }
 
+export function patchStaffs(token: string, ids: string[], data: BulkPatchStaff): Promise<Staff[]> {
+    return fetch(BASE_URL + StaffsEndpoint, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            ids,
+            data
+        })
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return res.data as Staff[];
+        } else {
+            return [];
+        }
+    })
+}
+
 export function postStaff(token: string, staff: Staff): Promise<Staff> {
     return fetch(BASE_URL + StaffsEndpoint, {
         method: 'POST',
@@ -64,6 +85,24 @@ export function deleteStaff(token: string, staff: Staff): Promise<boolean> {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return true;
+        } else {
+            return false;
+        }
+    })
+}
+
+export function deleteStaffs(token: string, ids: string[]): Promise<boolean> {
+    return fetch(BASE_URL + StaffsEndpoint + 'delete', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ ids })
     }).then(res => res.json()).then(res => {
         if (res.success) {
             return true;

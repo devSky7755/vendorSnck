@@ -1,7 +1,6 @@
 import { Box, Button, MenuItem } from '@mui/material';
 import { VendorStand as Vendor } from 'src/models/vendorStand';
 import { useState } from 'react';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { ACTIONS, StyledMenu } from 'src/components/BulkAction';
 
 interface BulkActionsProps {
@@ -54,7 +53,6 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
           aria-expanded={open ? 'true' : undefined}
           disableElevation
           onClick={handleClick}
-          endIcon={<KeyboardArrowUpIcon />}
         >
           Bulk Action
         </Button>
