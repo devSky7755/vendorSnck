@@ -105,10 +105,8 @@ function VenuesPage(props: VenuesPageProps) {
     } else if (action === 'Bulk Delete') {
       setDeleting(selectedVenues);
       setDeleteOpen(true);
-    } else if (action === 'Bulk Active') {
-      handleBulkVenuePatch(selectedVenues, 'active', true);
-    } else if (action === 'Bulk Inactive') {
-      handleBulkVenuePatch(selectedVenues, 'active', false);
+    } else if (action === 'Bulk Update') {
+      handleBulkVenuePatch(selectedVenues, data);
     } else if (action === 'Distribution Area') {
       navigate('/venueareas/' + data.id);
     } else if (action === 'In Location') {
@@ -188,16 +186,14 @@ function VenuesPage(props: VenuesPageProps) {
     });
   }
 
-  const handleBulkVenuePatch = (svenues, key, value) => {
-    let update = {};
-    update[key] = value;
+  const handleBulkVenuePatch = (svenues, patch) => {
     let data = {
       ids: svenues.map(v => v.id),
-      data: update
+      data: patch
     }
     patchBulkVenueAPI(token, data).then(res => {
       res.forEach(v => {
-        props.patchVenue(v, key, value);
+        props.updateVenue(v);
       })
     });
   }

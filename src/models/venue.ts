@@ -34,6 +34,10 @@ export interface Venue {
     vendorStands?: VendorStand[];
 }
 
+export interface BulkVenuePatch {
+    active?: boolean;
+}
+
 export interface VenueInLocation {
     id: string;
     hierarchy1: string;

@@ -2,7 +2,7 @@ import {
   Box, Menu, MenuItem, Button,
 } from '@mui/material';
 import { useState } from 'react';
-import { Venue } from 'src/models/venue';
+import { Venue, BulkVenuePatch } from 'src/models/venue';
 
 interface BulkActionsProps {
   onAction: Function;
@@ -14,9 +14,9 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
 
   const { selected } = props;
 
-  const handleCloseAction = (action) => {
+  const handleCloseAction = (action, patch: BulkVenuePatch) => {
     setAnchorEl(null);
-    props.onAction(action);
+    props.onAction(action, patch);
   }
 
   return (
@@ -59,9 +59,9 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
             'aria-labelledby': 'basic-button',
           }}
         >
-          <MenuItem onClick={() => handleCloseAction('Bulk Active')}>Mark all&nbsp;<b>Active</b></MenuItem>
-          <MenuItem onClick={() => handleCloseAction('Bulk Inactive')}>Mark all&nbsp;<b>Inactive</b></MenuItem>
-          <MenuItem onClick={() => handleCloseAction('Bulk Delete')}>Delete&nbsp;<b>Venues</b></MenuItem>
+          <MenuItem onClick={() => handleCloseAction('Bulk Update', { active: true })}>Mark all&nbsp;<b>Active</b></MenuItem>
+          <MenuItem onClick={() => handleCloseAction('Bulk Update', { active: false })}>Mark all&nbsp;<b>Inactive</b></MenuItem>
+          <MenuItem onClick={() => handleCloseAction('Bulk Delete', {})}>Delete&nbsp;<b>Venues</b></MenuItem>
         </Menu>
       </Box>
     </Box>
