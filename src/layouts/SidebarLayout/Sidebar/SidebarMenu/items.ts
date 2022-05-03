@@ -20,25 +20,25 @@ const vendorMenuItems: MenuItems[] = [
     items: [
       {
         name: 'New',
-        link: '/orders/items/new',
+        link: '/orders/new',
       },
       {
         name: 'Preparing',
-        link: '/orders/items/preparing',
+        link: '/orders/preparing',
         badge: "3"
       },
       {
         name: 'Delivery',
-        link: '/orders/items/delivery',
+        link: '/orders/delivery',
         badge: "2"
       },
       {
         name: 'Pickup',
-        link: '/orders/items/pickup',
+        link: '/orders/pickup',
       },
       {
         name: 'All',
-        link: '/orders/items/all',
+        link: '/orders/all',
       }
     ]
   },

@@ -75,7 +75,7 @@ function HeaderMenu() {
             classes={{ root: 'MuiListItem-indicators' }}
             button
             component={NavLink}
-            to="/orders/items/new"
+            to="/orders/new"
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true, variant: 'button' }}
@@ -86,7 +86,7 @@ function HeaderMenu() {
             classes={{ root: 'MuiListItem-indicators' }}
             button
             component={NavLink}
-            to="/orders/items/preparing"
+            to="/orders/preparing"
           >
             <NotificationsBadge showZero={false} badgeContent={3} color='warning'>
               <ListItemText
@@ -100,7 +100,7 @@ function HeaderMenu() {
             classes={{ root: 'MuiListItem-indicators' }}
             button
             component={NavLink}
-            to="/orders/items/delivery"
+            to="/orders/delivery"
           >
             <NotificationsBadge showZero={false} badgeContent={2} color='warning'>
               <ListItemText
@@ -114,7 +114,7 @@ function HeaderMenu() {
             classes={{ root: 'MuiListItem-indicators' }}
             button
             component={NavLink}
-            to="/orders/items/pickup"
+            to="/orders/pickup"
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true, variant: 'button' }}
@@ -125,7 +125,7 @@ function HeaderMenu() {
             classes={{ root: 'MuiListItem-indicators' }}
             button
             component={NavLink}
-            to="/orders/items/all"
+            to="/orders/all"
           >
             <ListItemText
               primaryTypographyProps={{ noWrap: true, variant: 'button' }}

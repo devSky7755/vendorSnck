@@ -3,22 +3,24 @@ import { useState } from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import Typography from '@mui/material/Typography';
-import { GetOrderItemCount, Order } from 'src/models/order';
-import { Box, Button, Table, DialogActions, Grid, IconButton, TableContainer, TableRow, TableCell, TableBody } from '@mui/material';
+import { GetOrderDistributionLabel, GetOrderIDLabel, GetOrderInVenueLocation, GetOrderItemCount, GetOrderStatusLabel, Order } from 'src/models/order';
+import { Box, Button, Table, DialogActions, Grid, IconButton, TableContainer, TableRow, TableCell, TableBody, TextField, MenuItem } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import HistoryIcon from '@mui/icons-material/History';
 import PrintOutlinedIcon from '@mui/icons-material/PrintOutlined';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import ErrorIcon from '@mui/icons-material/Error';
+import { Staff } from 'src/models/staff';
 
 interface EditOrderInterface {
     onClose: Function,
     open: boolean,
+    staffs: Staff[];
     order?: Order,
 };
 
 const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
-    const { onClose, order, open } = props;
+    const { onClose, order, open, staffs } = props;
     const [editing, setEditingOrder] = useState(order)
 
     const handleClose = () => {
@@ -33,25 +35,25 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
             case 'Ready':
                 setEditingOrder({
                     ...editing,
-                    status: 'Ready'
+                    status: 'ready'
                 });
                 break;
             case 'Dispatch':
                 setEditingOrder({
                     ...editing,
-                    status: 'Delivering'
+                    status: 'delivering'
                 });
                 break;
             case 'Delivered':
                 setEditingOrder({
                     ...editing,
-                    status: 'Completed'
+                    status: 'completed'
                 });
                 break;
             case 'Picked up':
                 setEditingOrder({
                     ...editing,
-                    status: 'Waitlist'
+                    status: 'waitlist'
                 });
                 break;
             default:
@@ -59,24 +61,24 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
         }
     }
 
-    const unavailable = editing.items.filter(x => x.currentAvailable === 0);
+    const unavailable = editing.cartItems.filter(x => x.currentAvailable === 0);
     const unavailable_items = unavailable.map(x => x.name).join(',');
-    const duetime = editing.duetime - Date.now();
+    const duetime = editing.dueTimestamp - Date.now();
 
-    const buttonDisabled = editing.status === 'Preparing' && unavailable.length > 0;
+    const buttonDisabled = editing.status === 'preparing' && unavailable.length > 0;
     let actionName = 'Print';
-    if (editing.status === 'Preparing') actionName = 'Ready';
-    else if (editing.status === 'Ready' && editing.order_type === 'Delivery') actionName = 'Dispatch';
-    else if (editing.status === 'Delivering' && editing.order_type === 'Delivery') actionName = 'Delivered';
-    else if (editing.status === 'Ready' && editing.order_type === 'Pickup') actionName = 'Picked up';
-    else if (editing.status === 'Waitlist' && editing.order_type === 'Pickup') actionName = 'Delivered';
+    if (editing.status === 'preparing') actionName = 'Ready';
+    else if (editing.status === 'ready' && editing.distributionMethod === 'delivery') actionName = 'Dispatch';
+    else if (editing.status === 'delivering' && editing.distributionMethod === 'delivery') actionName = 'Delivered';
+    else if (editing.status === 'ready' && editing.distributionMethod === 'pickup') actionName = 'Picked up';
+    else if (editing.status === 'waitlist' && editing.distributionMethod === 'pickup') actionName = 'Delivered';
 
     return (
         <Dialog onClose={() => {
             onClose(null);
         }} open={open} PaperProps={{ style: { width: 480 } }}>
             <DialogTitle className='border-bottom d-flex font-bold' sx={{ px: 2, py: 1 }}>
-                <Typography variant='h6' component={'span'}>Order #{order.id}</Typography>
+                <Typography variant='h6' component={'span'}>Order #{GetOrderIDLabel(order.id)}</Typography>
                 <IconButton className='float-right' sx={{ p: 0 }} size='small' onClick={() => {
                     onClose(null);
                 }}>
@@ -117,11 +119,11 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
                     <Grid container justifyContent='space-between'>
                         <Grid item>
                             <Typography className='color-60-grey' variant='subtitle2'>Order</Typography>
-                            <Typography variant='body1'>{editing.order_type}</Typography>
+                            <Typography variant='body1'>{GetOrderDistributionLabel(editing.distributionMethod)}</Typography>
                         </Grid>
                         <Grid item>
                             <Typography className='color-60-grey' variant='subtitle2'>Status</Typography>
-                            <Typography variant='body1'>{editing.status}</Typography>
+                            <Typography variant='body1'>{GetOrderStatusLabel(editing.status)}</Typography>
                         </Grid>
                         <Grid item>
                             <Typography className='color-60-grey' variant='subtitle2'>Items</Typography>
@@ -144,46 +146,55 @@ const EditOrderDialog: React.FC<EditOrderInterface> = (props) => {
                         <Grid item xs={12}>
                             <Typography variant='subtitle1'>{order.customer.firstName} {order.customer.lastName}</Typography>
                             {
-                                order.customer.inVenueLocationId &&
-                                <Typography variant='body1'>{order.customer.inVenueLocationId}</Typography>
+                                order.inVenueLocation &&
+                                <Typography variant='body1'>{GetOrderInVenueLocation(order)}</Typography>
                             }
                         </Grid>
                     </Grid>
                 </Box>
                 {
-                    editing.order_type === 'Delivery' &&
                     <Box sx={{ px: 2, pb: 1, pt: 2 }} className='border-bottom'>
-                        <Grid container justifyContent='space-between'>
-                            <Grid item>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
                                 <Typography className='color-60-grey' variant='subtitle1'>Delivery Person</Typography>
                             </Grid>
-                            <Grid item className='ml-auto' sx={{ mt: -0.5 }}>
-                                <Button size='small'>{editing.delivery_person ? 'Re-Assign' : 'Assign'}</Button>
+                            <Grid item xs={12}>
+                                <TextField
+                                    select
+                                    size='small'
+                                    fullWidth
+                                    variant='standard'
+                                    value={editing.runnerStaffId}
+                                    onChange={(e) => {
+                                        setEditingOrder({
+                                            ...editing,
+                                            runnerStaffId: e.target.value
+                                        });
+                                    }}
+                                >
+                                    {staffs.map((staff) => {
+                                        if (staff.vendorStand.id === editing.vendorStand.id && staff.role === 'runner') {
+                                            return (
+                                                <MenuItem key={staff.id} value={staff.id}>
+                                                    {staff.firstName} {staff.lastName}
+                                                </MenuItem>
+                                            )
+                                        }
+                                    })}
+                                </TextField>
                             </Grid>
-                            {
-                                editing.delivery_person &&
-                                <Grid item xs={12}>
-                                    <Typography variant='subtitle1'>
-                                        {editing.delivery_person.firstName} {editing.delivery_person.lastName}
-                                    </Typography>
-                                    <Typography variant='body1'>
-                                        #{editing.delivery_person.id}
-                                    </Typography>
-                                </Grid>
-                            }
-
                         </Grid>
                     </Box>
                 }
                 <Box sx={{ px: 2, py: 1 }}>
                     <Box sx={{ pb: 1 }} className='border-bottom'>
                         <Typography sx={{ pb: 1 }} className='color-60-grey' variant='subtitle1'>Order</Typography>
-                        <Typography variant='body1'>12:00 PM @ Snackr Hot Dog Stand</Typography>
+                        <Typography variant='body1'>{new Date(editing.createdAt).toLocaleString()} @ {editing.vendorStand.name}</Typography>
                     </Box>
                     <TableContainer>
                         <Table>
                             <TableBody>
-                                {order.items.map((menu, index) => {
+                                {order.cartItems.map((menu, index) => {
                                     return (
                                         <TableRow
                                             key={index}

@@ -8,8 +8,8 @@ export interface OrderFilter {
 }
 
 export const defaultFilter: OrderFilter = {
-    type: ['Delivery', 'Pickup'],
-    status: ['New', 'Preparing', 'Ready', 'Delivering', 'Waitlist', 'Completed', 'Cancelled'],
+    type: ['delivery', 'pickup'],
+    status: ['new', 'preparing', 'ready', 'delivering', 'waitlist', 'completed', 'cancelled'],
     search: '',
     menuIds: []
 }

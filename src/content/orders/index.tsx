@@ -4,13 +4,19 @@ import { useEffect, useState } from 'react';
 import OrdersTable from './OrdersTable';
 import EditOrderDialog from './EditOrder';
 import BulkActions from './BulkActions';
-import { Order, temp_orders } from 'src/models/order';
+import { Order } from 'src/models/order';
 import OrdersDetail from './OrdersDetail';
 import { useParams } from 'react-router-dom';
 import { NotificationBoard } from './notification';
 import { OrderIssue } from './issue';
 import SidebarFilter from './SidebarFilter';
 import { defaultFilter, OrderFilter } from './order_filter';
+import { isVendorApp } from 'src/models/constant';
+import { getOrders, getAllStaffs } from 'src/Api/apiClient';
+import { connect } from 'react-redux';
+import { VendorStand } from 'src/models/vendorStand';
+import AdminOrdersTable from './AdminOrdersTable';
+import { Staff } from 'src/models/staff';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -52,7 +58,7 @@ const ContainerWrapper = styled(Box)(
 
 const filterOrders = (orders: Order[], filter: OrderFilter) => {
   var filtered = orders.filter(order => {
-    if (filter.type.includes(order.order_type) === false) return false;
+    if (filter.type.includes(order.distributionMethod) === false) return false;
     if (filter.status.includes(order.status) === false) return false;
     return true;
   });
@@ -60,8 +66,13 @@ const filterOrders = (orders: Order[], filter: OrderFilter) => {
   return filtered;
 }
 
-const OrdersPage = () => {
-  const { type } = useParams();
+interface OrdersPageProps {
+  token: string;
+  type: string;
+}
+
+const OrdersPage = (props: OrdersPageProps) => {
+  const { token, type } = props;
 
   const [editOpen, setEditOpen] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -74,33 +85,51 @@ const OrdersPage = () => {
   const [showRightFilter, setShowRightFilter] = useState(false);
   const [openNotificatoin, setOpenNotification] = useState(false);
   const [filter, setFilter] = useState<OrderFilter>(defaultFilter);
+  const [staffs, setStaffs] = useState<Staff[]>([]);
 
   useEffect(() => {
-    let filtered = [];
-    switch (type.toLowerCase()) {
-      case 'new':
-        filtered = temp_orders.filter(x => x.status === 'New');
-        break;
-      case 'preparing':
-        filtered = temp_orders.filter(x => x.status === 'Preparing');
-        break;
-      case 'delivery':
-        filtered = temp_orders.filter(x => (x.status === 'Ready' && x.order_type === 'Delivery') || x.status === 'Delivering');
-        break;
-      case 'pickup':
-        filtered = temp_orders.filter(x => (x.status === 'Ready' && x.order_type === 'Pickup') || x.status === 'Waitlist');
-        break;
-      default:
-        filtered = [...temp_orders];
-        break;
-    }
-    setOrders(filtered);
-    setSelectedOrders([]);
-    setFilter(defaultFilter);
-    setShowOrderDetail(false);
-    setEditOpen(false);
-    setEditing(null);
+    let allOrders: Order[] = [];
+    getOrders(token).then(res => {
+      if (res) {
+        allOrders = res;
+        switch (type) {
+          case 'new':
+            allOrders = allOrders.filter(x => x.status === 'new');
+            break;
+          case 'preparing':
+            allOrders = allOrders.filter(x => x.status === 'preparing');
+            break;
+          case 'delivery':
+            allOrders = allOrders.filter(x => (x.status === 'ready' && x.distributionMethod === 'delivery') || x.status === 'delivering');
+            break;
+          case 'pickup':
+            allOrders = allOrders.filter(x => (x.status === 'ready' && x.distributionMethod === 'pickup') || x.status === 'waitlist');
+            break;
+          default:
+            break;
+        }
+        allOrders.forEach(x => {
+          x.dueTimestamp = new Date(x.dueAt).getTime();
+        })
+        setOrders(allOrders);
+        setSelectedOrders([]);
+        setFilter(defaultFilter);
+        setShowOrderDetail(false);
+        setEditOpen(false);
+        setEditing(null);
+      }
+    })
   }, [type]);
+
+  useEffect(() => {
+    if (!isVendorApp) {
+      getAllStaffs(token).then(res => {
+        if (res) {
+          setStaffs(res);
+        }
+      })
+    }
+  }, [])
 
   useEffect(() => {
     setFiltered(filterOrders(orders, filter));
@@ -183,7 +212,7 @@ const OrdersPage = () => {
         <title>New Orders</title>
       </Helmet>
       {editOpen && editing && (
-        <EditOrderDialog order={editing} open={editOpen} onClose={onEdited} />
+        <EditOrderDialog order={editing} open={editOpen} staffs={staffs} onClose={onEdited} />
       )}
       {issueWithOpen && issueWith && (
         <OrderIssue
@@ -197,7 +226,13 @@ const OrdersPage = () => {
           <Grid container alignItems="stretch">
             <Grid item style={{ flex: 1 }}>
               <TableWrapper>
-                <OrdersTable {...ordersTblProps} />
+                {
+                  isVendorApp ? (
+                    <OrdersTable {...ordersTblProps} />
+                  ) : (
+                    <AdminOrdersTable {...ordersTblProps} staffs={staffs} />
+                  )
+                }
               </TableWrapper>
             </Grid>
             {(showOrderDetail || showRightFilter) && (
@@ -234,4 +269,9 @@ const OrdersPage = () => {
   );
 }
 
-export default OrdersPage;
+function reduxState(state) {
+  return {
+    token: state.auth && state.auth.token,
+  }
+}
+export default connect(reduxState)(OrdersPage);

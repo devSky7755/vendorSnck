@@ -22,6 +22,8 @@ function GetPageTitle(pathname) {
       return 'Promo';
     case '/customers':
       return 'Customers';
+    case '/orders':
+      return 'Orders';
     default:
       if (pathname.startsWith('/menuitems')) {
         return 'Menu Items';
@@ -87,8 +89,8 @@ function HeaderButtons({ pauseUntil, refreshPause }) {
             )}
             {seconds > 0
               ? `Paused ${Math.floor(seconds / 60)}:${(seconds % 60)
-                  .toString()
-                  .padStart(2, '0')}`
+                .toString()
+                .padStart(2, '0')}`
               : 'Available'}
           </Button>
         </Box>

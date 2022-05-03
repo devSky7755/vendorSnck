@@ -149,7 +149,7 @@ const EditCustomerDialog: React.FC<EditCustomerInterface> = (props) => {
                                                         <TableCell>
                                                             <Typography variant='subtitle1'>Order No. {order.id}</Typography>
                                                         </TableCell>
-                                                        <TableCell align='right'>${(order.price || 0).toFixed(2)}</TableCell>
+                                                        <TableCell align='right'>${(order.totalPrice || 0).toFixed(2)}</TableCell>
                                                         <TableCell padding='checkbox'>
                                                             <IconButton className='float-right' sx={{ p: 0 }} size='small'>
                                                                 <MoreVertTwoToneIcon />

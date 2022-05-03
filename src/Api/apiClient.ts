@@ -7,3 +7,4 @@ export * from './promo';
 export * from './staff';
 export * from './vendorstands';
 export * from './venueinlocation';
+export * from './order';

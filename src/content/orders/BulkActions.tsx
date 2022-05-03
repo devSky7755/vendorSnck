@@ -33,7 +33,7 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
           </Box>
         }
         {
-          type === 'Preparing' &&
+          type === 'preparing' &&
           <Box display="flex" alignItems="center">
             <Button
               color='primary'

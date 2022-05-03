@@ -37,7 +37,7 @@ const OrdersDetail: FC<OrdersDetailProps> = ({ type, selected, onHide }) => {
     useEffect(() => {
         let new_list: MenuItem[] = [];
         selectedOrders.forEach(order => {
-            order.items.forEach(item => {
+            order.cartItems.forEach(item => {
                 let exist = new_list.find(x => x.name === item.name);
                 if (exist) {
                     exist.count += item.count;

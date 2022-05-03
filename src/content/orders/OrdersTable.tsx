@@ -3,7 +3,7 @@ import {
   Checkbox, IconButton, Table, TableBody, TableCell, TableHead, TableRow, TableContainer,
   Typography, Switch, Menu, MenuItem
 } from '@mui/material';
-import { GetOrderItemCount, Order } from 'src/models/order';
+import { GetOrderDistributionLabel, GetOrderIDLabel, GetOrderInVenueLocation, GetOrderItemCount, Order } from 'src/models/order';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -58,26 +58,26 @@ const GetGroupedOrders = (orders: Order[], type: string, showPreOrders = false) 
   if (type === 'new' || type === 'preparing') {
     let last_duetime = 0;
     if (orders.length > 0) {
-      last_duetime = orders[orders.length - 1].duetime;
+      last_duetime = orders[orders.length - 1].dueTimestamp;
     }
     let current_time = Date.now();
     let endtime = current_time + 5 * 60 * 1000;
     let starttime = 0;
 
     while (last_duetime > starttime) {
-      let filtered = orders.filter(x => x.duetime >= starttime && x.duetime < endtime);
+      let filtered = orders.filter(x => x.dueTimestamp >= starttime && x.dueTimestamp < endtime);
 
       if (filtered.length > 0) {
         const group_time = formatAMPM(new Date(endtime));
 
         let warning = '';
-        const late_prepare = filtered.filter(x => x.status === 'Preparing' && x.duetime < current_time);
+        const late_prepare = filtered.filter(x => x.status === 'preparing' && x.dueTimestamp < current_time);
         if (late_prepare.length > 0) {
           warning = warning + `${late_prepare.length} order(s) are late to prepare`;
         }
         let no_item_count = 0;
         filtered.forEach((order) => {
-          let is_no_item = order.items.find(x => x.currentAvailable === 0);
+          let is_no_item = order.cartItems.find(x => x.currentAvailable === 0);
           if (is_no_item) no_item_count++;
         });
 
@@ -100,9 +100,9 @@ const GetGroupedOrders = (orders: Order[], type: string, showPreOrders = false) 
       endtime += 10 * 60 * 1000;
     }
   } else if (type === 'delivery') {
-    const ready_orders = orders.filter(x => x.status === 'Ready' && x.order_type === 'Delivery');
+    const ready_orders = orders.filter(x => x.status === 'ready' && x.distributionMethod === 'delivery');
     let ready_warning = '';
-    const late_delivery = ready_orders.filter(x => x.duetime < current_time);
+    const late_delivery = ready_orders.filter(x => x.dueTimestamp < current_time);
     if (late_delivery.length > 0) {
       ready_warning = ready_warning + `${late_delivery.length} order(s) are late to dispatch`;
     }
@@ -120,12 +120,12 @@ const GetGroupedOrders = (orders: Order[], type: string, showPreOrders = false) 
 
     //Delivering
     let delivery_warning = '';
-    const late_delivering = orders.filter(x => x.status === 'Delivering' && x.dispatch_time < current_time - 10 * 60 * 1000);
+    const late_delivering = orders.filter(x => x.status === 'delivering' && x.dispatch_time < current_time - 10 * 60 * 1000);
     if (late_delivering.length > 0) {
       delivery_warning = delivery_warning + `${late_delivering.length} order(s) are late to deliver`;
     }
 
-    const delivering = orders.filter(x => x.status === 'Delivering');
+    const delivering = orders.filter(x => x.status === 'delivering');
     grouped.push({
       name: 'Delivering',
       desc: `orders`,
@@ -138,9 +138,9 @@ const GetGroupedOrders = (orders: Order[], type: string, showPreOrders = false) 
       orders: delivering
     });
   } else if (type === 'pickup') {
-    const ready_orders = orders.filter(x => x.status === 'Ready' && x.order_type === 'Pickup');
+    const ready_orders = orders.filter(x => x.status === 'ready' && x.distributionMethod === 'pickup');
     let ready_warning = '';
-    const late_pickup = ready_orders.filter(x => x.duetime < current_time);
+    const late_pickup = ready_orders.filter(x => x.dueTimestamp < current_time);
     if (late_pickup.length > 0) {
       ready_warning = ready_warning + `${late_pickup.length} order(s) are late to pickup`;
     }
@@ -158,12 +158,12 @@ const GetGroupedOrders = (orders: Order[], type: string, showPreOrders = false) 
 
     //Delivering
     let delivery_warning = '';
-    const late_delivering = orders.filter(x => x.status === 'Waitlist' && x.dispatch_time < current_time - 10 * 60 * 1000);
+    const late_delivering = orders.filter(x => x.status === 'waitlist' && x.dispatch_time < current_time - 10 * 60 * 1000);
     if (late_delivering.length > 0) {
       delivery_warning = delivery_warning + `${late_delivering.length} order(s) are late to deliver`;
     }
 
-    const delivering = orders.filter(x => x.status === 'Waitlist');
+    const delivering = orders.filter(x => x.status === 'waitlist');
     grouped.push({
       name: 'Waitlist',
       desc: `orders`,
@@ -186,14 +186,13 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
   const [expanded, setExpanded] = useState<string[]>([]);
   const [showPreOrders, setShowPreOrders] = useState(false);
 
-  const [actionID, setActionID] = useState<number>(-1);
+  const [actionID, setActionID] = useState<string>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   useEffect(() => {
     orders.sort((x, y) => {
-      if (x.duetime < y.duetime) return -1;
-      if (x.duetime > y.duetime) return 1;
-      return 0;
+      if (x.dueAt < y.dueAt) return -1;
+      return 1;
     });
 
     let grouped = GetGroupedOrders(orders, type, showPreOrders);
@@ -261,14 +260,14 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
 
   const handleClickAction = (
     event: React.MouseEvent<HTMLButtonElement>,
-    id: number
+    id: string
   ) => {
     setActionID(id);
     setAnchorEl(event.currentTarget);
   };
 
   const handleCloseAction = (action: string, order: Order) => {
-    setActionID(-1);
+    setActionID(null);
     setAnchorEl(null);
 
     switch (action) {
@@ -295,19 +294,19 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
   const OrderTableRow = (order: Order, index: number) => {
     let waiting = current_time - order.created;
     const isOrderSelected = selectedOrders.findIndex(x => x.id === order.id) >= 0;
-    const hasAlchol = order.items && order.items.find((x) => x.isAlcohol);
-    const prepare_delayed = order.status === 'Preparing' && order.duetime < Date.now();
-    const delivery_delayed = order.status === 'Ready' && order.order_type === 'Delivery' && order.duetime < Date.now();
-    const deliverying_delayed = order.status === 'Delivering' && order.order_type === 'Delivery' && order.dispatch_time < Date.now() - 10 * 60 * 1000;
-    const pickup_delayed = order.status === 'Ready' && order.order_type === 'Pickup' && order.duetime < Date.now();
-    const no_item = order.items.find(x => x.currentAvailable === 0);
+    const hasAlchol = order.cartItems && order.cartItems.find((x) => x.isAlcohol);
+    const prepare_delayed = order.status === 'preparing' && order.dueTimestamp < Date.now();
+    const delivery_delayed = order.status === 'ready' && order.distributionMethod === 'delivery' && order.dueTimestamp < Date.now();
+    const deliverying_delayed = order.status === 'delivering' && order.distributionMethod === 'delivery' && order.dispatch_time < Date.now() - 10 * 60 * 1000;
+    const pickup_delayed = order.status === 'ready' && order.distributionMethod === 'pickup' && order.dueTimestamp < Date.now();
+    const no_item = order.cartItems.find(x => x.currentAvailable === 0);
 
-    if (type === 'delivery' && order.status === 'Ready') {
-      waiting = order.duetime - current_time;
-    } else if (type === 'delivery' && order.status === 'Delivering') {
+    if (type === 'delivery' && order.status === 'ready') {
+      waiting = order.dueTimestamp - current_time;
+    } else if (type === 'delivery' && order.status === 'delivering') {
       waiting = 10 * 60 * 1000 - current_time + order.dispatch_time;
     } else if (type === 'pickup') {
-      waiting = order.duetime - current_time;
+      waiting = order.dueTimestamp - current_time;
     }
 
     return (
@@ -328,7 +327,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
             }
           />
         </TableCell>
-        <TableCell>#{order.id}</TableCell>
+        <TableCell>#{GetOrderIDLabel(order.id)}</TableCell>
         <TableCell>
           {GetOrderItemCount(order)}
           {hasAlchol && (
@@ -348,7 +347,7 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
         {type === 'delivery' && (
           <TableCell>
             <Typography variant="body2" component="span">
-              {order.delivery_person && order.delivery_person.firstName + ' ' + order.delivery_person.lastName}
+              {order.runnerStaff && order.runnerStaff.firstName + ' ' + order.runnerStaff.lastName}
             </Typography>
           </TableCell>
         )}
@@ -363,9 +362,9 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
           <TableCell>
             <div className="d-inline-flex">
               <Typography variant="body2" component="span">
-                {order.order_type}
+                {GetOrderDistributionLabel(order.distributionMethod)}
               </Typography>
-              {order.order_type === 'Delivery' && (
+              {order.distributionMethod === 'delivery' && (
                 <DirectionsRunIcon sx={{ ml: 1 }} color="disabled" fontSize="small" />
               )}
             </div>
@@ -380,12 +379,12 @@ const OrdersTable: FC<OrdersTableProps> = ({ type, orders, selected, onSelection
           </TableCell>
         }
         <TableCell>
-          <Typography variant="body2" color="text.primary" gutterBottom sx={{ mb: 0 }} noWrap>
+          <Typography variant="body2" color="text.primary" gutterBottom sx={{ mb: 0, pt: 0.5 }} noWrap>
             {order.customer.firstName} {order.customer.lastName}
           </Typography>
-          {order.customer.inVenueLocationId && (
-            <Typography variant="body2" color={'#00000099'} gutterBottom fontSize={10} noWrap>
-              {order.customer.inVenueLocationId}
+          {order.inVenueLocation && (
+            <Typography variant="body2" color={'#00000099'} gutterBottom fontSize={10} noWrap sx={{ mb: 0 }}>
+              {GetOrderInVenueLocation(order)}
             </Typography>
           )}
         </TableCell>

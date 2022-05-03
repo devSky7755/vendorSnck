@@ -9,7 +9,7 @@ import {
 
 import CloseIcon from '@mui/icons-material/Close';
 import { OrderFilter } from './order_filter';
-import { OrderStatus, OrderType } from 'src/models/order';
+import { GetOrderDistributionLabel, GetOrderStatusLabel, OrderStatus, OrderType } from 'src/models/order';
 
 interface SidebarFilterProps {
     type: string;
@@ -18,8 +18,8 @@ interface SidebarFilterProps {
     onHide: Function;
 }
 
-const OrderStatuses: OrderStatus[] = ['New', 'Preparing', 'Ready', 'Delivering', 'Waitlist', 'Completed', 'Cancelled'];
-const OrderTypes: OrderType[] = ['Delivery', 'Pickup'];
+const OrderStatuses: OrderStatus[] = ['new', 'preparing', 'ready', 'delivering', 'waitlist', 'completed', 'cancelled'];
+const OrderTypes: OrderType[] = ['delivery', 'pickup'];
 
 const SidebarFilter: FC<SidebarFilterProps> = ({ type, onHide, filter, onChangeFilter }) => {
     const [editing, setEditing] = useState(filter);
@@ -86,7 +86,7 @@ const SidebarFilter: FC<SidebarFilterProps> = ({ type, onHide, filter, onChangeF
                                         handleOrderType(type, e.target.checked);
                                     }}
                                 />
-                                {type}
+                                {GetOrderDistributionLabel(type)}
                             </Box>
                         )
                     })
@@ -103,7 +103,7 @@ const SidebarFilter: FC<SidebarFilterProps> = ({ type, onHide, filter, onChangeF
                                         handleOrderStatus(status, e.target.checked);
                                     }}
                                 />
-                                {status}
+                                {GetOrderStatusLabel(status)}
                             </Box>
                         )
                     })

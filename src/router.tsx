@@ -222,11 +222,27 @@ const vendorRoutes: RouteObject[] = [
     children: [
       {
         path: '',
-        element: <Navigate to="/orders/items/new" replace />
+        element: <Navigate to="/orders/new" replace />
       },
       {
-        path: 'items/:type',
-        element: <OrdersPage />
+        path: 'new',
+        element: <OrdersPage type='new' />
+      },
+      {
+        path: 'preparing',
+        element: <OrdersPage type='preparing' />
+      },
+      {
+        path: 'pickup',
+        element: <OrdersPage type='pickup' />
+      },
+      {
+        path: 'delivery',
+        element: <OrdersPage type='delivery' />
+      },
+      {
+        path: 'all',
+        element: <OrdersPage type='all' />
       }
     ]
   }
@@ -291,6 +307,16 @@ const adminRoutes: RouteObject[] = [
       {
         path: '',
         element: <FAQ />
+      }
+    ]
+  },
+  {
+    path: 'orders',
+    element: <SidebarLayout />,
+    children: [
+      {
+        path: '',
+        element: <OrdersPage type='all' />
       }
     ]
   },

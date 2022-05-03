@@ -98,19 +98,19 @@ const OrderIssue = ({ setOpen, order, open }) => {
   const [actionBoard, setActionBoard] = useState(false);
   // const order = temp_orders.find((order: Order) => order.id === parseInt(id));
   const getActions = () => {
-    if (order.status === 'New')
+    if (order.status === 'new')
       return {
         type: 'New',
         actions: ACTIONS
       };
-    if (order.status === 'Preparing')
+    if (order.status === 'preparing')
       return {
         type: 'Preparing',
         actions: ACTIONS
       };
     if (
-      (order.status === 'Ready' && order.order_type === 'Delivery') ||
-      order.status === 'Delivering'
+      (order.status === 'ready' && order.order_type === 'delivery') ||
+      order.status === 'delivering'
     ) {
       return {
         type: 'Delivering',
@@ -118,8 +118,8 @@ const OrderIssue = ({ setOpen, order, open }) => {
       };
     }
     if (
-      (order.status === 'Ready' && order.order_type === 'Pickup') ||
-      order.status === 'Waitlist'
+      (order.status === 'ready' && order.order_type === 'pickup') ||
+      order.status === 'waitlist'
     ) {
       return {
         type: 'Pickup',

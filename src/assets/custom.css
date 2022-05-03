@@ -165,3 +165,8 @@ tr.group-header-row {
 #__react-alert__ span {
     text-transform: none;
 }
+
+td a {
+    text-decoration: none;
+    color: inherit;
+}
