@@ -21,6 +21,42 @@ export function getMenuItems(token: string): Promise<MenuItem[]> {
     })
 }
 
+export function patchBulkMenuItems(token, patch): Promise<MenuItem[]> {
+    return fetch(BASE_URL + MenuItemsEndpoint, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(patch)
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return res.data as MenuItem[];
+        } else {
+            return [];
+        }
+    }).catch(ex => {
+        return [];
+    })
+}
+
+export function deleteBulkMenuItems(token: string, data): Promise<boolean> {
+    return fetch(BASE_URL + MenuItemsEndpoint + 'delete', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    }).then(res => res.json()).then(res => {
+        return res.success;
+    }).catch(ex => {
+        return false;
+    })
+}
+
 export function patchMenuItem(token: string, menu: MenuItem, patch): Promise<MenuItem> {
     return fetch(BASE_URL + VendorStandEndpoint + menu.vendorStandId + '/menuItems/' + menu.id, {
         method: 'PATCH',

@@ -19,6 +19,12 @@ export interface MenuItem {
   menuItemCategoryId?: any;
 }
 
+export interface BulkPatchMenuItem {
+  mostPopular?: boolean;
+  available?: boolean;
+  containsAlcohol?: boolean;
+}
+
 export interface MenuItemV1 {
   id: number;
   name: string;

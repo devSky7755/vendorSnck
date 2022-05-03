@@ -6,7 +6,7 @@ import MenuItemsTable from './MenuItemsTable';
 import EditMenuItemDialog from './EditMenuItem';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
-import { patchMenuItem, postMenuItem, deleteMenuItem, getMenuItems } from 'src/Api/apiClient';
+import { patchMenuItem, postMenuItem, deleteMenuItem, getMenuItems, patchBulkMenuItems, deleteBulkMenuItems } from 'src/Api/apiClient';
 import { getVendorStand } from 'src/Api/apiClient';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 import { useParams } from 'react-router';
@@ -61,6 +61,7 @@ function MenuItemsPage(props: MenuItemsPageProps) {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [deleting, setDeleting] = useState<MenuItem[]>([]);
   const [vendor, setVendor] = useState(null);
   const [notFound, setNotFound] = useState(false);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -98,7 +99,8 @@ function MenuItemsPage(props: MenuItemsPageProps) {
       handleSave(data);
     } else if (action === 'Delete') {
       setEditOpen(false);
-      setEditing(data);
+      setEditing(null);
+      setDeleting([data]);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
       setEditing({ available: true });
@@ -108,11 +110,30 @@ function MenuItemsPage(props: MenuItemsPageProps) {
       setEditing(null);
     } else if (action === 'Remove') {
       setDeleteOpen(false);
-      handleDelete(editing);
+      handleDelete(deleting);
       setEditing(null);
+    } else if (action === 'Bulk Delete') {
+      setDeleting(selectedMenuItems);
+      setDeleteOpen(true);
+    } else if (action === 'Bulk Update') {
+      handleBulkPatch(selectedMenuItems, data);
     }
   }
 
+  const handleBulkPatch = (menus: MenuItem[], patch: any) => {
+    let data = {
+      ids: menus.map(x => x.id),
+      data: patch
+    }
+    patchBulkMenuItems(token, data).then(res => {
+      let new_items = [...menuItems];
+      res.forEach(item => {
+        const index = new_items.findIndex(x => x.id === item.id);
+        new_items[index] = item;
+      })
+      setMenuItems(new_items);
+    });
+  }
 
   const handleSave = (menuItem) => {
     let patch: MenuItem = { ...menuItem };
@@ -147,13 +168,26 @@ function MenuItemsPage(props: MenuItemsPageProps) {
     }
   }
 
-  const handleDelete = (menuItem) => {
-    deleteMenuItem(token, menuItem).then(success => {
-      if (success) {
-        let filtered = menuItems.filter(x => x.id !== menuItem.id);
-        setMenuItems(filtered);
+  const handleDelete = (deleteItems: MenuItem[]) => {
+    if (!deleteItems) return;
+    if (deleteItems.length === 1) {
+      deleteMenuItem(token, deleteItems[0]).then(success => {
+        if (success) {
+          let filtered = menuItems.filter(x => x.id !== deleteItems[0].id);
+          setMenuItems(filtered);
+        }
+      })
+    } else {
+      let data = {
+        ids: deleteItems.map(v => v.id)
       }
-    })
+      deleteBulkMenuItems(token, data).then(success => {
+        if (success) {
+          let filtered = menuItems.filter(x => deleteItems.findIndex(y => y.id === x.id) === -1);
+          setMenuItems(filtered);
+        }
+      })
+    }
   }
 
   const handleSelectionChanged = (selectedIDs) => {
@@ -195,14 +229,14 @@ function MenuItemsPage(props: MenuItemsPageProps) {
         />
       }
       {
-        deleteOpen && editing &&
+        deleteOpen && deleting && deleting.length > 0 &&
         <ConfirmDialog
           success='Remove'
           successLabel='DELETE'
           cancelLabel='RETURN'
           cancel='Cancel Remove'
-          header='Are you sure you want to delete this menu item?'
-          text='It cannot be recovered'
+          header={deleting.length === 1 ? 'Are you sure you want to delete this menu item?' : 'Are you sure you want to delete these menu items?'}
+          text={deleting.length === 1 ? 'It cannot be recovered' : 'They cannot be recovered'}
           open={deleteOpen}
           onAction={onAction}
         />
