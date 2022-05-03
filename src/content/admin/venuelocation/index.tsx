@@ -89,7 +89,7 @@ function VenueLocationsPage(props: VenueLocationsPageProps) {
       setEditing(data);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      setEditing({ active: false, pickupEnabled: false, deliveryEnabled: false });
+      setEditing({ active: true, pickupEnabled: true, deliveryEnabled: true });
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);

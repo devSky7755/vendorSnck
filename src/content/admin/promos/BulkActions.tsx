@@ -1,7 +1,6 @@
 import { Box, Button, MenuItem } from '@mui/material';
 import { Promo } from 'src/models/promo';
 import { useState } from 'react';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { ACTIONS, StyledMenu } from 'src/components/BulkAction';
 
 interface BulkActionsProps {

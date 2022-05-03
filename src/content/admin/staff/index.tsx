@@ -111,9 +111,9 @@ function StaffsPage(props: StaffsPageProps) {
       setDeleteOpen(true);
     } else if (action === 'Add New') {
       if (vendorId) {
-        setEditing({ active: false, vendorStandId: vendorId });
+        setEditing({ active: true, vendorStandId: vendorId });
       } else {
-        setEditing({ active: false });
+        setEditing({ active: true });
       }
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {

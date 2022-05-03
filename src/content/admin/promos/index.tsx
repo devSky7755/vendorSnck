@@ -82,7 +82,7 @@ function PromosPage(props: PromosPageProps) {
       setEditing(data);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      setEditing({ type: 'percentage' });
+      setEditing({ type: 'percentage', multipleUse: true });
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);

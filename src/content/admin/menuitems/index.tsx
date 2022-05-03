@@ -101,7 +101,7 @@ function MenuItemsPage(props: MenuItemsPageProps) {
       setEditing(data);
       setDeleteOpen(true);
     } else if (action === 'Add New') {
-      setEditing({ available: false });
+      setEditing({ available: true });
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
       setDeleteOpen(false);
