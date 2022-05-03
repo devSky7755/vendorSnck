@@ -71,9 +71,14 @@ function StaffsPage(props: StaffsPageProps) {
       }).catch(ex => {
         setNotFound(true);
       })
+    } else {
+      setVendor(null);
     }
 
     getAllStaffs(token).then(res => {
+      res.forEach(x => {
+        x.vendorStandId = x.vendorStand && x.vendorStand.id;
+      })
       if (vendorId) {
         setStaffs(res.filter(x => x.vendorStandId === vendorId));
       } else {
