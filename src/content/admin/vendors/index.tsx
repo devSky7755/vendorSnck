@@ -6,13 +6,22 @@ import VendorsTable from './VendorsTable';
 import EditVendorDialog from './EditVendor';
 import { connect } from 'react-redux';
 import BulkActions from './BulkActions';
-import { patchVendorStand, postVendorStand, deleteVendorStand, getVendorStands, getVenue } from 'src/Api/apiClient';
+import {
+  patchVendorStand,
+  postVendorStand,
+  deleteVendorStand,
+  getVendorStands,
+  getVenue,
+  patchVendorStands,
+  deleteVendorStands
+} from 'src/Api/apiClient';
 import { Venue } from 'src/models/venue';
 import { useNavigate } from 'react-router';
 import ConfirmDialog from 'src/components/Dialog/ConfirmDialog';
 import { useParams } from 'react-router';
 import PageTitleWrapper from 'src/components/PageTitleWrapper';
 import PageHeader from './PageHeader';
+import { ACTIONS } from 'src/components/BulkAction';
 
 const TableWrapper = styled(Box)(
   ({ theme }) => `
@@ -50,6 +59,7 @@ function VendorsPage(props: VendorsPageProps) {
   const { token, venues } = props;
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteBulkOpen, setDeleteBulkOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [venue, setVenue] = useState(null);
@@ -61,15 +71,17 @@ function VendorsPage(props: VendorsPageProps) {
   useEffect(() => {
     loadVendors();
     if (venueId) {
-      getVenue(venueId).then(res => {
-        if (res) {
-          setVenue(res);
-        } else {
+      getVenue(venueId)
+        .then((res) => {
+          if (res) {
+            setVenue(res);
+          } else {
+            setVenue(null);
+          }
+        })
+        .catch((ex) => {
           setVenue(null);
-        }
-      }).catch(ex => {
-        setVenue(null);
-      })
+        });
     } else {
       setVenue(null);
     }
@@ -77,16 +89,16 @@ function VendorsPage(props: VendorsPageProps) {
 
   const loadVendors = () => {
     setVendors([]);
-    getVendorStands(token).then(res => {
+    getVendorStands(token).then((res) => {
       if (res) {
         if (venueId) {
-          setVendors(res.filter(x => x.venueId === venueId));
+          setVendors(res.filter((x) => x.venueId === venueId));
         } else {
           setVendors(res);
         }
       }
-    })
-  }
+    });
+  };
 
   const onAction = (action, data) => {
     if (action === 'Edit') {
@@ -104,9 +116,18 @@ function VendorsPage(props: VendorsPageProps) {
       setDeleteOpen(true);
     } else if (action === 'Add New') {
       if (venueId) {
-        setEditing({ available: true, deliveryAvailable: true, pickupAvailable: true, venueId: venueId });
+        setEditing({
+          available: true,
+          deliveryAvailable: true,
+          pickupAvailable: true,
+          venueId: venueId
+        });
       } else {
-        setEditing({ available: true, deliveryAvailable: true, pickupAvailable: true });
+        setEditing({
+          available: true,
+          deliveryAvailable: true,
+          pickupAvailable: true
+        });
       }
       setEditOpen(true);
     } else if (action === 'Cancel Remove') {
@@ -120,9 +141,125 @@ function VendorsPage(props: VendorsPageProps) {
       navigate('/staff/' + data.id);
     } else if (action === 'Manage Menu') {
       navigate('/menuitems/' + data.id);
+    } else if (action === 'Bulk Action') {
+      handleBulkAction(data);
+    } else if (action === 'Bulk Remove') {
+      setDeleteBulkOpen(false);
+      handleBulkRemove();
+    } else if (action === 'Cancel Bulk Remove') {
+      setDeleteBulkOpen(false);
     }
-  }
+  };
 
+  const handleBulkAction = (action) => {
+    const ids = selectedVendors.map((vendor) => vendor.id);
+    switch (action) {
+      case ACTIONS.SET_AVAILABLE.action:
+        patchVendorStands(token, ids, {
+          available: true
+        }).then((updatedVendors) => {
+          let newVendors = [...vendors].map((vendor) => {
+            const findVendor = updatedVendors.find(
+              (uVendor) => uVendor.id === vendor.id
+            );
+            return findVendor ? findVendor : vendor;
+          });
+          setVendors(newVendors);
+          setSelectedVendors([]);
+        });
+        break;
+      case ACTIONS.SET_UNAVAILABLE.action:
+        patchVendorStands(token, ids, {
+          available: false
+        }).then((updatedVendors) => {
+          let newVendors = [...vendors].map((vendor) => {
+            const findVendor = updatedVendors.find(
+              (uVendor) => uVendor.id === vendor.id
+            );
+            return findVendor ? findVendor : vendor;
+          });
+          setVendors(newVendors);
+          setSelectedVendors([]);
+        });
+        break;
+      case ACTIONS.ENABLE_DELIVERY.action:
+        patchVendorStands(token, ids, {
+          deliveryAvailable: true
+        }).then((updatedVendors) => {
+          let newVendors = [...vendors].map((vendor) => {
+            const findVendor = updatedVendors.find(
+              (uVendor) => uVendor.id === vendor.id
+            );
+            return findVendor ? findVendor : vendor;
+          });
+          setVendors(newVendors);
+          setSelectedVendors([]);
+        });
+        break;
+      case ACTIONS.DISABLE_DELIVERY.action:
+        patchVendorStands(token, ids, {
+          deliveryAvailable: false
+        }).then((updatedVendors) => {
+          let newVendors = [...vendors].map((vendor) => {
+            const findVendor = updatedVendors.find(
+              (uVendor) => uVendor.id === vendor.id
+            );
+            return findVendor ? findVendor : vendor;
+          });
+          setVendors(newVendors);
+          setSelectedVendors([]);
+        });
+        break;
+      case ACTIONS.ENABLE_PICKUP.action:
+        patchVendorStands(token, ids, {
+          pickupAvailable: true
+        }).then((updatedVendors) => {
+          let newVendors = [...vendors].map((vendor) => {
+            const findVendor = updatedVendors.find(
+              (uVendor) => uVendor.id === vendor.id
+            );
+            return findVendor ? findVendor : vendor;
+          });
+          setVendors(newVendors);
+          setSelectedVendors([]);
+        });
+        break;
+      case ACTIONS.DISABLE_PICKUP.action:
+        patchVendorStands(token, ids, {
+          pickupAvailable: false
+        }).then((updatedVendors) => {
+          let newVendors = [...vendors].map((vendor) => {
+            const findVendor = updatedVendors.find(
+              (uVendor) => uVendor.id === vendor.id
+            );
+            return findVendor ? findVendor : vendor;
+          });
+          setVendors(newVendors);
+          setSelectedVendors([]);
+        });
+        break;
+      case ACTIONS.DELETE_VENDOR_STANDS.action:
+        setDeleteBulkOpen(true);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleBulkRemove = () => {
+    const ids = selectedVendors.map((vendor) => vendor.id);
+    deleteVendorStands(token, ids).then((res) => {
+      if (!res) return;
+      let newVendors = [...vendors].filter((vendor) => {
+        const findVendor = selectedVendors.find(
+          (sVendor) => sVendor.id === vendor.id
+        );
+        return findVendor ? false : true;
+      });
+      setVendors(newVendors);
+      setSelectedVendors([]);
+    });
+  };
 
   const handleSave = (vendor) => {
     let patch: Vendor = { ...vendor };
@@ -137,62 +274,65 @@ function VendorsPage(props: VendorsPageProps) {
     Object.keys(patch).forEach((k) => patch[k] == null && delete patch[k]);
 
     if (vendor.id) {
-      patchVendorStand(token, vendor, patch).then(res => {
-        let newVendors = [...vendors];
-        let index = newVendors.findIndex(x => x.id === vendor.id);
-        if (index >= 0) {
-          newVendors[index] = res
-          setVendors(newVendors);
-        }
-      }).catch(ex => {
-        console.log(ex.message);
-      })
+      patchVendorStand(token, vendor, patch)
+        .then((res) => {
+          let newVendors = [...vendors];
+          let index = newVendors.findIndex((x) => x.id === vendor.id);
+          if (index >= 0) {
+            newVendors[index] = res;
+            setVendors(newVendors);
+          }
+        })
+        .catch((ex) => {
+          console.log(ex.message);
+        });
     } else {
-      postVendorStand(token, patch).then(res => {
-        if (res) {
-          setVendors(prev => [...prev, res]);
-        }
-      }).catch(ex => {
-        console.log(ex.message);
-      })
+      postVendorStand(token, patch)
+        .then((res) => {
+          if (res) {
+            setVendors((prev) => [...prev, res]);
+          }
+        })
+        .catch((ex) => {
+          console.log(ex.message);
+        });
     }
-  }
+  };
 
   const handleDelete = (vendor) => {
-    deleteVendorStand(token, vendor.id).then(success => {
+    deleteVendorStand(token, vendor.id).then((success) => {
       if (success) {
-        let filtered = vendors.filter(x => x.id !== vendor.id);
+        let filtered = vendors.filter((x) => x.id !== vendor.id);
         setVendors(filtered);
       }
-    })
-  }
+    });
+  };
 
   const handleSelectionChanged = (selectedIDs) => {
-    const selected = vendors.filter(x => selectedIDs.includes(x.id));
+    const selected = vendors.filter((x) => selectedIDs.includes(x.id));
     setSelectedVendors(selected);
-  }
+  };
 
   const handleVendorPatch = (vendor, key, value) => {
     let patch = {};
     patch[key] = value;
 
-    patchVendorStand(token, vendor, patch).then(res => {
+    patchVendorStand(token, vendor, patch).then((res) => {
       let newVendors = [...vendors];
-      let index = newVendors.findIndex(x => x.id === vendor.id);
+      let index = newVendors.findIndex((x) => x.id === vendor.id);
       if (index >= 0) {
-        newVendors[index] = res
+        newVendors[index] = res;
         setVendors(newVendors);
       }
     });
-  }
+  };
 
   return (
     <>
       <Helmet>
         <title>Vendors</title>
       </Helmet>
-      {
-        editOpen && editing &&
+      {editOpen && editing && (
         <EditVendorDialog
           venueId={venueId}
           venues={venues}
@@ -200,31 +340,47 @@ function VendorsPage(props: VendorsPageProps) {
           open={editOpen}
           onAction={onAction}
         />
-      }
-      {
-        deleteOpen && editing &&
+      )}
+      {deleteOpen && editing && (
         <ConfirmDialog
-          success='Remove'
-          successLabel='DELETE'
-          cancelLabel='RETURN'
-          cancel='Cancel Remove'
-          header='Are you sure you want to delete this vendor?'
-          text='It cannot be recovered'
+          success="Remove"
+          successLabel="DELETE"
+          cancelLabel="RETURN"
+          cancel="Cancel Remove"
+          header="Are you sure you want to delete this vendor?"
+          text="It cannot be recovered"
           open={deleteOpen}
           onAction={onAction}
         />
-      }
-      {
-        venue &&
+      )}
+      {deleteBulkOpen && (
+        <ConfirmDialog
+          success="Bulk Remove"
+          successLabel="DELETE"
+          cancelLabel="RETURN"
+          cancel="Cancel Bulk Remove"
+          header="Are you sure you want to delete these vendors?"
+          text="Deleted Vendors cannot be recovered"
+          open={deleteBulkOpen}
+          onAction={onAction}
+        />
+      )}
+      {venue && (
         <PageTitleWrapper>
           <PageHeader venue={venue} />
         </PageTitleWrapper>
-      }
+      )}
       <Box style={{ height: venue ? 'calc(100% - 56px)' : '100%' }}>
         <ContainerWrapper>
           <TableWrapper>
-            <VendorsTable venue={venue} vendors={vendors} venues={venues}
-              onAction={onAction} onSelectionChanged={handleSelectionChanged} onVendorPatch={handleVendorPatch} />
+            <VendorsTable
+              venue={venue}
+              vendors={vendors}
+              venues={venues}
+              onAction={onAction}
+              onSelectionChanged={handleSelectionChanged}
+              onVendorPatch={handleVendorPatch}
+            />
           </TableWrapper>
         </ContainerWrapper>
         <FooterWrapper>
@@ -239,6 +395,6 @@ function reduxState(state) {
   return {
     token: state.auth && state.auth.token,
     venues: state.venues && state.venues.venues
-  }
+  };
 }
 export default connect(reduxState)(VendorsPage);

@@ -2,7 +2,9 @@ import { ChangeEvent, FC, useEffect, useState } from 'react';
 import {
   Card,
   IconButton,
-  Table, Menu, MenuItem,
+  Table,
+  Menu,
+  MenuItem,
   TableBody,
   TableCell,
   TableHead,
@@ -36,18 +38,30 @@ const URLTableCell = styled(TableCell)(
 `
 );
 
-const VendorsTable: FC<VendorsTableProps> = ({ vendors, venue, venues, onAction, onSelectionChanged, onVendorPatch }) => {
+const VendorsTable: FC<VendorsTableProps> = ({
+  vendors,
+  venue,
+  venues,
+  onAction,
+  onSelectionChanged,
+  onVendorPatch
+}) => {
   const [actionID, setActionID] = useState<string>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedVendors, setSelectedVendors] = useState<string[]>(
-    []
-  );
+  const [selectedVendors, setSelectedVendors] = useState<string[]>([]);
+
+  useEffect(() => {
+    setSelectedVendors([]);
+  }, [vendors]);
 
   useEffect(() => {
     onSelectionChanged(selectedVendors);
-  }, [selectedVendors])
+  }, [selectedVendors]);
 
-  const handleClickAction = (event: React.MouseEvent<HTMLButtonElement>, vendorId: string) => {
+  const handleClickAction = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    vendorId: string
+  ) => {
     setActionID(vendorId);
     setAnchorEl(event.currentTarget);
   };
@@ -62,10 +76,7 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venue, venues, onAction,
     id: string
   ): void => {
     if (!selectedVendors.includes(id)) {
-      setSelectedVendors((prevSelected) => [
-        ...prevSelected,
-        id
-      ]);
+      setSelectedVendors((prevSelected) => [...prevSelected, id]);
     } else {
       setSelectedVendors((prevSelected) =>
         prevSelected.filter((x) => x !== id)
@@ -75,27 +86,23 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venue, venues, onAction,
 
   const handleVendorPatch = (vendor, key, value) => {
     onVendorPatch(vendor, key, value);
-  }
+  };
 
   return (
     <Card>
       <TableContainer>
-        <Table size='small'>
+        <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox" style={{ height: 52 }}>
-              </TableCell>
+              <TableCell padding="checkbox" style={{ height: 52 }}></TableCell>
               <TableCell>Name</TableCell>
-              {
-                !venue &&
-                <TableCell>Venue</TableCell>
-              }
+              {!venue && <TableCell>Venue</TableCell>}
               <TableCell>Cover Image</TableCell>
               <TableCell>Active</TableCell>
               <TableCell>Delivery</TableCell>
               <TableCell>Pickup</TableCell>
-              <TableCell align='center'>Staff</TableCell>
-              <TableCell align='center'>Menu Items</TableCell>
+              <TableCell align="center">Staff</TableCell>
+              <TableCell align="center">Menu Items</TableCell>
               <TableCell align="right"></TableCell>
             </TableRow>
           </TableHead>
@@ -103,15 +110,12 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venue, venues, onAction,
             {vendors.map((vendor, index) => {
               const isSelected = selectedVendors.includes(vendor.id);
               const imageName = vendor.coverImageUrl?.replace(/^.*[\\\/]/, '');
-              const vendor_venue = venues.find(x => x.id === vendor.venueId);
+              const vendor_venue = venues.find((x) => x.id === vendor.venueId);
               return (
-                <TableRow
-                  hover
-                  key={vendor.id}
-                >
+                <TableRow hover key={vendor.id}>
                   <TableCell padding="checkbox" style={{ height: 52 }}>
                     <Checkbox
-                      size='small'
+                      size="small"
                       color="primary"
                       checked={isSelected}
                       onChange={(event: ChangeEvent<HTMLInputElement>) =>
@@ -119,44 +123,67 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venue, venues, onAction,
                       }
                     />
                   </TableCell>
-                  <TableCell>
-                    {vendor.name}
-                  </TableCell>
-                  {
-                    !venue &&
-                    <TableCell>
-                      {vendor_venue && vendor_venue.name}
-                    </TableCell>
-                  }
+                  <TableCell>{vendor.name}</TableCell>
+                  {!venue && (
+                    <TableCell>{vendor_venue && vendor_venue.name}</TableCell>
+                  )}
                   <URLTableCell style={{ maxWidth: 250 }}>
                     {imageName}
                   </URLTableCell>
                   <TableCell>
-                    <Switch checked={vendor.available || false} onChange={e => {
-                      handleVendorPatch(vendor, 'available', e.target.checked);
-                    }} />
+                    <Switch
+                      checked={vendor.available || false}
+                      onChange={(e) => {
+                        handleVendorPatch(
+                          vendor,
+                          'available',
+                          e.target.checked
+                        );
+                      }}
+                    />
                   </TableCell>
                   <TableCell>
-                    <Switch checked={vendor.deliveryAvailable || false} onChange={e => {
-                      handleVendorPatch(vendor, 'deliveryAvailable', e.target.checked);
-                    }} />
+                    <Switch
+                      checked={vendor.deliveryAvailable || false}
+                      onChange={(e) => {
+                        handleVendorPatch(
+                          vendor,
+                          'deliveryAvailable',
+                          e.target.checked
+                        );
+                      }}
+                    />
                   </TableCell>
                   <TableCell>
-                    <Switch checked={vendor.pickupAvailable || false} onChange={e => {
-                      handleVendorPatch(vendor, 'pickupAvailable', e.target.checked);
-                    }} />
+                    <Switch
+                      checked={vendor.pickupAvailable || false}
+                      onChange={(e) => {
+                        handleVendorPatch(
+                          vendor,
+                          'pickupAvailable',
+                          e.target.checked
+                        );
+                      }}
+                    />
                   </TableCell>
-                  <TableCell align='center'>
-                    <Link to={`/staff/${vendor.id}`}>{vendor.staffsCount || 0}</Link>
+                  <TableCell align="center">
+                    <Link to={`/staff/${vendor.id}`}>
+                      {vendor.staffsCount || 0}
+                    </Link>
                   </TableCell>
-                  <TableCell align='center'>
-                    <Link to={`/menuitems/${vendor.id}`}>{vendor.menuItemsCount || 0}</Link>
+                  <TableCell align="center">
+                    <Link to={`/menuitems/${vendor.id}`}>
+                      {vendor.menuItemsCount || 0}
+                    </Link>
                   </TableCell>
                   <TableCell align="right" padding="checkbox">
-                    <IconButton size='small' onClick={(event) => {
-                      handleClickAction(event, vendor.id);
-                    }}>
-                      <MoreVertTwoToneIcon fontSize='small' />
+                    <IconButton
+                      size="small"
+                      onClick={(event) => {
+                        handleClickAction(event, vendor.id);
+                      }}
+                    >
+                      <MoreVertTwoToneIcon fontSize="small" />
                     </IconButton>
                     <Menu
                       anchorEl={anchorEl}
@@ -165,13 +192,31 @@ const VendorsTable: FC<VendorsTableProps> = ({ vendors, venue, venues, onAction,
                         handleCloseAction('None', vendor);
                       }}
                       MenuListProps={{
-                        'aria-labelledby': 'basic-button',
+                        'aria-labelledby': 'basic-button'
                       }}
                     >
-                      <MenuItem onClick={() => handleCloseAction('Edit', vendor)}>Edit</MenuItem>
-                      <MenuItem onClick={() => handleCloseAction('Delete', vendor)}>Delete</MenuItem>
-                      <MenuItem onClick={() => handleCloseAction('Manage Staff', vendor)}>Manage Staff</MenuItem>
-                      <MenuItem onClick={() => handleCloseAction('Manage Menu', vendor)}>Manage Menu Items</MenuItem>
+                      <MenuItem
+                        onClick={() => handleCloseAction('Edit', vendor)}
+                      >
+                        Edit
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => handleCloseAction('Delete', vendor)}
+                      >
+                        Delete
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() =>
+                          handleCloseAction('Manage Staff', vendor)
+                        }
+                      >
+                        Manage Staff
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => handleCloseAction('Manage Menu', vendor)}
+                      >
+                        Manage Menu Items
+                      </MenuItem>
                     </Menu>
                   </TableCell>
                 </TableRow>

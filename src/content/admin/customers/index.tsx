@@ -49,6 +49,7 @@ function CustomersPage(props: CustomersPageProps) {
   const { token } = props;
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteBulkOpen, setDeleteBulkOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [customers, setCustomers] = useState<Customer[]>([]);
 
@@ -89,6 +90,11 @@ function CustomersPage(props: CustomersPageProps) {
       setEditing(null);
     } else if (action === 'Bulk Action') {
       handleBulkAction(data);
+    } else if (action === 'Bulk Remove') {
+      setDeleteBulkOpen(false);
+      handleBulkRemove();
+    } else if (action === 'Cancel Bulk Remove') {
+      setDeleteBulkOpen(false);
     }
   };
 
@@ -152,21 +158,26 @@ function CustomersPage(props: CustomersPageProps) {
         });
         break;
       case ACTIONS.DELETE_CUSTOMERS.action:
-        deleteCustomers(token, ids).then((res) => {
-          if (!res) return;
-          let newCustomers = [...customers].filter((customer) => {
-            const findCustomer = selectedCustomers.find(
-              (sCustomer) => sCustomer.id === customer.id
-            );
-            return findCustomer ? false : true;
-          });
-          setCustomers(newCustomers);
-          setSelectedCustomers([]);
-        });
+        setDeleteBulkOpen(true);
         break;
       default:
         break;
     }
+  };
+
+  const handleBulkRemove = () => {
+    const ids = selectedCustomers.map((customer) => customer.id);
+    deleteCustomers(token, ids).then((res) => {
+      if (!res) return;
+      let newCustomers = [...customers].filter((customer) => {
+        const findCustomer = selectedCustomers.find(
+          (sCustomer) => sCustomer.id === customer.id
+        );
+        return findCustomer ? false : true;
+      });
+      setCustomers(newCustomers);
+      setSelectedCustomers([]);
+    });
   };
 
   const handleSave = (customer) => {
@@ -253,6 +264,18 @@ function CustomersPage(props: CustomersPageProps) {
           header="Are you sure you want to delete this customer?"
           text="It cannot be recovered"
           open={deleteOpen}
+          onAction={onAction}
+        />
+      )}
+      {deleteBulkOpen && (
+        <ConfirmDialog
+          success="Bulk Remove"
+          successLabel="DELETE"
+          cancelLabel="RETURN"
+          cancel="Cancel Bulk Remove"
+          header="Are you sure you want to delete these customers?"
+          text="Deleted Customers cannot be recovered"
+          open={deleteBulkOpen}
           onAction={onAction}
         />
       )}

@@ -50,6 +50,7 @@ function PromosPage(props: PromosPageProps) {
   const { token } = props;
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteBulkOpen, setDeleteBulkOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [promos, setPromos] = useState<Promo[]>([]);
 
@@ -93,6 +94,11 @@ function PromosPage(props: PromosPageProps) {
       setEditing(null);
     } else if (action === 'Bulk Action') {
       handleBulkAction(data);
+    } else if (action === 'Bulk Remove') {
+      setDeleteBulkOpen(false);
+      handleBulkRemove();
+    } else if (action === 'Cancel Bulk Remove') {
+      setDeleteBulkOpen(false);
     }
   };
 
@@ -128,21 +134,26 @@ function PromosPage(props: PromosPageProps) {
         });
         break;
       case ACTIONS.DELETE_PROMOS.action:
-        deletePromos(token, ids).then((res) => {
-          if (!res) return;
-          let newPromos = [...promos].filter((promo) => {
-            const findPromo = selectedPromos.find(
-              (sPromo) => sPromo.id === promo.id
-            );
-            return findPromo ? false : true;
-          });
-          setPromos(newPromos);
-          setSelectedPromos([]);
-        });
+        setDeleteBulkOpen(true);
         break;
       default:
         break;
     }
+  };
+
+  const handleBulkRemove = () => {
+    const ids = selectedPromos.map((promo) => promo.id);
+    deletePromos(token, ids).then((res) => {
+      if (!res) return;
+      let newPromos = [...promos].filter((promo) => {
+        const findPromo = selectedPromos.find(
+          (sPromo) => sPromo.id === promo.id
+        );
+        return findPromo ? false : true;
+      });
+      setPromos(newPromos);
+      setSelectedPromos([]);
+    });
   };
 
   const handleSave = (promo) => {
@@ -227,6 +238,18 @@ function PromosPage(props: PromosPageProps) {
           header="Are you sure you want to delete this promo?"
           text="It cannot be recovered"
           open={deleteOpen}
+          onAction={onAction}
+        />
+      )}
+      {deleteBulkOpen && (
+        <ConfirmDialog
+          success="Bulk Remove"
+          successLabel="DELETE"
+          cancelLabel="RETURN"
+          cancel="Cancel Bulk Remove"
+          header="Are you sure you want to delete these promos?"
+          text="Deleted Promos cannot be recovered"
+          open={deleteBulkOpen}
           onAction={onAction}
         />
       )}

@@ -22,3 +22,9 @@ export interface VendorStand {
 
     venue?: Venue;
 }
+
+export interface BulkPatchVendorStand {
+    available?: boolean;
+    deliveryAvailable?: boolean;
+    pickupAvailable?: boolean;
+}

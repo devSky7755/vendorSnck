@@ -39,7 +39,7 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
           // onClick={() => {
           //   props.onAction('Bulk Action', selected);
           // }}
-          aria-controls={open ? 'demo-customized-menu' : undefined}
+          aria-controls={open ? 'bulk-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
           disableElevation

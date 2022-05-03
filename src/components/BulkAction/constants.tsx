@@ -30,5 +30,33 @@ export const ACTIONS = {
   DELETE_CUSTOMERS: {
     label: 'Delete Customers',
     action: 'delete-customers'
+  },
+  SET_AVAILABLE: {
+    label: 'Set Available',
+    action: 'set-available'
+  },
+  SET_UNAVAILABLE: {
+    label: 'Set Unavailable',
+    action: 'set-unavailable'
+  },
+  ENABLE_DELIVERY: {
+    label: 'Enable Delivery',
+    action: 'enable-delivery'
+  },
+  DISABLE_DELIVERY: {
+    label: 'Disable Delivery',
+    action: 'disable-delivery'
+  },
+  ENABLE_PICKUP: {
+    label: 'Enable Pickup',
+    action: 'enable-pickup'
+  },
+  DISABLE_PICKUP: {
+    label: 'Disable Pickup',
+    action: 'disable-pickup'
+  },
+  DELETE_VENDOR_STANDS: {
+    label: 'Delete Vendor Stands',
+    action: 'delete-vendor-stands'
   }
 };

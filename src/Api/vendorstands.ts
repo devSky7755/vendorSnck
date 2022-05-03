@@ -1,5 +1,5 @@
 import { BASE_URL } from "src/models/constant";
-import { VendorStand } from "src/models/vendorStand";
+import { BulkPatchVendorStand, VendorStand } from "src/models/vendorStand";
 
 const VendorStandEndpoint = 'vendorStands/';
 
@@ -48,6 +48,27 @@ export function patchVendorStand(token: string, vendor: VendorStand, patch): Pro
     })
 }
 
+export function patchVendorStands(token: string, ids: string[], data: BulkPatchVendorStand): Promise<VendorStand[]> {
+    return fetch(BASE_URL + VendorStandEndpoint, {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            ids,
+            data
+        })
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return res.data as VendorStand[];
+        } else {
+            return [];
+        }
+    })
+}
+
 export function postVendorStand(token: string, vendor: VendorStand): Promise<VendorStand> {
     return fetch(BASE_URL + VendorStandEndpoint, {
         method: 'POST',
@@ -74,6 +95,24 @@ export function deleteVendorStand(token: string, id: string): Promise<boolean> {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
+    }).then(res => res.json()).then(res => {
+        if (res.success) {
+            return true;
+        } else {
+            return false;
+        }
+    })
+}
+
+export function deleteVendorStands(token: string, ids: string[]): Promise<boolean> {
+    return fetch(BASE_URL + VendorStandEndpoint + 'delete', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ ids })
     }).then(res => res.json()).then(res => {
         if (res.success) {
             return true;
