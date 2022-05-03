@@ -2,6 +2,7 @@ import { Box, Button, MenuItem } from '@mui/material';
 import { Promo } from 'src/models/promo';
 import { useState } from 'react';
 import { ACTIONS, StyledMenu } from 'src/components/BulkAction';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 interface BulkActionsProps {
   onAction: Function;
