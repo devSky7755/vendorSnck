@@ -3,7 +3,7 @@ import { BulkPatchCustomer, Customer } from "src/models/customer";
 
 const CustomersEndpoint = 'customers/';
 
-export function getCustomers(token): Promise<Customer[]> {
+export function getCustomers(token: string): Promise<Customer[]> {
     return fetch(BASE_URL + CustomersEndpoint, {
         method: 'GET',
         headers: {
@@ -14,6 +14,23 @@ export function getCustomers(token): Promise<Customer[]> {
     }).then(res => res.json()).then(res => {
         if (res.success && res.data) {
             return res.data.customers as Customer[];
+        } else {
+            return null;
+        }
+    })
+}
+
+export function getCustomer(token: string, id: string): Promise<Customer> {
+    return fetch(BASE_URL + CustomersEndpoint + id, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    }).then(res => res.json()).then(res => {
+        if (res.success && res.data) {
+            return res.data as Customer;
         } else {
             return null;
         }

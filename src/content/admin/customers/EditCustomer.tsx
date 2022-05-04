@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
@@ -8,6 +8,9 @@ import { styled, Box, Button, DialogActions, Grid, IconButton, Switch, TextField
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
+import { Order, GetOrderIDLabel } from 'src/models/order';
+import { getCustomer } from 'src/Api/customer';
+import { connect } from 'react-redux';
 
 const DialogSubtitle = styled(Typography)(
     ({ theme }) => `
@@ -18,15 +21,30 @@ const DialogSubtitle = styled(Typography)(
 interface EditCustomerInterface {
     onAction: Function;
     open: boolean;
+    token: string;
     customer?: Customer;
 };
 
 const EditCustomerDialog: React.FC<EditCustomerInterface> = (props) => {
-    const { onAction, customer, open } = props;
+    const { onAction, token, customer, open } = props;
     const [editing, setEditingCustomer] = useState(customer);
     const [showError, setShowError] = useState(false);
 
+    const [orders, setOrders] = useState<Order[]>(null);
+
     const isNew = !customer.id
+
+    useEffect(() => {
+        if (open && customer && customer.id) {
+            getCustomer(token, customer.id).then(res => {
+                if (res) {
+                    setOrders(res.orders || []);
+                } else {
+                    setOrders([]);
+                }
+            })
+        }
+    }, [open])
 
     const validateInput = () => {
         if (!editing.firstName || editing.firstName.trim().length === 0) return false;
@@ -138,16 +156,16 @@ const EditCustomerDialog: React.FC<EditCustomerInterface> = (props) => {
                 <Box sx={{ px: 2, py: 1 }}>
                     <DialogSubtitle variant='subtitle1' sx={{ pb: 2 }}>Orders</DialogSubtitle>
                     {
-                        editing.orders ? (
+                        (orders && orders.length > 0) ? (
                             <TableContainer style={{ width: '100%' }}>
                                 <Table>
                                     <TableBody>
                                         {
-                                            editing.orders.map((order, id) => {
+                                            orders.map((order, id) => {
                                                 return (
-                                                    <TableRow>
+                                                    <TableRow key={order.id}>
                                                         <TableCell>
-                                                            <Typography variant='subtitle1'>Order No. {order.id}</Typography>
+                                                            <Typography variant='subtitle1'>Order No. {GetOrderIDLabel(order.id)}</Typography>
                                                         </TableCell>
                                                         <TableCell align='right'>${(order.totalPrice || 0).toFixed(2)}</TableCell>
                                                         <TableCell padding='checkbox'>
@@ -164,7 +182,11 @@ const EditCustomerDialog: React.FC<EditCustomerInterface> = (props) => {
                             </TableContainer>
                         ) : (
                             <Box>
-                                <Typography variant='body1'>No Orders</Typography>
+                                <Typography variant='body1'>
+                                    {
+                                        orders ? 'No Orders' : ''
+                                    }
+                                </Typography>
                             </Box>
                         )
                     }
@@ -208,4 +230,9 @@ const EditCustomerDialog: React.FC<EditCustomerInterface> = (props) => {
     );
 }
 
-export default EditCustomerDialog;
+function reduxState(state) {
+    return {
+        token: state.auth && state.auth.token
+    };
+}
+export default connect(reduxState)(EditCustomerDialog);
