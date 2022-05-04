@@ -78,5 +78,17 @@ export const ACTIONS = {
   DELETE_STAFF: {
     label: 'Delete Staff',
     action: 'delete-staff'
+  },
+  MARK_ALL_ACTIVE: {
+    label: 'Mark all Active',
+    action: 'set-active'
+  },
+  MARK_ALL_INACTIVE: {
+    label: 'Mark all Inactive',
+    action: 'set-inactive'
+  },
+  DELETE_IN_VENUE_LOCATIONS: {
+    label: 'Delete In Venue Locations',
+    action: 'delete-in-venue-locations'
   }
 };

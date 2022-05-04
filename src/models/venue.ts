@@ -54,6 +54,12 @@ export interface VenueInLocation {
     deletedAt?: Date;
 }
 
+export interface BulkPatchVenueInLocation {
+    active?: boolean;
+    deliveryEnabled?: boolean;
+    pickupEnabled?: boolean;
+}
+
 export interface VenueDistributionArea {
     id?: string;
     venueId?: string;
