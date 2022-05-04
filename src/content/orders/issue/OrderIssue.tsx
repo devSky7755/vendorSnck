@@ -157,7 +157,7 @@ const OrderIssue = ({ setOpen, order, open }) => {
 
   return (
     <BootstrapDialog
-      onClose={handleClose}
+      //onClose={handleClose}
       open={open}
       fullWidth
       maxWidth={maxWidth}

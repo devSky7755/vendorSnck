@@ -153,7 +153,7 @@ const NotificationBoard = (props: NotificationBoardProps) => {
 
   return (
     <BootstrapDialog
-      onClose={handleClose}
+      //onClose={handleClose}
       fullWidth
       maxWidth={maxWidth}
       fullScreen={fullScreen}

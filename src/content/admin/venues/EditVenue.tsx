@@ -62,7 +62,7 @@ const EditVenueDialog: React.FC<EditVenueInterface> = (props) => {
 
     return (
         <Dialog onClose={() => {
-            onAction('Close');
+            //onAction('Close');
         }} open={open} PaperProps={{ style: { width: 1280, maxWidth: 1280 } }}>
             <DialogTitle className='border-bottom d-flex' sx={{ px: 2, py: 1 }}>
                 <Typography component='span' variant='h6'>{isNew ? 'Add' : 'Edit'}&nbsp;Venue</Typography>

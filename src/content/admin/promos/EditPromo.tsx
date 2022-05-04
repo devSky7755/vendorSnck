@@ -62,7 +62,7 @@ const EditPromoDialog: React.FC<EditPromoInterface> = (props) => {
 
     return (
         <Dialog onClose={() => {
-            onAction('Close');
+            //onAction('Close');
         }} open={open} PaperProps={{ style: { width: 640, maxWidth: 640 } }}>
             <DialogTitle className='border-bottom d-flex' sx={{ px: 2, py: 1 }}>
                 <Typography component='span' variant='h6'>Edit Promo</Typography>
