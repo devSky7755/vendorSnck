@@ -55,7 +55,7 @@ const EditStaffDialog: React.FC<EditStaffInterface> = (props) => {
             onAction('Close');
         }} open={open} PaperProps={{ style: { width: 1280, maxWidth: 640 } }}>
             <DialogTitle className='border-bottom d-flex' sx={{ px: 2, py: 1 }}>
-                <Typography component='span' variant='h6'>Edit Staff</Typography>
+                <Typography component='span' variant='h6'>{isNew ? 'Add' : 'Edit'}&nbsp;Staff</Typography>
                 <IconButton className='float-right' sx={{ p: 0 }} size='small' onClick={() => {
                     onAction('Close');
                 }}>

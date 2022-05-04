@@ -41,6 +41,8 @@ const EditMenuDialog: React.FC<EditMenuInterface> = (props) => {
     const { onClose, menu, open } = props;
     const [editing, setEditingMenu] = useState(menu)
 
+    const isNew = !editing.id;
+
     const handleClose = () => {
         onClose(editing);
     };
@@ -50,7 +52,7 @@ const EditMenuDialog: React.FC<EditMenuInterface> = (props) => {
             onClose(null);
         }} open={open} PaperProps={{ style: { width: 480 } }}>
             <DialogTitle className='border-bottom d-flex font-bold' sx={{ px: 2, py: 1 }}>
-                <Typography variant='h6' component={'span'}>Edit Menu Item</Typography>
+                <Typography variant='h6' component={'span'}>{isNew ? 'Add' : 'Edit'}&nbsp;Menu Item</Typography>
                 <IconButton className='float-right' sx={{ p: 0 }} size='small' onClick={() => {
                     onClose(null);
                 }}>
