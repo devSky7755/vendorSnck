@@ -59,31 +59,51 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
             onClick={(e) => handleClose(ACTIONS.ENABLE_TEMPORARY_BLOCK.action)}
             disableRipple
           >
-            {ACTIONS.ENABLE_TEMPORARY_BLOCK.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.ENABLE_TEMPORARY_BLOCK.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.DISABLE_TEMPORARY_BLOCK.action)}
             disableRipple
           >
-            {ACTIONS.DISABLE_TEMPORARY_BLOCK.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.DISABLE_TEMPORARY_BLOCK.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.ENABLE_PERMANENT_BLOCK.action)}
             disableRipple
           >
-            {ACTIONS.ENABLE_PERMANENT_BLOCK.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.ENABLE_PERMANENT_BLOCK.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.DISABLE_PERMANENT_BLOCK.action)}
             disableRipple
           >
-            {ACTIONS.DISABLE_PERMANENT_BLOCK.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.DISABLE_PERMANENT_BLOCK.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.DELETE_CUSTOMERS.action)}
             disableRipple
           >
-            {ACTIONS.DELETE_CUSTOMERS.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.DELETE_CUSTOMERS.label
+              }}
+            />
           </MenuItem>
         </StyledMenu>
       </Box>

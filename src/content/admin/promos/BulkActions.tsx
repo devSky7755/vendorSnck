@@ -69,19 +69,31 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
             onClick={(e) => handleClose(ACTIONS.COMMENCE_NOW.action)}
             disableRipple
           >
-            {ACTIONS.COMMENCE_NOW.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.COMMENCE_NOW.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.EXPIRE_NOW.action)}
             disableRipple
           >
-            {ACTIONS.EXPIRE_NOW.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.EXPIRE_NOW.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.DELETE_PROMOS.action)}
             disableRipple
           >
-            {ACTIONS.DELETE_PROMOS.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.DELETE_PROMOS.label
+              }}
+            />
           </MenuItem>
         </StyledMenu>
       </Box>

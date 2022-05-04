@@ -69,31 +69,51 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
             onClick={(e) => handleClose(ACTIONS.SET_ACTIVE.action)}
             disableRipple
           >
-            {ACTIONS.SET_ACTIVE.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.SET_ACTIVE.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.SET_INACTIVE.action)}
             disableRipple
           >
-            {ACTIONS.SET_INACTIVE.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.SET_INACTIVE.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.SET_ROLE_AS_RUNNER.action)}
             disableRipple
           >
-            {ACTIONS.SET_ROLE_AS_RUNNER.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.SET_ROLE_AS_RUNNER.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.SET_ROLE_AS_MANAGER.action)}
             disableRipple
           >
-            {ACTIONS.SET_ROLE_AS_MANAGER.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.SET_ROLE_AS_MANAGER.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.DELETE_STAFF.action)}
             disableRipple
           >
-            {ACTIONS.DELETE_STAFF.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.DELETE_STAFF.label
+              }}
+            />
           </MenuItem>
         </StyledMenu>
       </Box>

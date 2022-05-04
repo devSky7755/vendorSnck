@@ -69,43 +69,71 @@ const BulkActions: React.FC<BulkActionsProps> = (props) => {
             onClick={(e) => handleClose(ACTIONS.SET_AVAILABLE.action)}
             disableRipple
           >
-            {ACTIONS.SET_AVAILABLE.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.SET_AVAILABLE.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.SET_UNAVAILABLE.action)}
             disableRipple
           >
-            {ACTIONS.SET_UNAVAILABLE.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.SET_UNAVAILABLE.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.ENABLE_DELIVERY.action)}
             disableRipple
           >
-            {ACTIONS.ENABLE_DELIVERY.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.ENABLE_DELIVERY.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.DISABLE_DELIVERY.action)}
             disableRipple
           >
-            {ACTIONS.DISABLE_DELIVERY.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.DISABLE_DELIVERY.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.ENABLE_PICKUP.action)}
             disableRipple
           >
-            {ACTIONS.ENABLE_PICKUP.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.ENABLE_PICKUP.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.DISABLE_PICKUP.action)}
             disableRipple
           >
-            {ACTIONS.DISABLE_PICKUP.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.DISABLE_PICKUP.label
+              }}
+            />
           </MenuItem>
           <MenuItem
             onClick={(e) => handleClose(ACTIONS.DELETE_VENDOR_STANDS.action)}
             disableRipple
           >
-            {ACTIONS.DELETE_VENDOR_STANDS.label}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: ACTIONS.DELETE_VENDOR_STANDS.label
+              }}
+            />
           </MenuItem>
         </StyledMenu>
       </Box>
